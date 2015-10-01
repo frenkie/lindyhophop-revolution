@@ -1,0 +1,99 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/" />
+    <title>Fullstack Academy Generated Application</title>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <script src="/lodash/index.js"></script>
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="/socket.io-client/socket.io.js"></script>
+    <script src="/main.js"></script>
+</head>
+<body ng-app="FullstackGeneratedApp">
+    <navbar></navbar>
+    <div id="main" ui-view></div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8>
+</head>
+
+<body>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src='/utils/remix.js'></script>
+<script type="text/javascript">
+
+    // These are the things you need:  an API key, the track ID, and the path to the track
+    var apiKey = 'R5G7A3U0RXN8MLQBY';
+    var trackID = 'Sandstorm';
+    var trackURL = 'Darude - Sandstorm.mp3'
+
+    // Set up the key variables
+    var remixer;
+    var player;
+    var track;
+    var remixed;
+
+// The main function.
+function init() {
+
+    // Make sure the browser supports Web Audio.
+    if (window.AudioContext === undefined) {
+        error("Sorry, this app needs advanced web audio. Your browser doesn't"
+            + " support it. Try the latest version of Chrome");
+    } else {
+        
+        // These set up the WebAudio playback environment, and create the remixer and player.
+        var context = new window.AudioContext();
+        remixer = createJRemixer(context, $, apiKey);
+        player = remixer.getPlayer();
+        $("#info").text("Loading analysis data...");
+
+        // The key line.  This prepares the track for remixing:  it gets
+        // data from the Echo Nest analyze API and connects it with the audio file.
+        // All the remixing takes place in the callback function.
+        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+            track = t;
+
+            // Keep the user update with load times
+            $("#info").text(percent + "% of the track loaded");
+            if (percent == 100) {
+                $("#info").text(percent + "% of the track loaded, remixing...");
+            }
+
+            // Do the remixing!
+            if (track.status == 'ok') {
+                // This array holds the chunks of audio that we're going to play back
+                remixed = new Array();
+
+                // This loops over each beat in the track.
+                // If the index of the beat is a multiple of four, we append the beat to the playback array.
+                for (var i=0; i < track.analysis.beats.length; i++) {
+                    if (i % 4 == 0) {
+                        remixed.push(track.analysis.beats[i])
+                    }
+                }
+                $("#info").text("Remix complete!");
+            }
+        });
+    }
+}
+
+// Run the main function once the page is loaded.
+window.onload = init;
+</script>
+
+Welcome to One.html
+<div id='info'> </div>
+<!-- These buttons will play and stop your remix.  -->
+<button onClick="player.play(0, remixed);">Play!</button>
+<button onClick="player.stop()">Stop!</button>
+</body>
+</html>
