@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>tonejs test</title>
+  <script type="text/javascript" src="http://cdn.tonejs.org/latest/Tone.min.js"></script>
+</head>
+<body>
+<script>
+
+  var player = new Tone.Player("./Darude - Sandstorm.mp3").toMaster();
+  Tone.Buffer.onload = function () {
+    player.start();
+  }
+
+</script>
+
+</body>
+</html>
