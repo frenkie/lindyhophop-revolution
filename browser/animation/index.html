@@ -64,14 +64,16 @@
   <script>
     window.onload = function () {
       console.log('moving shiz');
-      var box = document.getElementById("box1");
+      // var box = document.getElementById("box1");
       // Check out the GSAP Jumpstart tutorial and this vid for more info on timelines
       // http://greensock.com/sequence-video
+      // TweenLite(box, 1020, {})
       var tl = new TimelineLite();
-      tl.to(box1, 2, {top: "-30vh", ease:Linear.easeNone}, 0)
-      .to(box2, 2, {top: "-30vh", ease:Linear.easeNone}, 0.5)
-      .to(box3, 2, {top: "-30vh", ease:Linear.easeNone}, .75)
-      .to(box4, 2, {top: "-30vh", ease:Linear.easeNone}, 1);
+      tl.to(box1, 6, {top: "-30vh", ease:Linear.easeNone}, 0)
+      .to(box2, 6, {top: "-30vh", ease:Linear.easeNone}, 3)
+      // .to(box3, 2, {top: "-30vh", ease:Linear.easeNone}, .75)
+      // .to(box4, 2, {top: "-30vh", ease:Linear.easeNone}, 1);
+      tl.timeScale(4)
     }
 
   </script>
