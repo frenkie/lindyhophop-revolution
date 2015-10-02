@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <!-- GSAP all libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+  <style>
+
+    #boxes {
+      display: inline-block;
+    }
+
+    #box1 {
+      display: inline-block;
+
+      position: relative;
+      top: 100vh;
+      height: 100px;
+      width: 100px;
+      background-color: blue;
+    }
+    #box2 {
+      display: inline-block;
+
+      position: relative;
+      top: 100vh;
+      /*left: 110px;*/
+      height: 100px;
+      width: 100px;
+      background-color: blue;
+    }
+    #box3 {
+      display: inline-block;
+
+      position: relative;
+      top: 100vh;
+      /*left: 220px;*/
+      height: 100px;
+      width: 100px;
+      background-color: blue;
+    }
+    #box4 {
+      display: inline-block;
+
+      position: relative;
+      top: 100vh;
+      /*left: 330px;*/
+      height: 100px;
+      width: 100px;
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+  <div id="boxes">
+    <div id="box1"></div>
+    <div id="box2"></div>
+    <div id="box3"></div>
+    <div id="box4"></div>
+  </div>
+
+
+  <script>
+    window.onload = function () {
+      console.log('moving shiz');
+      var box = document.getElementById("box1");
+      // Check out the GSAP Jumpstart tutorial and this vid for more info on timelines
+      // http://greensock.com/sequence-video
+      var tl = new TimelineLite();
+      tl.to(box1, 2, {top: "-30vh", ease:Linear.easeNone}, 0)
+      .to(box2, 2, {top: "-30vh", ease:Linear.easeNone}, 0.5)
+      .to(box3, 2, {top: "-30vh", ease:Linear.easeNone}, .75)
+      .to(box4, 2, {top: "-30vh", ease:Linear.easeNone}, 1);
+    }
+
+  </script>
+
+</body>
+</html>
+
+
