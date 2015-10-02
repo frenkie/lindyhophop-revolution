@@ -22,6 +22,8 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
+var fs = require('fs');
+var parse = require('./server/sm-parser').readSM;
 
 var seedUsers = function () {
 
@@ -40,7 +42,19 @@ var seedUsers = function () {
 
 };
 
+var seedSongs = function () {
+
+    var smFiles = fs.readdirSync('./browser/sm/');
+    smFiles.forEach(function(sm) {
+        console.log('sending', sm);
+        parse(sm);
+    });
+    
+
+};
+
 connectToDb.then(function () {
+    seedSongs();
     User.findAsync({}).then(function (users) {
         if (users.length === 0) {
             return seedUsers();

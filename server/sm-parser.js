@@ -13,11 +13,18 @@ var startSteps = /^\d{4}$/,
 
 
 function readSM(title) {
-	fs.readFile(path.join(__dirname, '..', 'browser', 'sm', title+'.sm'), 'utf8', function(err, data) {
+	console.log('title', title);
+	var filePath = path.join(__dirname, '..', 'browser', 'sm', title);
+	console.log('path', filePath);
+	fs.readFile(filePath, 'utf8', function(err, data) {
+		console.log('why arent you logging?');
 		if (err) {
 			console.log('Could not find file '+title+'.sm', err);
 			return;
 		}
+
+		console.log('data', data);
+		console.log('hi');
 
 		var sections = data.split(sectionSplit);
 
@@ -45,8 +52,8 @@ function readSM(title) {
 				charts[chartData.difficulty] = chartData;
 			}
 		}
-		console.log('Metadata:',metadata);
-		console.log('Charts:',charts);
+		return charts;
+		//return charts;
 	})
 }
 
@@ -96,8 +103,10 @@ function getChartData(section) {
 	return data;
 }
 
-
-readSM(process.argv[2]);
+module.exports = {
+	readSM: readSM
+};
+//readSM(process.argv[2]);
 
 
 
