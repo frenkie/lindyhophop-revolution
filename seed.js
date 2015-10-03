@@ -41,7 +41,7 @@ var seedUsers = function() {
 
 };
 
-var seedCharts = function() {
+var seedSongs = function() {
 
     var charts = [
         {
@@ -1509,50 +1509,54 @@ var seedCharts = function() {
 
     ];
 
-    return StepChart.createAsync(charts);
 
-};
+    return StepChart.createAsync(charts)
+    .then(function(charts) {
 
-var seedSongs = function() {
+        // var starsEz = charts[0]._id;
+        // var healing = charts[1]._id;
+        // var sandstorm = charts[2]._id;
 
-    var smFiles = fs.readdirSync('./browser/sm/');
-    var songs = smFiles.map(function(sm) {
-        var data = SMparse(sm);
-        var retObj = {
-            TITLE: data.metadata.TITLE,
-            ARTIST: data.metadata.ARTIST,
-            BPMS: data.metadata.BPMS,
-            DISPLAYBPM: data.metadata.DISPLAYBPM,
-            OFFSET: data.metadata.OFFSET,
-            MUSIC: data.metadata.MUSIC
-            // Charts: {
-            //     Easy: {
-            //         // _stepChart: 'lskdjf',
-            //         level: data.charts.Easy.level,
-            //         grooveRadar: data.charts.Easy.grooveRadar
-            //     }
-            // }
-        };
-        return retObj;
-
+        var smFiles = fs.readdirSync('./browser/sm/');
+        var songs = smFiles.map(function(sm, index) {
+            var data = SMparse(sm);
+            var retObj = {
+                TITLE: data.metadata.TITLE,
+                ARTIST: data.metadata.ARTIST,
+                BPMS: data.metadata.BPMS,
+                DISPLAYBPM: data.metadata.DISPLAYBPM,
+                OFFSET: data.metadata.OFFSET,
+                MUSIC: data.metadata.MUSIC,
+                Charts: {
+                    Easy: {
+                        stepChart: charts[index]._id,
+                        level: data.charts.Easy.level,
+                        grooveRadar: data.charts.Easy.grooveRadar
+                    }
+                }
+            };
+            return retObj;
+        });
+        return Song.createAsync(songs);
     });
+
+// };
+
+// var seedSongs = function() {
+
 
 
     // console.log('songs', songs);
 
-    return Song.createAsync(songs);
-
 };
+
+
 
 connectToDb.then(function() {
 
 
-    seedCharts().then(function() {
-        console.log('successfully seeded charts');
-    }).then(function() {
-        return seedSongs();
-    }).then(function() {
-        console.log('successfully seeded songs');
+    seedSongs().then(function() {
+        console.log('successfully seeded charts and songs');
         process.kill(0);
     }).catch(function(err) {
         console.error(err);

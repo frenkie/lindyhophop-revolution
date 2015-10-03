@@ -27,44 +27,44 @@ var schema = new mongoose.Schema({
   },
   Charts: {
     Beginner: {
-      _stepChart: {
+      stepChart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
       level: Number,
-      grooveRadar: [Number]
+      grooveRadar: Object
     },
     Easy: {
-      _stepChart: {
+      stepChart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
       level: Number,
-      grooveRadar: [Number]
+      grooveRadar: Object
     },
     Medium: {
-      _stepChart: {
+      stepChart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
       level: Number,
-      grooveRadar: [Number]
+      grooveRadar: Object
     },
     Hard: {
-      _stepChart: {
+      stepChart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
       level: Number,
-      grooveRadar: [Number]
+      grooveRadar: Object
     },
     Challenge: {
-      _stepChart: {
+      stepChart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
       level: Number,
-      grooveRadar: [Number]
+      grooveRadar: Object
     }
   }
 });
