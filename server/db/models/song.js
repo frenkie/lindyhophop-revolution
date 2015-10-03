@@ -31,7 +31,7 @@ var schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
-      feet: Number,
+      level: Number,
       grooveRadar: [Number]
     },
     Easy: {
@@ -39,7 +39,7 @@ var schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
-      feet: Number,
+      level: Number,
       grooveRadar: [Number]
     },
     Medium: {
@@ -47,7 +47,7 @@ var schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
-      feet: Number,
+      level: Number,
       grooveRadar: [Number]
     },
     Hard: {
@@ -55,7 +55,7 @@ var schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
-      feet: Number,
+      level: Number,
       grooveRadar: [Number]
     },
     Challenge: {
@@ -63,7 +63,7 @@ var schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'StepChart'
       },
-      feet: Number,
+      level: Number,
       grooveRadar: [Number]
     }
   }

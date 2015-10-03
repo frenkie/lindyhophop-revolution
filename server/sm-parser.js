@@ -13,18 +13,8 @@ var startSteps = /^\d{4}$/,
 
 
 function readSM(title) {
-	console.log('title', title);
 	var filePath = path.join(__dirname, '..', 'browser', 'sm', title);
-	console.log('path', filePath);
-	fs.readFile(filePath, 'utf8', function(err, data) {
-		console.log('why arent you logging?');
-		if (err) {
-			console.log('Could not find file '+title+'.sm', err);
-			return;
-		}
-
-		console.log('data', data);
-		console.log('hi');
+	var data = fs.readFileSync(filePath, 'utf8');
 
 		var sections = data.split(sectionSplit);
 
@@ -47,14 +37,16 @@ function readSM(title) {
 			if (singleRegex.exec(section)[1] === 'single') {
 				// var difficulty = difficultyRegex.exec(section)[1];
 				// console.log('difficulty:',difficulty);
-				console.log('index',i);
 				var chartData = getChartData(section);
 				charts[chartData.difficulty] = chartData;
 			}
 		}
-		return charts;
+		return {
+			charts: charts,
+			metadata: metadata
 		//return charts;
-	})
+		}
+
 }
 
 
@@ -80,7 +72,6 @@ function getChartData(section) {
 
 	for (var j=0; j<chartInfo.length; j++) {
 		var line = chartInfo[j].trim().replace(':', '');
-		console.log('line:',line);
 		var diff = difficultyRegex.exec(line);
 		if (diff) data.difficulty = diff[1];
 		else if (!isNaN(line)) data.level = Number(line);
