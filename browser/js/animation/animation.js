@@ -2,14 +2,33 @@ app.config(function ($stateProvider) {
     $stateProvider.state('animation', {
         url: '/animation',
         templateUrl: 'js/animation/animation.html',
-        controller: function ($scope) {
+        controller: function ($scope, ArrowFactory) {
             // SongFactory.getChart(songId, difficultyString)
-            for (var i = 0; i < 4; i++) {
-                for (var j = 0; j < 8; j++) {
-                    console.log('adding arrow', i, j)
-                    $('.arrow-col-' + i).append($(`<div class="arrow arrow-${i}-${j}"></div>`))
-                }
-            }
+            // for (var i = 0; i < 4; i++) {
+            //     for (var j = 0; j < 8; j++) {
+            //         console.log('adding arrow', i, j)
+            //         $('.arrow-col-' + i).append($(`<div class="arrow arrow-${i}-${j}"></div>`))
+            //     }
+            // }
+            // var leftArrow = new ArrowFactory('left', 1);
+            // var rightArrow = new ArrowFactory('right', 1);
+            // var upArrow = new ArrowFactory('up', 1);
+            // var downArrow = new ArrowFactory('down', 1);
+            // var tl = new TimelineLite();
+            // tl.to(leftArrow)
+
+            // leftArrow.animate(120);
+            // setTimeout(function () {
+            //     rightArrow.animate(120)
+            // }, 500);
+            // setTimeout(function () {
+            //     upArrow.animate(120)
+            // }, 1000);
+            // setTimeout(function () {
+            //     downArrow.animate(120)
+            // }, 1500);
+
+
 
 
 
@@ -170,7 +189,19 @@ app.config(function ($stateProvider) {
                 [ '0', '0', '0', '0' ],
                 [ '0', '0', '3', '0' ],
                 [ '0', '0', '0', '0' ] ] ];
-            console.log(testChart);
+            ArrowFactory.makeTimeline();
+            testChart.forEach(function (measure, chIndex) {
+                var notes = measure.length;
+                measure.forEach(function (note, mIndex) {
+                    note.forEach(function (maybeArrow, index) {
+                        if (maybeArrow !== '0') {
+                            var dir = ArrowFactory.indexToDir(index);
+                            var arrow = new ArrowFactory(dir, 1);
+                            arrow.animate(192, chIndex, mIndex, notes);
+                        }
+                    })
+                })
+            })
         }
     });
 });
