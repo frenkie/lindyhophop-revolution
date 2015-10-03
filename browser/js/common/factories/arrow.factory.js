@@ -1,7 +1,8 @@
 app.factory('ArrowFactory', function () {
     var Arrow = function (direction, player) {
         this.direction = direction;
-        this.el = $(`<div class="arrow"></div>`);
+        // this.el = $(`<div class="arrow"></div>`);
+        this.el = $(`<div class="arrow"><img src="/img/${direction}.png"></img></div>`);
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
 
@@ -9,9 +10,12 @@ app.factory('ArrowFactory', function () {
 
     Arrow.makeTimeline = function (params) {
         if (!tl) tl = new TimelineLite(params);
+        tl.pause();
     };
 
-
+    Arrow.resumeTimeline = function () {
+        tl.resume();
+    }
 
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
         if (!tl) throw Error('Make a timeline first');

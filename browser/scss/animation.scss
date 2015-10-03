@@ -4,9 +4,21 @@
   // left: 0;
   height: 10vh;
   width: 100%;
-  background-color: blue;
+  text-align: center;
+  // background-color: blue;
+  img {
+      width: 100px;
+  }
 }
 
 .arrow-col {
   position: relative;
+}
+
+.arrowPlace {
+    position: absolute;
+    top: 0;
+    height: 10vh;
+    width: 100%;
+    background-color: red;
 }
