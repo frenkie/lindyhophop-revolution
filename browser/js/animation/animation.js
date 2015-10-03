@@ -626,10 +626,10 @@ app.config(function($stateProvider) {
                                 listener(arrow)
                               }
                             });
-                          }, `${chIndex}m + ${notes}n * ${mIndex}`);
+                          }, `${chIndex}m + ${notes}n * ${mIndex} + 16n`);
                           tone.transport.setTimeline(function(time) {
                             $body.off(`keydown.${chIndex}${mIndex}${index}`)
-                          }, `${chIndex}m + ${notes}n * ${mIndex} + 2* 16n`);
+                          }, `${chIndex}m + ${notes}n * ${mIndex} - 16n`);
                       }
                   })
                 })
