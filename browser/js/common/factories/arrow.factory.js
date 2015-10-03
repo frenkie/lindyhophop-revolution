@@ -40,5 +40,12 @@ app.factory('ArrowFactory', function () {
         return dict[n]
     }
 
+    Arrow.ARROW_KEYS = {
+      left: '37',
+      down: '40',
+      up: '38',
+      right: '39'
+    };
+
     return Arrow;
 })

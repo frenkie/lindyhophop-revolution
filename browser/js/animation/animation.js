@@ -608,34 +608,34 @@ app.config(function($stateProvider) {
                     ['0', '0', '0', '0'],
                     [';']
                 ]
-            ]
+            ];
+            var $body = $(document.body)
             var tone = new ToneFactory("/audio/321 STARS.mp3", 191.94, 2.7-0.67239, ".67239");
             ArrowFactory.makeTimeline();
             testChart.forEach(function(measure, chIndex) {
                 var notes = measure.length;
                 measure.forEach(function(note, mIndex) {
-                  if(note[0] !== '0') {
-
-                  }
                   note.forEach(function(maybeArrow, index) {
                       if (maybeArrow !== '0') {
                           var dir = ArrowFactory.indexToDir(index);
                           var arrow = new ArrowFactory(dir, 1);
                           arrow.animate(191.94, chIndex, mIndex, notes);
                           tone.transport.setTimeline(function(time) {
-                            document.body.addEventListener("keypress", listener)
-                          }, `${chIndex}m + ${notes}n * ${mIndex} - 8n`);
+                            $body.on(`keydown.${chIndex}${mIndex}${index}`, function(e) {
+                              if(e.keyCode == ArrowFactory.ARROW_KEYS[dir]) {
+                                listener(arrow)
+                              }
+                            });
+                          }, `${chIndex}m + ${notes}n * ${mIndex}`);
                           tone.transport.setTimeline(function(time) {
-                            document.body.removeEventListener("keypress", listener)
-                          }, `${chIndex}m + ${notes}n * ${mIndex} + 8n`);
+                            $body.off(`keydown.${chIndex}${mIndex}${index}`)
+                          }, `${chIndex}m + ${notes}n * ${mIndex} + 2* 16n`);
                       }
                   })
                 })
             });
-
-            var listener = function() {
-              console.log("IVE BEEN SHOT");
-
+            var listener = function(arrow) {
+              arrow.el.remove();
             };
 
             $scope.runInit = function () {
