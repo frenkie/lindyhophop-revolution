@@ -2,7 +2,7 @@ app.factory('ArrowFactory', function () {
     var Arrow = function (direction, player) {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
-        this.el = $(`<div class="arrow"><img src="/img/${direction}.png"></img></div>`);
+        this.el = $(`<div class="arrow"><img src="/img/${direction}.svg"></img></div>`);
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
 
