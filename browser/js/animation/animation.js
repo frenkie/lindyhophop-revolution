@@ -623,7 +623,24 @@ app.config(function($stateProvider) {
                 })
             });
 
-            var tone = new ToneFactory("/audio/321 STARS.mp3", 191.94, "2.1", ".67239");
+            var listener = function(){
+              console.log("IVE BEEN SHOT");
+            };
+            var tone = new ToneFactory("/audio/321 STARS.mp3", 191.94, 2.7-0.67239, ".67239");
+            testChart.forEach(function(measure, mIndex) {
+              var notes = measure.length;
+              measure.forEach(function(note, nIndex) {
+                if(note[0] !== '0') {
+                  tone.transport.setTimeline(function(time) {
+                    document.body.addEventListener("click", listener)
+                  }, `${mIndex}m + ${notes}n * ${nIndex} - 16n`);
+                  tone.transport.setTimeline(function(time) {
+                    document.body.removeEventListener("click", listener)
+                  }, `${mIndex}m + ${notes}n * ${nIndex} + 16n`);
+                }
+              });
+            });
+
 
             $scope.runInit = function () {
                 ArrowFactory.resumeTimeline();

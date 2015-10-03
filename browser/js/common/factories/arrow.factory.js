@@ -19,12 +19,15 @@ app.factory('ArrowFactory', function () {
 
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
         if (!tl) throw Error('Make a timeline first');
-        var animationLength = (180 * 4)/bpm;
+        var animationLength = (130 * 4)/bpm;
         var measureTime = 240 / bpm;
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
         this.startTime = startTime;
-        tl.to(this.el, animationLength, {top: '-35vh', ease:Linear.easeNone}, startTime);
+        this.crossingTime = startTime + animationLength;
+        this.toneTime = this.crossingTime - 0.67239;
+        tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime)
+        // .to(this.el, animationLength/2, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
 
     Arrow.indexToDir = function (n) {
