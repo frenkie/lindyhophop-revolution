@@ -617,6 +617,7 @@ app.config(function($stateProvider) {
                 measure.forEach(function(note, mIndex) {
                   note.forEach(function(maybeArrow, index) {
                       if (maybeArrow !== '0') {
+                        //maybe we can make the arrows and let them go via timeline events?
                           var dir = ArrowFactory.indexToDir(index);
                           var arrow = new ArrowFactory(dir, 1);
                           arrow.animate(191.94, chIndex, mIndex, notes);
@@ -626,10 +627,10 @@ app.config(function($stateProvider) {
                                 listener(arrow)
                               }
                             });
-                          }, `${chIndex}m + ${notes}n * ${mIndex} + 16n`);
+                          }, `${chIndex}m + ${notes}n * ${mIndex} + 0 * 16n`);
                           tone.transport.setTimeline(function(time) {
                             $body.off(`keydown.${chIndex}${mIndex}${index}`)
-                          }, `${chIndex}m + ${notes}n * ${mIndex} - 16n`);
+                          }, `${chIndex}m + ${notes}n * ${mIndex} + 2 * 16n`);
                       }
                   })
                 })
