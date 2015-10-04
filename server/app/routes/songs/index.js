@@ -32,9 +32,11 @@ router.post('/upload', multipartMiddleware, function(req, res, next) {
             console.log('file should be written');
             createStepCharts(readSM(req.files.sm.originalFilename));
 
+            //delete temp file
+            fs.unlink('req.files.sm.path', function () {
+                console.log('temp file has been deleted');
+            })
         });
-
-        //remember to delete temp files
     });
 
 });

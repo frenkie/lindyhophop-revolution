@@ -2,7 +2,6 @@
 var router = require('express').Router();
 module.exports = router;
 
-router.use('/members', require('./members'));
 router.use('/songs', require('./songs'));
 router.use('/stepcharts', require('./stepCharts'));
 
@@ -12,5 +11,3 @@ router.use('/stepcharts', require('./stepCharts'));
 router.use(function (req, res) {
     res.status(404).end();
 });
-
-

@@ -8,7 +8,7 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('uploadCtrl', function ($scope, Upload) {
+app.controller('uploadCtrl', function ($scope, Upload, $state) {
     // upload later on form submit or something similar
     $scope.submit = function() {
       if ($scope.song && !$scope.song.$error && $scope.sm && !$scope.sm.$error) {
@@ -32,7 +32,9 @@ app.controller('uploadCtrl', function ($scope, Upload) {
         }, function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + progressPercentage + '% ' + evt.config.data.song.name);
+        })
+        .then(function () {
+            $state.go('home');
         });
     };
 });
-
