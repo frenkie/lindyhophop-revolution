@@ -6,7 +6,7 @@ $arrow-height: 120px;
 
 // overflow hidden to keep from seeing hidden arrow divs -- do we need to scroll ever?
 body {
-  overflow: hidden;
+  // overflow: hidden;
   background: #fdfdfd;
 }
 
@@ -20,7 +20,7 @@ body {
 }
 
 #main {
-  padding-top: 60px;
+  // padding-top: 60px;
   width: 1200px;
   margin: 0 auto;
 }
