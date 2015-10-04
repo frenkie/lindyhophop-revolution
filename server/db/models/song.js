@@ -2,26 +2,26 @@ var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
 
-  TITLE: {
+  title: {
     type: String,
     required: true
   },
-  ARTIST: {
+  artist: {
     type: String,
     required: true
   },
-  BPMS: {
+  bpms: {
     type: String,
     required: true
   },
-  DISPLAYBPM: {
+  displayBpm: {
     type: String
   },
-  OFFSET: {
+  offset: {
     type: String,
     required: true
   },
-  MUSIC: {
+  music: {
     type: String,
     required: true
   },

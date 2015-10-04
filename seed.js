@@ -1513,20 +1513,16 @@ var seedSongs = function() {
     return StepChart.createAsync(charts)
     .then(function(charts) {
 
-        // var starsEz = charts[0]._id;
-        // var healing = charts[1]._id;
-        // var sandstorm = charts[2]._id;
-
         var smFiles = fs.readdirSync('./browser/sm/');
         var songs = smFiles.map(function(sm, index) {
             var data = SMparse(sm);
             var retObj = {
-                TITLE: data.metadata.TITLE,
-                ARTIST: data.metadata.ARTIST,
-                BPMS: data.metadata.BPMS,
-                DISPLAYBPM: data.metadata.DISPLAYBPM,
-                OFFSET: data.metadata.OFFSET,
-                MUSIC: data.metadata.MUSIC,
+                title: data.metadata.TITLE,
+                artist: data.metadata.ARTIST,
+                bpms: data.metadata.BPMS,
+                displayBpm: data.metadata.DISPLAYBPM,
+                offset: data.metadata.OFFSET,
+                music: data.metadata.MUSIC,
                 Charts: {
                     Easy: {
                         stepChart: charts[index]._id,
