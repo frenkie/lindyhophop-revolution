@@ -31,7 +31,7 @@ app.controller('ToneStuffCtrl', function($scope) {
     // document.body.style['background-color'] = "blue";
     var count = 0;
 
-    Tone.Transport.setInterval(function(time) {
+    Tone.Transport.setInterval(function() {
         // document.body.innerHTML = '';
 
         // document.body.innerHTML = "<h1>" + str[count % 4] + "</h1>";

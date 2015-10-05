@@ -4,9 +4,6 @@ app.config(function($stateProvider) {
         templateUrl: 'js/animation/animation.html',
         controller: function($scope, ArrowFactory, ToneFactory) {
 
-            function move() {
-                console.log('moving shiz');
-            };
 
             var testChart = [
                 [
@@ -609,7 +606,7 @@ app.config(function($stateProvider) {
                     [';']
                 ]
             ];
-            var $body = $(document.body)
+            var $body = $(document.body);
             var tone = new ToneFactory("/audio/321 STARS.mp3", 191.94, 2.7-0.67239, ".67239");
             ArrowFactory.makeTimeline();
             testChart.forEach(function(measure, chIndex) {
@@ -620,14 +617,14 @@ app.config(function($stateProvider) {
                           var dir = ArrowFactory.indexToDir(index);
                           var arrow = new ArrowFactory(dir, 1);
                           arrow.animate(191.94, chIndex, mIndex, notes);
-                          tone.transport.setTimeline(function(time) {
+                          tone.transport.setTimeline(function() {
                             $body.on(`keydown.${chIndex}${mIndex}${index}`, function(e) {
-                              if(e.keyCode == ArrowFactory.ARROW_KEYS[dir]) {
+                              if(e.keyCode === ArrowFactory.ARROW_KEYS[dir]) {
                                 listener(arrow)
                               }
                             });
                           }, `${chIndex}m + ${notes}n * ${mIndex}`);
-                          tone.transport.setTimeline(function(time) {
+                          tone.transport.setTimeline(function() {
                             $body.off(`keydown.${chIndex}${mIndex}${index}`)
                         }, `${chIndex}m + ${notes}n * ${mIndex} + 8n`);
                       }

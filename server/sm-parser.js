@@ -28,7 +28,7 @@ function readSM(title) {
 			metadata[key] = value;
 		})
 
-		var stepCharts = {};
+		// var stepCharts = {};
 
 		var charts = {};
 		for (var i=1; i<sections.length; i++) {

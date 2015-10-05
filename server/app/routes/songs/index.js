@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var sm = require('mongoose').model('Song');
+// var sm = require('mongoose').model('Song');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var fs = require('fs');
@@ -25,10 +25,16 @@ router.post('/upload', multipartMiddleware, function(req, res, next) {
 
 
     fs.readFile(req.files.sm.path, function(err, data) {
-        if (err) console.error(err);
+        if (err) {
+            console.error('error in readFile ', err);
+            next(err);
+        }
         var newPath = process.cwd() + "/browser/sm/" + req.files.sm.originalFilename;
-        fs.writeFile(newPath, data, function(err) {
-            if (err) console.error(err);
+        fs.writeFile(newPath, data, function(error) {
+            if (error) {
+            console.error('error in writeFile ', error);
+            next(error);
+            }
             console.log('file should be written');
             createStepCharts(readSM(req.files.sm.originalFilename));
 
