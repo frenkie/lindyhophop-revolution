@@ -4,9 +4,6 @@ app.config(function($stateProvider) {
         templateUrl: 'js/animation/animation.html',
         controller: function($scope, ArrowFactory, ToneFactory) {
 
-            function move() {
-                console.log('moving shiz');
-            };
 
             var testChart = [
                 [
@@ -609,8 +606,11 @@ app.config(function($stateProvider) {
                     [';']
                 ]
             ];
+
             // var $body = $(document.body)
+
             var tone = new ToneFactory("/audio/321 STARS.mp3", 191.94, 2.7-0.67239, ".67239");
+
             // ArrowFactory.makeTimeline();
             // testChart.forEach(function(measure, chIndex) {
             //     var notes = measure.length;
