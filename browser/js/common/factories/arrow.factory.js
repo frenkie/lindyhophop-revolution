@@ -26,7 +26,7 @@ app.factory('ArrowFactory', function () {
         this.startTime = startTime;
         this.crossingTime = startTime + animationLength;
         this.toneTime = this.crossingTime - 0.67239;
-        tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime)
+        tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
         // .to(this.el, animationLength/2, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
 
