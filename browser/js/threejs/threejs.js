@@ -122,7 +122,7 @@ app.config(function ($stateProvider) {
             var render = function () {
                 requestAnimationFrame( render );
                 upArrows = upArrows.map(function (arrow) {
-                    arrow.position.y += 0.03;
+                    arrow.position.y += 0.1;
                     if (arrow.position.y > 5) {
                         console.log('removing arrow from scene')
                         scene.remove(arrow);

@@ -630,7 +630,7 @@ app.config(function($stateProvider) {
                           }, `${chIndex}m + ${notes}n * ${mIndex} + 0 * 16n`);
                           tone.transport.setTimeline(function(time) {
                             $body.off(`keydown.${chIndex}${mIndex}${index}`)
-                          }, `${chIndex}m + ${notes}n * ${mIndex} + 2 * 16n`);
+                          }, `${chIndex}m + ${notes}n * ${mIndex} + 2 * 16n-`);
                       }
                   })
                 })
