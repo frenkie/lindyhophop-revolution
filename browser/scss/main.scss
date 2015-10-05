@@ -2,9 +2,14 @@
   box-sizing: border-box;
 }
 
+$arrow-height: 120px;
+
+// overflow hidden to keep from seeing hidden arrow divs -- do we need to scroll ever?
 body {
+  overflow: hidden;
   background: #fdfdfd;
 }
+
 
 @mixin clearfix {
   &:after {
@@ -21,7 +26,5 @@ body {
 }
 
 @import 'directives/main';
-@import 'home/main';
-@import 'about/main';
-@import 'tutorial/main';
 @import 'login/main';
+@import 'animation'
