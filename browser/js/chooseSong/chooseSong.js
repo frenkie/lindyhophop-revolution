@@ -9,7 +9,15 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
-    console.log("hey Kim")
+
+    $(document).bind('keyup', function(e) {
+      if(e.keyCode==39){
+        $('#item1').trigger('click');
+      } else if(e.keyCode==37){
+        $('#item2').trigger('click');
+      }
+    });
+
     // set and cache variables
 		var w, container, carousel, item, radius, itemLength, rY, ticker, fps;
 		var mouseX = 0;
