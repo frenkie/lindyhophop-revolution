@@ -16,7 +16,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-    Song.findById(req.params.id).then(function(song) {
+    Song.findById(req.params.id).populate('StepChart')
+    .then(function(song) {
         res.send(song);
     }).then(null, next);
 });
