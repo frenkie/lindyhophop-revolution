@@ -50,15 +50,47 @@
 		visibility:hidden;
 	}
 
+	.carouselItem:hover
+	{
+		width:320px;
+		height:130px;
+		position:absolute;
+		left:50%;
+		top:50%;
+		margin-left:-160px;
+		margin-top:-90px;
+		visibility:hidden;
+		// border-style: solid;
+		// border-width: 5px;
+	}
+
 	.carouselItemInner
 	{
 		width:320px;
 		height:130px;
 		position:absolute;
-		background-color:rgba(255, 255, 255, .75);
+		background-color:rgba(234, 76, 136, .75);
+		border:10px solid rgba(212, 65, 121, .5);
+		color:#eee;
+		font-size:30px;
+		left:50%;
+		top:50%;
+		margin-left:-160px;
+		margin-top:-90px;
+		text-align:center;
+		padding-top:50px;
+
+	}
+
+	.carouselItemInner:hover
+	{
+		width:320px;
+		height:130px;
+		position:absolute;
+		background-color:rgba(212, 65, 121, .75);
 		border:10px solid rgba(255, 255, 255, .5);
-		color:aqua;
-		font-size:72px;
+		color:#eee;
+		font-size:30px;
 		left:50%;
 		top:50%;
 		margin-left:-160px;
