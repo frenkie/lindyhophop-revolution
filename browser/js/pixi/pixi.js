@@ -7,6 +7,7 @@ app.config(function ($stateProvider) {
         controller: function (PixiFactory, ToneFactory, ArrowFactory) {
             var container = new PIXI.Container();
             var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
+            console.log(renderer);
             renderer.backgroundColor = 0xDDDDDD;
 
             document.body.appendChild(renderer.view);
@@ -641,9 +642,34 @@ app.config(function ($stateProvider) {
             //     })
             // });
 
-            var arrow = PixiFactory.makeArrow(container, 'left', 0);
-            var arrow2 = PixiFactory.makeArrow(container, 'right', 100);
-            var arrow3 = PixiFactory.makeArrow(container, 'down', 200);
+            //
+            var tone = new ToneFactory("/audio/321 STARS.mp3", 191.94, 2.125-0.578, ".578");
+
+            testChart.forEach(function(measure, chIndex) {
+                var notes = measure.length;
+                measure.forEach(function(note, mIndex) {
+                  note.forEach(function(maybeArrow, index) {
+                      if (maybeArrow !== '0') {
+                        //maybe we can make the arrows and let them go via timeline events?
+                          var dir = ArrowFactory.indexToDir(index);
+                          var arrow = PixiFactory.makeArrow(container, dir, `${chIndex}m + ${notes}n * ${mIndex} - 2.125`, tone.transport);
+    
+                      }
+                  });
+                });
+            });
+
+
+    
+            // var arrow2 = PixiFactory.makeArrow(container, 'right', 1, tone.transport);
+            // var arrow3 = PixiFactory.makeArrow(container, 'down', 1, tone.transport);
+
+            Tone.Buffer.onload = function () {
+                console.log('Start it!');
+                tone.start();
+            }
+            //tone.transport.start();
+            //
 
             window.container = container;
             // container.alpha = 0;
@@ -654,10 +680,10 @@ app.config(function ($stateProvider) {
             function animate() {
                 requestAnimationFrame(animate);
                 // how to add events at a certain time (keep track with elapsedMS and add to a value)
-                timeElapsed += ticker.elapsedMS
+                timeElapsed += ticker.elapsedMS;
                 // console.log(timeElapsed);
 
-                PixiFactory.moveArrows(10);
+                PixiFactory.moveArrows(8);
 
 
                 renderer.render(container);

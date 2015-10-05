@@ -48,7 +48,7 @@ app.factory('PixiFactory', function () {
             xPosition: 560,
             rotation: Math.PI
         }
-    }
+    };
 
     var arrowsOnScreen = [];
 
@@ -62,10 +62,18 @@ app.factory('PixiFactory', function () {
         arrow.width = 100;
         arrow.dir = dirString;
 
-        setTimeout(function () {
-            container.addChild(arrow);
-            arrowsOnScreen.push(arrow);
-        }, timeout);
+        // setTimeout(function () {
+        //     container.addChild(arrow);
+        //     arrowsOnScreen.push(arrow);
+        // }, timeout);
+
+    
+    transport.setTimeline(function(time){
+        //console.log('time: ', time);
+        container.addChild(arrow);
+        arrowsOnScreen.push(arrow);
+    }, timeout);
+    
 
         arrow.rotation = PixiFactory.ARROW_INFO[dirString].rotation;
         arrow.position.x = PixiFactory.ARROW_INFO[dirString].xPosition;

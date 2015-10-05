@@ -10,7 +10,7 @@ app.factory('ToneFactory', function () {
         this.transport.bpm.value = this.bpm;
 
         Tone.Buffer.onload = function () {
-            console.log('Buffer loaded!');
+            //console.log('Buffer loaded!');
         }
     }
 
