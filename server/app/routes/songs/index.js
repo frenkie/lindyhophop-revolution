@@ -34,8 +34,11 @@ router.post('/upload', multipartMiddleware, function(req, res, next) {
 
             //delete temp file
             fs.unlink('req.files.sm.path', function () {
-                console.log('temp file has been deleted');
-            })
+                console.log('temp sm file has been deleted');
+                fs.unlink('req.files.song.path', function() {
+                  console.log('temp song deleted');
+                });
+            });
         });
     });
 
