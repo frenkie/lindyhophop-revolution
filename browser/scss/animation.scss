@@ -1,0 +1,23 @@
+.arrow {
+  position: absolute;
+  top: 100vh;
+  // left: 0;
+  height: 10vh;
+  width: 10vw;
+  text-align: center;
+  // background-color: blue;
+  img {
+      width: 100px;
+  }
+}
+
+.arrow-col {
+  position: relative;
+}
+
+.arrowPlace img {
+    position: absolute;
+    top: 0;
+    height: 10vh;
+    width: 10vw;
+}
