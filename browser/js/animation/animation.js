@@ -9,77 +9,80 @@ app.config(function($stateProvider) {
         },
         controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory) {
 
+
+
             $scope.songs = songs;
+
             console.log(songs);
             var currentSong = songs[4];
             console.log(currentSong);
             var difficulty = "Hard";
             var chartId = currentSong.Charts[difficulty].stepChart;
-            console.log(chartId);
             // var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
             var mainBPM = 136.34;
+
+            var config = {
+                TIMING_WINDOW: 0.15,
+                ARROW_SPEED: 520/mainBPM, //Time it takes for the arrow to cross screen
+                MEASURE_TIME: 1/(mainBPM/60/4) //Number of seconds per measure
+            };
 
 
 
             SongFactory.getChartById(chartId)
-                .then(function(chart) {
-
-                    console.log(chart);
+            .then(function(stepchart) {
    
+                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
 
-                var syncOffset = currentSong.offset;
-                console.log('syncOffset:',syncOffset);  
-                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, (130 * 4)/mainBPM + Number(syncOffset), syncOffset);
+                var dirToKeyCode = {
+                  left: '37',
+                  down: '40',
+                  up: '38',
+                  right: '39'
+                };
 
-            var dirToKeyCode = {
-              left: '37',
-              down: '40',
-              up: '38',
-              right: '39'
-            };
+                var keyCodeToDir = {
+                  '37': 'left',
+                  '40': 'down',
+                  '38': 'up',
+                  '39': 'right'
+                };
+                
+                var startTime = 0;
+                ArrowFactory.makeTimeline();
+                var charts = tone.timeCharts(stepchart.chart);
 
-            var keyCodeToDir = {
-              '37': 'left',
-              '40': 'down',
-              '38': 'up',
-              '39': 'right'
-            };
-            var TIMING_WINDOW = 0.15;
-            var startTime = 0;
-            ArrowFactory.makeTimeline();
-            var charts = tone.timeCharts(chart.chart);
-            console.log(charts);
-            var addListener = function () {
-                console.log('added listener to arows')
-                document.body.addEventListener('keydown', function (e) {
-                    if (keyCodeToDir[e.which]) e.preventDefault();
-                    else return;
-                    var timeStamp = (Date.now() - startTime) / 1000;
-                    var thisChart = charts[keyCodeToDir[e.which]];
-                    console.log(keyCodeToDir[e.which], "pressed on", timeStamp)
-                    var pointer = thisChart.length - 1;
-                    var lastOne = thisChart[thisChart.length - 1];
-                    while (lastOne.time < timeStamp - TIMING_WINDOW) {
-                        thisChart.pop();
-                        lastOne = thisChart[thisChart.length - 1];
-                    }
-                    var diff = Math.abs(lastOne.time - timeStamp);
-                    console.log(`diff: ${diff}`);
-                    if (diff < TIMING_WINDOW) {
-                        lastOne.arrow.el.remove();
-                    }
+                var addListener = function () {
 
-                });
-            }
-            
-            $scope.runInit = function () {
-                console.log('arrows starting', Date.now());
-                ArrowFactory.resumeTimeline();
+                    document.body.addEventListener('keydown', function (e) {
+                        if (keyCodeToDir[e.which]) e.preventDefault();
+                        else return;
 
-                tone.start();
-                startTime = Date.now() - currentSong.offset*1000;
-                addListener();
-            }
+                        var timeStamp = (Date.now() - startTime) / 1000;
+                        var thisChart = charts[keyCodeToDir[e.which]];
+                        console.log(keyCodeToDir[e.which], "pressed on", timeStamp);
+                        var pointer = thisChart.length - 1;
+                        var lastOne = thisChart[thisChart.length - 1];
+
+                        while (lastOne.time < timeStamp - config.TIMING_WINDOW) {
+                            thisChart.pop();
+                            lastOne = thisChart[thisChart.length - 1];
+                        }
+                        var diff = Math.abs(lastOne.time - timeStamp);
+                        console.log(`diff: ${diff}`);
+                        if (diff < config.TIMING_WINDOW) {
+                            lastOne.arrow.el.remove();
+                        }
+
+                    });
+                }
+                
+                $scope.runInit = function () {
+                    ArrowFactory.resumeTimeline();
+                    tone.start();
+                    startTime = Date.now() - currentSong.offset*1000;
+                    addListener();
+                }
 
 
             });
