@@ -10,9 +10,9 @@ app.config(function($stateProvider) {
             }
         },
         controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory) {
-
             $scope.songs = songs;
             $scope.choice = {};
+
 
             $scope.getDifficulties = function() {
                 $scope.choice.levels = [];
