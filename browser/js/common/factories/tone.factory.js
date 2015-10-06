@@ -63,7 +63,7 @@ app.factory('ToneFactory', function (ArrowFactory) {
 
         console.log('arrow height offset',ArrowFactory.speed*4/bpm);
         stops.forEach(function(stop) {
-            ArrowFactory.addPause(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*stop.beat, stop.duration);
+            ArrowFactory.addStop(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*stop.beat, stop.duration);
         })
         bpms.forEach(function(bpmChange) {
             if (bpmChange.beat === 0) return;

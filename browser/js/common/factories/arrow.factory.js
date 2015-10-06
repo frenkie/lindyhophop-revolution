@@ -44,7 +44,7 @@ app.factory('ArrowFactory', function () {
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
 
-    Arrow.addPause = function(timestamp, duration) {
+    Arrow.addStop = function(timestamp, duration) {
         tl.addPause(timestamp, TweenMax.delayedCall, [duration, function(){tl.play()}]);
         console.log('paused at',timestamp);
     }
