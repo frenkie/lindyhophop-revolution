@@ -114,7 +114,8 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 		// 	mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
 		// }
 	var leftX = 0, 
-  		rightX = 0;
+  		rightX = 0,
+  		target;
 
   	function onKeyboardMove(event) {
   		
@@ -139,14 +140,16 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
         console.log("DOWN KEY HIT: ", event)
         
       } else if(event.which === 13) {
+
+      	TweenMax.set($(`#item${target}`), {clearProps:"all"});
+		init();
+
       	var degrees = addX % 360;
 		var songs = carousel.children().length;
 		var delta = 360 / songs;
 
 
 		console.log('degrees is ', degrees);
-		var target = 1;
-		// console.log('delta is ', delta);
 		var upper = degrees + delta/2;
 		var lower = degrees - delta/2;
 
@@ -159,10 +162,9 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 			}
 		}
 		target !== 1 ? target = 14 - target : target;
-		console.log($(`#item${target}`));
-		// $(`#item${target}`).css('background-color', 'white');
+
 		TweenMax.to($(`#item${target}`), 1, {
-			transform: 'scale3d(1,1,1) scale(4) translateY(-140px)',
+			transform: 'scale(4) translateY(-140px)',
 			'background-color': '#E9A92E'
 		});
       }
