@@ -8,16 +8,22 @@ app.config(function($stateProvider) {
             }
         },
         controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory) {
-
             $scope.songs = songs;
+
+            function findSong(name) {
+                return _.find($scope.songs, song => song.title === name);
+            }
+
+            console.log('songs:');
             console.log(songs);
-            var currentSong = songs[4];
+            var currentSong = findSong('CHAOS');
             console.log(currentSong);
             var difficulty = "Hard";
             var chartId = currentSong.Charts[difficulty].stepChart;
-            console.log(chartId);
+            var mainBPM = Number(currentSong.bpms.match(/=(\d+.*\d*)/)[1]);
+            console.log(`mainBPM: ${mainBPM}`);
             // var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
-            var mainBPM = 136.34;
+            //var mainBPM = 136.34;
 
 
 
