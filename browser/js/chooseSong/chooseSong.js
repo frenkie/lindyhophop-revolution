@@ -75,15 +75,16 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 				var $item = item.eq(i);
 				var $block = $item.find('.carouselItemInner');
 
-        //thanks @chrisgannon!
-        TweenMax.set($item, {rotationY:rY * i, z:radius, transformOrigin:"50% 50% " + -radius + "px"});
+	        //thanks @chrisgannon!
+	        TweenMax.set($item, {rotationY:rY * i, z:radius, transformOrigin:"50% 50% " + -radius + "px"});
+	        mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
 
 				animateIn( $item, $block )
 			}
 
 			// set mouse x and y props and looper ticker
-			window.addEventListener( "mousemove", onMouseMove, false );
-			// window.addEventListener( "keydown", onKeyboardMove, false );
+			// window.addEventListener( "mousemove", onMouseMove, false );
+			window.addEventListener( "keydown", onKeyboardMove, false );
 			ticker = setInterval( looper, 1000/60 );
 		}
 
@@ -105,36 +106,47 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 			TweenMax.to( $block, $s-.5, { delay:$d, x:0, y:0, autoAlpha:1, ease:Expo.easeInOut} )
 		}
 
-		function onMouseMove(event)
-		{
-      // console.log("THIS IS THE EVENT: ", event);
-			mouseX = -(-(window.innerWidth * .5) + event.pageX) * .0025;
-			mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
-			mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
-		}
-
-  	// function onKeyboardMove(event)
+		// function onMouseMove(event)
 		// {
-    //   if(event.which === 39) {
-    //     console.log("RIGHT KEY HIT: ", event);
-  	// 		mouseX = -(-(window.innerWidth * .5) - 750) * .0025;
-  	// 		mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
-  	// 		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
-    //   } else if(event.which === 37) {
-    //     console.log("LEFT KEY HIT: ", event)
-    //     mouseX = -(-(window.innerWidth * .5) + 750) * .0025;
-    //     mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
-    //     mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
-    //   } else if(event.which === 38) {
-    //     console.log("UP KEY HIT: ", event)
-    //     TweenMax.set(container, {perspective:600})
-    //   }
+  //     // console.log("THIS IS THE EVENT: ", event);
+		// 	mouseX = -(-(window.innerWidth * .5) + event.pageX) * .0025;
+		// 	mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+		// 	mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
 		// }
+	var leftX = 0, 
+  		rightX = 0;
+
+  	function onKeyboardMove(event) {
+  		
+      if(event.which === 39) {
+      	console.log("RIGHT KEY HIT: ", event);
+      	rightX < 10 ? rightX += 2 : rightX;
+      	leftX > 0 ? leftX = rightX = 0 : leftX = 0;
+      	console.log(leftX, rightX);
+		mouseX = (window.innerWidth * .5) * .0004 * rightX;
+		// mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
+      } else if(event.which === 37) {
+        console.log("LEFT KEY HIT: ", event);
+        leftX < 10 ? leftX += 2 : leftX;
+      	rightX > 0 ? leftX = rightX = 0 : rightX = 0;
+      	console.log(leftX, rightX);
+        mouseX = -(window.innerWidth * .5) * .0004 * leftX;
+        // mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+        mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
+      } else if(event.which === 38) {
+        console.log("UP KEY HIT: ", event)
+        TweenMax.set(container, {perspective:600})
+      } else if(event.which === 13) {
+      	console.log("ENTER KEY HIT: ", event);
+      	TweenMax.to()
+      }
+	}
 
 		// loops and sets the carousel 3d properties
 		function looper()
 		{
-			addX += mouseX
+			addX += mouseX;
 			TweenMax.to( carousel, 1, { rotationY:addX, rotationX:mouseY, ease:Quint.easeOut } )
 			TweenMax.set( carousel, {z:mouseZ } )
 			fps.text( 'Framerate: ' + counter.tick() + '/60 FPS' )
