@@ -1,3 +1,5 @@
+/* global Tone */
+
 app.config(function($stateProvider) {
     $stateProvider.state('animation', {
         url: '/animation',
@@ -23,8 +25,8 @@ app.config(function($stateProvider) {
 
 
             $scope.setUpSong = function() {
-
                 var currentSong = JSON.parse($scope.choice.song);
+                currentSong.offset = Number(currentSong.offset)
                 var difficulty = $scope.choice.difficulty;
 
                 var chartId = currentSong.Charts[difficulty].stepChart;
@@ -32,23 +34,15 @@ app.config(function($stateProvider) {
 
                 var config = {
                     TIMING_WINDOW: 0.15,
-                    ARROW_SPEED: 520/mainBPM, //Time it takes for the arrow to cross screen
+                    ARROW_SPEED: 520, //Factor for timing how fast arrow takes (this number / bpm for seconds)
                     MEASURE_TIME: 1/(mainBPM/60/4) //Number of seconds per measure
                 };
+                config.ARROW_TIME = config.ARROW_SPEED/mainBPM;
 
 
+                function prepSong(stepChart) {
 
-                SongFactory.getChartById(chartId)
-                .then(function(stepchart) {
-       
                     var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
-
-                    var dirToKeyCode = {
-                      left: '37',
-                      down: '40',
-                      up: '38',
-                      right: '39'
-                    };
 
                     var keyCodeToDir = {
                       '37': 'left',
@@ -56,36 +50,25 @@ app.config(function($stateProvider) {
                       '38': 'up',
                       '39': 'right'
                     };
-                    
+
                     var startTime = 0;
                     ArrowFactory.makeTimeline();
-                    var charts = tone.timeCharts(stepchart.chart);
-
+                    var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM);
+                    var arrowWorker = new Worker('/js/animation/animationWorker.js');
+                    arrowWorker.postMessage({type: 'preChart', chart: stepChart.chart, bpm: mainBPM, offset: config.ARROW_TIME + currentSong.offset, timing: config.TIMING_WINDOW})
+                    arrowWorker.onmessage = function (e) {
+                        arrows[e.data.dir][e.data.index].el.remove();
+                    };
                     var addListener = function () {
-
                         document.body.addEventListener('keydown', function (e) {
-                            if (keyCodeToDir[e.which]) e.preventDefault();
+                            var dir = keyCodeToDir[e.which];
+                            if (dir) e.preventDefault();
                             else return;
-
                             var timeStamp = (Date.now() - startTime) / 1000;
-                            var thisChart = charts[keyCodeToDir[e.which]];
-                            console.log(keyCodeToDir[e.which], "pressed on", timeStamp);
-                            var pointer = thisChart.length - 1;
-                            var lastOne = thisChart[thisChart.length - 1];
-
-                            while (lastOne.time < timeStamp - config.TIMING_WINDOW) {
-                                thisChart.pop();
-                                lastOne = thisChart[thisChart.length - 1];
-                            }
-                            var diff = Math.abs(lastOne.time - timeStamp);
-                            console.log(`diff: ${diff}`);
-                            if (diff < config.TIMING_WINDOW) {
-                                lastOne.arrow.el.remove();
-                            }
-
+                            arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
                         });
                     }
-                    
+
                     $scope.runInit = function () {
                         ArrowFactory.resumeTimeline();
                         tone.start();
@@ -93,14 +76,15 @@ app.config(function($stateProvider) {
                         addListener();
                     }
 
-                    $scope.ready = true;
+                    Tone.Buffer.onload = function () {
+                        $scope.ready = true;
+                        $scope.$digest();
+                    };
+                };
 
-                });
-        
-                
-
+                SongFactory.getChartById(chartId)
+                .then(prepSong);
             };
-
 
 
         }

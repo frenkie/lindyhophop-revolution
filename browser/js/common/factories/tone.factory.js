@@ -1,17 +1,16 @@
+/* global Tone */
+
 app.factory('ToneFactory', function (ArrowFactory) {
     var ToneFactory = function (path, bpm, offset, config) {
-        
-        this.config = config;         
+
+        this.config = config;
         this.path = path;
         this.bpm = bpm;
-        this.syncOffset = config.ARROW_SPEED + Number(offset);
+        this.syncOffset = config.ARROW_SPEED/bpm + Number(offset);
         this.player = new Tone.Player(this.path).toMaster();
         this.transport = Tone.Transport;
         this.transport.bpm.value = this.bpm;
-
-        // Tone.Buffer.onload = function () {
-        //     //console.log('Buffer loaded!');
-        // }
+        this.buffer = Tone.Buffer;
 
     }
 
@@ -48,7 +47,7 @@ app.factory('ToneFactory', function (ArrowFactory) {
                         var dir = ArrowFactory.indexToDir(index);
                         var arrow = new ArrowFactory(dir, 1);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
-                        obj[indexToDir[index]].unshift({ arrow: arrow, time: timeStamp, attempted: false });
+                        obj[indexToDir[index]].unshift({arrow: arrow, time: timeStamp, attempted: false });
                     }
                 });
             });
