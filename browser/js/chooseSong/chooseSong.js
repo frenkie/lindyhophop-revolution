@@ -115,7 +115,8 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 		// }
 	var leftX = 0, 
   		rightX = 0,
-  		target;
+  		target,
+  		prevTarget;
 
   	function onKeyboardMove(event) {
   		
@@ -146,6 +147,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 
       	var degrees = addX % 360;
 		var songs = carousel.children().length;
+		console.log('songs ', carousel.children());
 		var delta = 360 / songs;
 
 
@@ -162,6 +164,8 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 			}
 		}
 		target !== 1 ? target = 14 - target : target;
+		// if( prevTarget === target ) $state.go('confirmSong', {songId: songs[target-1]._id})
+		prevTarget = target;
 
 		TweenMax.to($(`#item${target}`), 1, {
 			transform: 'scale(4) translateY(-140px)',
