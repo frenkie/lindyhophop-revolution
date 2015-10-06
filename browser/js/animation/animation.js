@@ -20,12 +20,9 @@ app.config(function($stateProvider) {
             console.log(currentSong);
             var difficulty = "Hard";
             var chartId = currentSong.Charts[difficulty].stepChart;
-            var mainBPM = Number(currentSong.bpms.match(/=(\d+.*\d*)/)[1]);
+            var mainBPM = currentSong.bpms[0].bpm;
             console.log(`mainBPM: ${mainBPM}`);
-            // var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
-            //var mainBPM = 136.34;
-
-
+ 
 
             SongFactory.getChartById(chartId)
                 .then(function(chart) {

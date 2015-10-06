@@ -11,8 +11,11 @@ var schema = new mongoose.Schema({
     required: true
   },
   bpms: {
-    type: String,
+    type: Array,
     required: true
+  },
+  stops: {
+    type: Array
   },
   displayBpm: {
     type: String
