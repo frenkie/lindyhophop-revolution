@@ -1,8 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 
-var startSteps = /^\d{4}$/,
-	sectionSplit = /\/\/(?:\-*)dance\-[a-z]+\s\-\s(?:\-*)/,
+var sectionSplit = /\/\/(?:\-*)dance\-[a-z]+\s\-\s(?:\-*)/,
 	metadataRegex = /\#([A-Z0-9]*)\:([^;]*)/,
 	singleRegex = /dance\-([a-z]+)/,
 	difficultyRegex = /(Beginner|Easy|Medium|Hard|Challenge)/,
@@ -19,8 +18,10 @@ function readSM(title) {
 		var sections = data.split(sectionSplit);
 
 		var metadataStr = sections[0].split('\r\n').filter(function(line) {
-			return line.charAt(0) === '#';
+			return line.trim().charAt(0) === '#';
 		});
+
+		console.log(metadataStr);
 		var metadata = {};
 		metadataStr.forEach(function(line) {
 			var lineParse = metadataRegex.exec(line);
@@ -41,6 +42,7 @@ function readSM(title) {
 				charts[chartData.difficulty] = chartData;
 			}
 		}
+
 		return {
 			charts: charts,
 			metadata: metadata
@@ -78,9 +80,7 @@ function getChartData(section) {
 		else {
 			var attrs = line.split(',');
 			if (attrs.length === 5) {
-				attrs = attrs.map(function(num) {
-					return Number(numberIdRegex.exec(num)[1]);
-				});
+				attrs = attrs.map(num => Number(numberIdRegex.exec(num)[1]));
 				data.grooveRadar = {
 					stream: attrs[0],
 					voltage: attrs[1],
@@ -97,7 +97,8 @@ function getChartData(section) {
 module.exports = {
 	readSM: readSM
 };
-//readSM(process.argv[2]);
+
+// readSM(process.argv[2]);
 
 
 
