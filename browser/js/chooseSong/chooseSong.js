@@ -14,7 +14,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
       $scope.loading = true;
       setTimeout(function(){
         $state.go('confirmSong');
-      }, 3000);
+      }, 5000);
     };
     // set and cache variables
 		var w, container, carousel, item, radius, itemLength, rY, ticker, fps;
