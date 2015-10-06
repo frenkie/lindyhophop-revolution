@@ -10,14 +10,12 @@ app.config(function ($stateProvider) {
 
 app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 
-    $(document).bind('keyup', function(e) {
-      if(e.keyCode==39){
-        $('#item1').trigger('click');
-      } else if(e.keyCode==37){
-        $('#item2').trigger('click');
-      }
-    });
-
+    $scope.loadSong = function() {
+      $scope.loading = true;
+      setTimeout(function(){
+        $state.go('confirmSong');
+      }, 3000);
+    };
     // set and cache variables
 		var w, container, carousel, item, radius, itemLength, rY, ticker, fps;
 		var mouseX = 0;
@@ -85,6 +83,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 
 			// set mouse x and y props and looper ticker
 			window.addEventListener( "mousemove", onMouseMove, false );
+			// window.addEventListener( "keydown", onKeyboardMove, false );
 			ticker = setInterval( looper, 1000/60 );
 		}
 
@@ -108,10 +107,29 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 
 		function onMouseMove(event)
 		{
+      // console.log("THIS IS THE EVENT: ", event);
 			mouseX = -(-(window.innerWidth * .5) + event.pageX) * .0025;
 			mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
 			mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
 		}
+
+  	// function onKeyboardMove(event)
+		// {
+    //   if(event.which === 39) {
+    //     console.log("RIGHT KEY HIT: ", event);
+  	// 		mouseX = -(-(window.innerWidth * .5) - 750) * .0025;
+  	// 		mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+  	// 		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
+    //   } else if(event.which === 37) {
+    //     console.log("LEFT KEY HIT: ", event)
+    //     mouseX = -(-(window.innerWidth * .5) + 750) * .0025;
+    //     mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+    //     mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
+    //   } else if(event.which === 38) {
+    //     console.log("UP KEY HIT: ", event)
+    //     TweenMax.set(container, {perspective:600})
+    //   }
+		// }
 
 		// loops and sets the carousel 3d properties
 		function looper()

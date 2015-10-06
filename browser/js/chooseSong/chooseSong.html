@@ -5,18 +5,19 @@
 	</header>
 
 	<div id="contentContainer" class="trans3d" id='selectable'>
-	<section id="carouselContainer" class="trans3d">
-		<figure id="item1" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">3, 2, 1 Steps</span></figure>
-		<figure id="item2" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Raining Men</span></figure>
-		<figure id="item3" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Sandstorm</span></figure>
-		<figure id="item4" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Joe's Mixtape</span></figure>
-		<figure id="item5" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Sean's Ballad</span></figure>
-		<figure id="item6" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Jimin's Rap</span></figure>
-		<figure id="item7" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Karen's Beat</span></figure>
-		<figure id="item8" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Jay's Creation</span></figure>
-		<figure id="item9" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Kim's Musical</span></figure>
-		<figure id="item10" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Look At Me Now</span></figure>
-		<figure id="item11" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Alexander Hamilton</span></figure>
-		<figure id="item12" class="carouselItem trans3d" ui-sref='confirmSong'><span class="carouselItemInner trans3d">Smile</span></figure>
+	<loading ng-show='loading'></loading>
+	<section id="carouselContainer" class="trans3d" ng-hide='loading'>
+		<figure id="item1" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">3, 2, 1 Steps</span></figure>
+		<figure id="item2" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Raining Men</span></figure>
+		<figure id="item3" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Sandstorm</span></figure>
+		<figure id="item4" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Joe's Mixtape</span></figure>
+		<figure id="item5" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Sean's Ballad</span></figure>
+		<figure id="item6" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Jimin's Rap</span></figure>
+		<figure id="item7" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Karen's Beat</span></figure>
+		<figure id="item8" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Jay's Creation</span></figure>
+		<figure id="item9" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Kim's Musical</span></figure>
+		<figure id="item10" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Look At Me Now</span></figure>
+		<figure id="item11" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Alexander Hamilton</span></figure>
+		<figure id="item12" class="carouselItem trans3d" ng-click='loadSong()'><span class="carouselItemInner trans3d">Smile</span></figure>
 	</section>
 	</div>
