@@ -10,12 +10,14 @@ app.config(function($stateProvider) {
         controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory) {
 
             $scope.songs = songs;
-            var currentSong = songs[3];
+            console.log(songs);
+            var currentSong = songs[0];
             console.log(currentSong);
             var difficulty = "Hard";
             var chartId = currentSong.Charts[difficulty].stepChart;
             console.log(chartId);
-            var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
+            // var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
+            var mainBPM = 190;
 
 
 
@@ -27,8 +29,11 @@ app.config(function($stateProvider) {
 
             // var $body = $(document.body)
 
+                var syncOffset = (currentSong.offset < 0) ? (240/mainBPM + Number(currentSong.offset)) : currentSong.offset;
+                console.log('syncOffset:',syncOffset);
 
-                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, 2.7, currentSong.offset);
+                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, 2.7-syncOffset, syncOffset);
+                // 240/bpm - offset
 
             // ArrowFactory.makeTimeline();
             // testChart.forEach(function(measure, chIndex) {
@@ -71,7 +76,7 @@ app.config(function($stateProvider) {
             var TIMING_WINDOW = 0.18;
             var startTime = 0;
             ArrowFactory.makeTimeline();
-            var charts = tone.timeCharts(testChart);
+            var charts = tone.timeCharts(chart.chart);
             console.log(charts);
             var addListener = function () {
                 document.body.addEventListener('keydown', function (e) {
@@ -125,7 +130,7 @@ app.config(function($stateProvider) {
             $scope.runInit = function () {
                 ArrowFactory.resumeTimeline();
                 tone.start();
-                startTime = Date.now() + 580;
+                startTime = Date.now() - currentSong.offset*1000;
                 addListener();
             }
 

@@ -18,7 +18,7 @@ app.factory('ToneFactory', function (ArrowFactory) {
     ToneFactory.prototype.start = function () {
 
         this.player.start(`+${this.syncOffset}`);
-        this.transport.start(this.measureOffset, "-2:0:0");
+        this.transport.start(this.measureOffset, "0:0:0");
     }
 
     var indexToDir = {
