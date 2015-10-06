@@ -17,7 +17,7 @@ app.config(function($stateProvider) {
             var chartId = currentSong.Charts[difficulty].stepChart;
             console.log(chartId);
             // var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
-            var mainBPM = 136.34;
+            var mainBPM = 150;
 
 
 
@@ -25,10 +25,10 @@ app.config(function($stateProvider) {
                 .then(function(chart) {
 
                     console.log(chart);
-   
+
 
                 var syncOffset = currentSong.offset;
-                console.log('syncOffset:',syncOffset);  
+                console.log('syncOffset:',syncOffset);
                 var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, (130 * 4)/mainBPM + Number(syncOffset), syncOffset);
 
             var dirToKeyCode = {
@@ -47,31 +47,42 @@ app.config(function($stateProvider) {
             var TIMING_WINDOW = 0.15;
             var startTime = 0;
             ArrowFactory.makeTimeline();
-            var charts = tone.timeCharts(chart.chart);
-            console.log(charts);
+            var arrows = ArrowFactory.makeArrows(chart.chart, mainBPM);
+            window.arrows = arrows;
+            console.log('arrows are', arrows)
+            var arrowWorker = new Worker('/js/animation/animationWorker.js');
+            arrowWorker.postMessage({type: 'preChart', chart: chart.chart, bpm: mainBPM, offset: (130 * 4)/mainBPM + Number(syncOffset), timing: TIMING_WINDOW})
+            arrowWorker.onmessage = function (e) {
+                console.log('removing arrow dir', e.data.dir, 'index', e.data.index)
+                console.log(arrows[e.data.dir][e.data.index]);
+                arrows[e.data.dir][e.data.index].el.remove();
+            };
             var addListener = function () {
                 console.log('added listener to arows')
                 document.body.addEventListener('keydown', function (e) {
-                    if (keyCodeToDir[e.which]) e.preventDefault();
+                    var dir = keyCodeToDir[e.which];
+                    if (dir) e.preventDefault();
                     else return;
                     var timeStamp = (Date.now() - startTime) / 1000;
-                    var thisChart = charts[keyCodeToDir[e.which]];
-                    console.log(keyCodeToDir[e.which], "pressed on", timeStamp)
-                    var pointer = thisChart.length - 1;
-                    var lastOne = thisChart[thisChart.length - 1];
-                    while (lastOne.time < timeStamp - TIMING_WINDOW) {
-                        thisChart.pop();
-                        lastOne = thisChart[thisChart.length - 1];
-                    }
-                    var diff = Math.abs(lastOne.time - timeStamp);
-                    console.log(`diff: ${diff}`);
-                    if (diff < TIMING_WINDOW) {
-                        lastOne.arrow.el.remove();
-                    }
+                    arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
+
+                    // var thisChart = charts[keyCodeToDir[e.which]];
+                    // console.log(keyCodeToDir[e.which], "pressed on", timeStamp)
+                    // var pointer = thisChart.length - 1;
+                    // var lastOne = thisChart[thisChart.length - 1];
+                    // while (lastOne.time < timeStamp - TIMING_WINDOW) {
+                    //     thisChart.pop();
+                    //     lastOne = thisChart[thisChart.length - 1];
+                    // }
+                    // var diff = Math.abs(lastOne.time - timeStamp);
+                    // console.log(`diff: ${diff}`);
+                    // if (diff < TIMING_WINDOW) {
+                    //     lastOne.arrow.el.remove();
+                    // }
 
                 });
             }
-            
+
             $scope.runInit = function () {
                 console.log('arrows starting', Date.now());
                 ArrowFactory.resumeTimeline();

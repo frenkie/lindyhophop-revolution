@@ -11,6 +11,8 @@ app.factory('ArrowFactory', function () {
     Arrow.makeTimeline = function (params) {
         if (!tl) tl = new TimelineLite(params);
         tl.pause();
+    window.tl = tl;
+
     };
 
     Arrow.resumeTimeline = function () {
@@ -38,6 +40,38 @@ app.factory('ArrowFactory', function () {
         }
         return dict[n]
     }
+    var indexToDir = {
+      '0': 'left',
+      '1': 'down',
+      '2': 'up',
+      '3': 'right'
+    };
+
+
+    Arrow.makeArrows = function (stepChart, bpm) {
+
+        var obj = {
+            right: [],
+            left: [],
+            up:[],
+            down: []
+        }
+        stepChart.forEach(function (measure, measureIndex) {
+            var notes = measure.length;
+            measure.forEach(function (line, lineIndex) {
+                line.forEach(function (maybeArrow, index) {
+                    if (maybeArrow !== "0") { //FIX to account for freezes : D
+                        var dir = Arrow.indexToDir(index);
+                        var arrow = new Arrow(dir, 1);
+                        arrow.animate(bpm, measureIndex, lineIndex, notes);
+                        obj[indexToDir[index]].unshift(arrow);
+                    }
+                });
+            });
+        });
+
+        return obj;
+    };
 
     Arrow.ARROW_KEYS = {
       left: '37',

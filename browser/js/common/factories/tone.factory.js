@@ -50,7 +50,7 @@ app.factory('ToneFactory', function (ArrowFactory) {
                         var dir = ArrowFactory.indexToDir(index);
                         var arrow = new ArrowFactory(dir, 1);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
-                        obj[indexToDir[index]].unshift({ arrow: arrow, time: timeStamp, attempted: false });
+                        obj[indexToDir[index]].unshift({arrow: arrow, time: timeStamp, attempted: false });
                     }
                 });
             });
