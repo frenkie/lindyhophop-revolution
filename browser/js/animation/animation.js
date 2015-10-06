@@ -11,13 +11,13 @@ app.config(function($stateProvider) {
 
             $scope.songs = songs;
             console.log(songs);
-            var currentSong = songs[0];
+            var currentSong = songs[4];
             console.log(currentSong);
             var difficulty = "Hard";
             var chartId = currentSong.Charts[difficulty].stepChart;
             console.log(chartId);
             // var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
-            var mainBPM = 190;
+            var mainBPM = 136.34;
 
 
 
@@ -29,10 +29,9 @@ app.config(function($stateProvider) {
 
             // var $body = $(document.body)
 
-                var syncOffset = (currentSong.offset < 0) ? (240/mainBPM + Number(currentSong.offset)) : currentSong.offset;
-                console.log('syncOffset:',syncOffset);
-
-                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, 2.7-syncOffset, syncOffset);
+                var syncOffset = currentSong.offset;
+                console.log('syncOffset:',syncOffset);  
+                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, (130 * 4)/mainBPM + Number(syncOffset), syncOffset);
                 // 240/bpm - offset
 
             // ArrowFactory.makeTimeline();
@@ -73,12 +72,13 @@ app.config(function($stateProvider) {
               '38': 'up',
               '39': 'right'
             };
-            var TIMING_WINDOW = 0.18;
+            var TIMING_WINDOW = 0.15;
             var startTime = 0;
             ArrowFactory.makeTimeline();
             var charts = tone.timeCharts(chart.chart);
             console.log(charts);
             var addListener = function () {
+                console.log('added listener to arows')
                 document.body.addEventListener('keydown', function (e) {
                     if (keyCodeToDir[e.which]) e.preventDefault();
                     else return;
@@ -128,7 +128,9 @@ app.config(function($stateProvider) {
             }
             
             $scope.runInit = function () {
+                console.log('arrows starting', Date.now());
                 ArrowFactory.resumeTimeline();
+
                 tone.start();
                 startTime = Date.now() - currentSong.offset*1000;
                 addListener();

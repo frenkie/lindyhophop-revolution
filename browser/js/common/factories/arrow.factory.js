@@ -24,8 +24,7 @@ app.factory('ArrowFactory', function () {
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
         this.startTime = startTime;
-        this.crossingTime = startTime + animationLength;
-        this.toneTime = this.crossingTime - 0.67239;
+        console.log('animationLength is', animationLength);
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
         // .to(this.el, animationLength/2, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
