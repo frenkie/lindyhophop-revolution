@@ -16,7 +16,7 @@ app.config(function($stateProvider) {
 
             console.log('songs:');
             console.log(songs);
-            var currentSong = findSong('Sandstorm');
+            var currentSong = findSong('CaramellDansen');
             console.log(currentSong);
             var difficulty = "Hard";
             var chartId = currentSong.Charts[difficulty].stepChart;
@@ -32,7 +32,7 @@ app.config(function($stateProvider) {
 
                 var syncOffset = currentSong.offset;
                 console.log('syncOffset:',syncOffset);  
-                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, (130 * 4)/mainBPM + Number(syncOffset), syncOffset);
+                var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, (ArrowFactory.speed * 4)/mainBPM + Number(syncOffset), syncOffset);
 
             var dirToKeyCode = {
               left: '37',
@@ -50,10 +50,9 @@ app.config(function($stateProvider) {
             var TIMING_WINDOW = 0.15;
             var startTime = 0;
             ArrowFactory.makeTimeline();
-            var charts = tone.timeCharts(chart.chart);
-            console.log(charts);
+            var charts = tone.timeCharts(chart.chart, currentSong.bpms, currentSong.stops);
+            console.log('charts:', charts);
             var addListener = function () {
-                console.log('added listener to arows')
                 document.body.addEventListener('keydown', function (e) {
                     if (keyCodeToDir[e.which]) e.preventDefault();
                     else return;
