@@ -119,27 +119,52 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
   	function onKeyboardMove(event) {
   		
       if(event.which === 39) {
-      	console.log("RIGHT KEY HIT: ", event);
       	rightX < 10 ? rightX += 2 : rightX;
       	leftX > 0 ? leftX = rightX = 0 : leftX = 0;
-      	console.log(leftX, rightX);
-		mouseX = (window.innerWidth * .5) * .0004 * rightX;
+        mouseX = -(window.innerWidth * .5) * .0004 * rightX;
+
 		// mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
 		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
       } else if(event.which === 37) {
-        console.log("LEFT KEY HIT: ", event);
         leftX < 10 ? leftX += 2 : leftX;
       	rightX > 0 ? leftX = rightX = 0 : rightX = 0;
-      	console.log(leftX, rightX);
-        mouseX = -(window.innerWidth * .5) * .0004 * leftX;
+		mouseX = (window.innerWidth * .5) * .0004 * leftX;
+
         // mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
         mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
       } else if(event.which === 38) {
         console.log("UP KEY HIT: ", event)
-        TweenMax.set(container, {perspective:600})
+
+      } else if(event.which === 40) {
+        console.log("DOWN KEY HIT: ", event)
+        
       } else if(event.which === 13) {
-      	console.log("ENTER KEY HIT: ", event);
-      	TweenMax.to()
+      	var degrees = addX % 360;
+		var songs = carousel.children().length;
+		var delta = 360 / songs;
+
+
+		console.log('degrees is ', degrees);
+		var target = 1;
+		// console.log('delta is ', delta);
+		var upper = degrees + delta/2;
+		var lower = degrees - delta/2;
+
+		for (var i = 0; i < songs; i++) {
+			if (degrees >= 0) {
+				if (degrees < i*delta + delta/2 && degrees > i*delta - delta/2) target = i+1;
+			}
+			else {
+				if (degrees < (i-songs)*delta + delta/2 && degrees > (i-songs)*delta - delta/2) target = i+1;
+			}
+		}
+		target !== 1 ? target = 14 - target : target;
+		console.log($(`#item${target}`));
+		// $(`#item${target}`).css('background-color', 'white');
+		TweenMax.to($(`#item${target}`), 1, {
+			transform: 'scale3d(1,1,1) scale(4) translateY(-140px)',
+			'background-color': '#E9A92E'
+		});
       }
 	}
 
