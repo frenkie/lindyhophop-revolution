@@ -54,10 +54,10 @@ app.factory('ToneFactory', function (ArrowFactory) {
                     }
                 });
             });
-        })
+        });
 
         return obj;
-    }
+    };
 
 
     return ToneFactory;
