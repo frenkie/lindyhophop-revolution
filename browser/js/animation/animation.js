@@ -62,10 +62,18 @@ app.config(function($stateProvider) {
                     var startTime = 0;
                     ArrowFactory.makeTimeline();
                     var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM);
-                    ArrowFactory.addStops(currentSong.stops, config.ARROW_TIME + currentSong.offset, config.BEAT_TIME);
-                    ArrowFactory.addBpmChanges(currentSong.bpms, config.ARROW_TIME + currentSong.offset, config.BEAT_TIME);
+                    ArrowFactory.addStops(currentSong.stops, config.ARROW_TIME, config.BEAT_TIME);
+                    ArrowFactory.addBpmChanges(currentSong.bpms, config.ARROW_TIME, config.BEAT_TIME, currentSong.stops);
                     var arrowWorker = new Worker('/js/animation/animationWorker.js');
-                    arrowWorker.postMessage({type: 'preChart', chart: stepChart.chart, bpm: mainBPM, offset: config.ARROW_TIME + currentSong.offset, timing: config.TIMING_WINDOW})
+                    arrowWorker.postMessage({
+                        type: 'preChart',
+                        chart: stepChart.chart,
+                        bpm: mainBPM,
+                        offset: config.ARROW_TIME + currentSong.offset,
+                        timing: config.TIMING_WINDOW,
+                        bpms: currentSong.bpms,
+                        stops: currentSong.stops
+                    });
                     arrowWorker.onmessage = function (e) {
                         arrows[e.data.dir][e.data.index].el.remove();
                     };

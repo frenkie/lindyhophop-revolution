@@ -48,29 +48,29 @@ app.factory('ArrowFactory', function () {
     }
 
     Arrow.addStops = function (stops, animationOffset, beatTime) {
+        console.log('stops', stops);
         stops.forEach(stop => {
             this.addStop(animationOffset + beatTime * stop.beat, stop.duration);
         })
     }
 
-    Arrow.addBpmChanges = function (bpms, animationOffset, beatTime) {
+    var getStopTime = function (thisBeat, stops) {
+        return stops.reduce(function (time, stop) {
+            if (thisBeat >= stop.beat) {
+                time += stop.duration;
+            }
+            return time;
+        }, 0);
+    };
+
+    Arrow.addBpmChanges = function (bpms, animationOffset, beatTime, stops) {
+        console.log('bpms', bpms);
         bpms.forEach(bpm => {
             if (bpm.beat === 0) return;
-            this.addBPMChange(animationOffset + beatTime * bpm.beat, bpm.duration);
+            // var stopTime = getStopTime(bpm.beat, stops);
+            this.addBPMChange(animationOffset + beatTime * bpm.beat, bpm.bpm/bpms[0].bpm);
         })
     }
-
-    // ArrowFactory.addStops(currentSong.stops, config.ARROW_TIME + currentSong.offset);
-    // ArrowFactory.addBpmChanges(currentSong.bpms, config.ARROW_TIME + currentSong.offset);
-
-    // console.log('arrow height offset',ArrowFactory.speed*4/bpm);
-    //     stops.forEach(function(stop) {
-    //         ArrowFactory.addStop(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*stop.beat, stop.duration);
-    //     })
-    //     bpms.forEach(function(bpmChange) {
-    //         if (bpmChange.beat === 0) return;
-    //         ArrowFactory.addBPMChange(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*bpmChange.beat, bpmChange.bpm/bpm);
-    //     })
 
 
     Arrow.addStop = function(timestamp, duration) {
@@ -80,7 +80,10 @@ app.factory('ArrowFactory', function () {
 
     Arrow.addBPMChange = function(timestamp, tempoScale) {
         console.log(`bpm changed by ${tempoScale} times at ${timestamp}`);
-        TweenMax.delayedCall(timestamp, TweenMax.globalTimeScale, [tempoScale]);
+        tl.add(function () {
+            console.log('changing tempo now to', tempoScale);
+            tl.timeScale(tempoScale);
+        }, timestamp);
     }
 
 
