@@ -190,11 +190,17 @@ app.factory('CarouselFactory', function() {
             // var temp = Song.findOne({title: carousel.children()[target-1].innerText});
             if (prevTarget === target) $state.go('confirmSong');
             prevTarget = target;
+    		// console.log($(`#item${target}`));
+
 
             TweenMax.to($(`#item${target}`), 1, {
                 transform: 'scale(4) translateY(-140px)',
                 'background-color': '#E9A92E'
             });
+
+            $(`#item${target}`).trigger('click');
+
+            //HACKY HACK to move chosen song to front view by moving carousel to degree 0
             addX = 0;
         }
     }

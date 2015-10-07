@@ -16,6 +16,7 @@ app.config(function ($stateProvider) {
 app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout) {
 
 	$scope.songs = songs;
+	$scope.choice = {};
 
     $scope.loadSong = function() {
       $scope.loading = true;
@@ -26,8 +27,22 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     $(document).ready(
     	$timeout ( function () {
-    		CarouselFactory.init()
+    		CarouselFactory.init();
+    		window.addEventListener("keydown", $scope.onKeyboardMove, false);
     	})
     );
+
+    $scope.getDifficulties = function(song) {
+    	$scope.choice.song = song;
+        $scope.choice.levels = [];
+        // var currentSong = JSON.parse($scope.choice.song);
+        var charts = song.Charts;
+        for(var key in charts) {
+            $scope.choice.levels.push(key);
+        }
+        console.log('levels ', $scope.choice.levels);
+        console.log('song ', $scope.choice.song);
+    };
+
 
 });
