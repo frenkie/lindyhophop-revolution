@@ -65,7 +65,6 @@ function readSM(title) {
         charts: charts,
         metadata: metadata
     }
-
 }
 
 
@@ -119,3 +118,4 @@ module.exports = {
 
 // for running in node bash
 //readSM(process.argv[2]);
+
