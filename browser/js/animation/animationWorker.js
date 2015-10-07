@@ -40,7 +40,6 @@ var getBPMTime = function (thisBeat, bpms) {
         var newBeatTime = 60 / bpms[i].bpm;
         var timeAtBeatWithOldBPM = (thisBeat - bpms[i].beat) * oldBeatTime;
         var timeAtBeatWithNewBPM = (thisBeat - bpms[i].beat) * newBeatTime;
-        // console.log(`at ${thisBeat}, time would be ${timeAtBeatWithOldBPM} at old bpm and ${timeAtBeatWithNewBPM} at new bpm`)
         addedTime += timeAtBeatWithNewBPM - timeAtBeatWithOldBPM;
     }
     return addedTime;
@@ -59,8 +58,9 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
             var thisBeat = measureIndex * 4 + lineIndex;
             var stopTime = getStopTime(thisBeat, stops);
             var extraBPMTime = getBPMTime(thisBeat, bpms);
-            console.log(`adding ${stopTime} extra stop time and ${extraBPMTime} extra BPM time`)
+            timeStamp += stopTime + extraBPMTime;
             line.forEach(function (maybeArrow, index) {
+                // console.log(`adding ${stopTime} extra stop time and ${extraBPMTime} extra BPM time for this ${indexToDir[index]} arrow`)
                 if (maybeArrow !== "0") {
                     chart[indexToDir[index]].unshift({ time: timeStamp, attempted: false });
                 }
@@ -85,7 +85,7 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
 };
 
 var respondToKey = function (time, dir) {
-    console.log(`pressed ${dir} at ${time}`);
+    // console.log(`pressed ${dir} at ${time}`);
     var thisChart = chart[dir];
     if (!thisChart.length) return;
     var lastOne = thisChart[thisChart.length - 1];
