@@ -67,7 +67,7 @@ function getChartData(section) {
 		}).map(function(line) {
 			return line.split('');
 		});
-	})
+	});
 	data.stepchart = beats;
 
 	chartInfo = chartInfo.trim().split('\r\n');
