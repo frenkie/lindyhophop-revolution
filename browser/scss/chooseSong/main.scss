@@ -86,4 +86,15 @@
 		background-color:rgba(212, 65, 121, .75);
 	}
 
-	
+	.loadingScreen {
+		width: inherit;
+		height: inherit;
+		background-color: black;
+		border: 5px solid white;
+	}
+
+	//note for later - change the widths and heights of the parent elements to be %
+	.loadingSphere {
+		margin-left: 35%;
+		margin-top: 10%;
+	}

@@ -14,7 +14,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
       $scope.loading = true;
       setTimeout(function(){
         $state.go('confirmSong');
-      }, 3000);
+      }, 5000);
     };
     // set and cache variables
 		var w, container, carousel, item, radius, itemLength, rY, ticker, fps;
@@ -113,13 +113,13 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 		// 	mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
 		// 	mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
 		// }
-	var leftX = 0, 
+	var leftX = 0,
   		rightX = 0,
   		target,
   		prevTarget;
 
   	function onKeyboardMove(event) {
-  		
+
       if(event.which === 39) {
       	rightX < 10 ? rightX += 2 : rightX;
       	leftX > 0 ? leftX = rightX = 0 : leftX = 0;
@@ -141,14 +141,14 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 
       } else if(event.which === 40) {
         console.log("DOWN KEY HIT: ", event)
-        
+
       } else if(event.which === 27) {
         console.log("ESC KEY HIT: ", event);
         leftX = 0;
         rightX = 0;
         TweenMax.set($(`#item${target}`), {clearProps:"all"});
         init();
-        
+
       } else if(event.which === 13) {
 
       	TweenMax.set($(`#item${target}`), {clearProps:"all"});
