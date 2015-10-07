@@ -75,15 +75,16 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 				var $item = item.eq(i);
 				var $block = $item.find('.carouselItemInner');
 
-        //thanks @chrisgannon!
-        TweenMax.set($item, {rotationY:rY * i, z:radius, transformOrigin:"50% 50% " + -radius + "px"});
+	        //thanks @chrisgannon!
+	        TweenMax.set($item, {rotationY:rY * i, z:radius, transformOrigin:"50% 50% " + -radius + "px"});
+	        mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
 
 				animateIn( $item, $block )
 			}
 
 			// set mouse x and y props and looper ticker
-			window.addEventListener( "mousemove", onMouseMove, false );
-			// window.addEventListener( "keydown", onKeyboardMove, false );
+			// window.addEventListener( "mousemove", onMouseMove, false );
+			window.addEventListener( "keydown", onKeyboardMove, false );
 			ticker = setInterval( looper, 1000/60 );
 		}
 
@@ -105,36 +106,89 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 			TweenMax.to( $block, $s-.5, { delay:$d, x:0, y:0, autoAlpha:1, ease:Expo.easeInOut} )
 		}
 
-		function onMouseMove(event)
-		{
-      // console.log("THIS IS THE EVENT: ", event);
-			mouseX = -(-(window.innerWidth * .5) + event.pageX) * .0025;
-			mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
-			mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
-		}
-
-  	// function onKeyboardMove(event)
+		// function onMouseMove(event)
 		// {
-    //   if(event.which === 39) {
-    //     console.log("RIGHT KEY HIT: ", event);
-  	// 		mouseX = -(-(window.innerWidth * .5) - 750) * .0025;
-  	// 		mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
-  	// 		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
-    //   } else if(event.which === 37) {
-    //     console.log("LEFT KEY HIT: ", event)
-    //     mouseX = -(-(window.innerWidth * .5) + 750) * .0025;
-    //     mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
-    //     mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
-    //   } else if(event.which === 38) {
-    //     console.log("UP KEY HIT: ", event)
-    //     TweenMax.set(container, {perspective:600})
-    //   }
+  //     // console.log("THIS IS THE EVENT: ", event);
+		// 	mouseX = -(-(window.innerWidth * .5) + event.pageX) * .0025;
+		// 	mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+		// 	mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
 		// }
+	var leftX = 0,
+  		rightX = 0,
+  		target,
+  		prevTarget;
+
+  	function onKeyboardMove(event) {
+
+      if(event.which === 39) {
+      	rightX < 10 ? rightX += 2 : rightX;
+      	leftX > 0 ? leftX = rightX = 0 : leftX = 0;
+        mouseX = -(window.innerWidth * .5) * .0004 * rightX;
+        console.log(leftX, rightX);
+
+		// mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
+      } else if(event.which === 37) {
+        leftX < 10 ? leftX += 2 : leftX;
+      	rightX > 0 ? leftX = rightX = 0 : rightX = 0;
+		mouseX = (window.innerWidth * .5) * .0004 * leftX;
+		console.log(leftX, rightX);
+
+        // mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+        mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
+      } else if(event.which === 38) {
+        console.log("UP KEY HIT: ", event)
+
+      } else if(event.which === 40) {
+        console.log("DOWN KEY HIT: ", event)
+
+      } else if(event.which === 27) {
+        console.log("ESC KEY HIT: ", event);
+        leftX = 0;
+        rightX = 0;
+        TweenMax.set($(`#item${target}`), {clearProps:"all"});
+        init();
+
+      } else if(event.which === 13) {
+
+      	TweenMax.set($(`#item${target}`), {clearProps:"all"});
+		init();
+
+
+      	var degrees = addX % 360;
+		var songs = carousel.children().length;
+		console.log('songs ', carousel.children());
+		var delta = 360 / songs;
+
+
+		console.log('degrees is ', degrees);
+		var upper = degrees + delta/2;
+		var lower = degrees - delta/2;
+
+		for (var i = 0; i < songs; i++) {
+			if (degrees >= 0) {
+				if (degrees < i*delta + delta/2 && degrees > i*delta - delta/2) target = i+1;
+			}
+			else {
+				if (degrees < (i-songs)*delta + delta/2 && degrees > (i-songs)*delta - delta/2) target = i+1;
+			}
+		}
+		target !== 1 ? target = 14 - target : target;
+		// var temp = Song.findOne({title: carousel.children()[target-1].innerText});
+		if( prevTarget === target ) $state.go('confirmSong');
+		prevTarget = target;
+
+		TweenMax.to($(`#item${target}`), 1, {
+			transform: 'scale(4) translateY(-140px)',
+			'background-color': '#E9A92E'
+		});
+      }
+	}
 
 		// loops and sets the carousel 3d properties
 		function looper()
 		{
-			addX += mouseX
+			addX += mouseX;
 			TweenMax.to( carousel, 1, { rotationY:addX, rotationX:mouseY, ease:Quint.easeOut } )
 			TweenMax.set( carousel, {z:mouseZ } )
 			fps.text( 'Framerate: ' + counter.tick() + '/60 FPS' )
