@@ -30,7 +30,8 @@ app.config(function($stateProvider) {
                 var difficulty = $scope.choice.difficulty;
 
                 var chartId = currentSong.Charts[difficulty].stepChart;
-                var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
+                // var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
+                var mainBPM = Number(currentSong.bpms.match(/=(\d+\.\d+)/)[1]);
 
                 var config = {
                     TIMING_WINDOW: 0.15,

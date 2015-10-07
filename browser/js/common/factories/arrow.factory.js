@@ -63,17 +63,14 @@ app.factory('ArrowFactory', function () {
                         var dir = Arrow.indexToDir(index);
                         var color;
                         var thing = lineIndex / notes * 16;
-                        console.log(thing);
                         if (thing % 4 === 0) {
                             color = 'purple';
                         } else if (thing % 2 === 0) {
-                            color = 'red';
-                        } else {
                             color = 'orange';
+                        } else {
+                            color = 'red';
                         }
-                        console.log(color);
-                        console.log('did idsd dnfakdfnnsks');
-                        var arrow = new Arrow(dir, 1, 'red');
+                        var arrow = new Arrow(dir, 1, color);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].unshift(arrow);
                     }
