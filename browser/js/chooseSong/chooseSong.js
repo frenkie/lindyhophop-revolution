@@ -124,9 +124,8 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
       	rightX < 10 ? rightX += 2 : rightX;
       	leftX > 0 ? leftX = rightX = 0 : leftX = 0;
         mouseX = -(window.innerWidth * .5) * .0004 * rightX;
-        console.log(leftX, rightX);
 
-		// mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+		mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
 		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
       } else if(event.which === 37) {
         leftX < 10 ? leftX += 2 : leftX;
@@ -134,7 +133,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 		mouseX = (window.innerWidth * .5) * .0004 * leftX;
 		console.log(leftX, rightX);
 
-        // mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
+        mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
         mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
       } else if(event.which === 38) {
         console.log("UP KEY HIT: ", event)
@@ -146,6 +145,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
         console.log("ESC KEY HIT: ", event);
         leftX = 0;
         rightX = 0;
+        // addX = 0;
         TweenMax.set($(`#item${target}`), {clearProps:"all"});
         init();
 
@@ -182,6 +182,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 			transform: 'scale(4) translateY(-140px)',
 			'background-color': '#E9A92E'
 		});
+		addX = 0;
       }
 	}
 

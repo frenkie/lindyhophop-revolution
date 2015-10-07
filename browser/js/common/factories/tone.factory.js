@@ -26,10 +26,12 @@ app.factory('ToneFactory', function (ArrowFactory) {
         3: 'right'
     }
 
-    ToneFactory.prototype.timeCharts = function (stepChart) {
+    ToneFactory.prototype.timeCharts = function (stepChart, bpms, stops) {
         var bpm = this.bpm;
         var measureTime = this.config.MEASURE_TIME;    // number of seconds per measure
         var timeSoFar = this.syncOffset;
+        var measureOffset = this.measureOffset*-1;
+        console.log('measureTime:', measureTime);
 
         var obj = {
             right: [],
@@ -37,6 +39,8 @@ app.factory('ToneFactory', function (ArrowFactory) {
             up:[],
             down: []
         }
+
+
         stepChart.forEach(function (measure, measureIndex) {
             var notes = measure.length;
             var noteTime = measureTime / measure.length;
@@ -52,6 +56,16 @@ app.factory('ToneFactory', function (ArrowFactory) {
                 });
             });
         });
+
+        console.log('arrow height offset',ArrowFactory.speed*4/bpm);
+        stops.forEach(function(stop) {
+            ArrowFactory.addStop(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*stop.beat, stop.duration);
+        })
+        bpms.forEach(function(bpmChange) {
+            if (bpmChange.beat === 0) return;
+            ArrowFactory.addBPMChange(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*bpmChange.beat, bpmChange.bpm/bpm);
+        })
+
 
         return obj;
     };
