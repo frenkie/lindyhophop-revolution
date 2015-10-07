@@ -14,6 +14,10 @@ app.config(function($stateProvider) {
             $scope.choice = {};
 
 
+            function findSong(name) {
+                return _.find($scope.songs, song => song.title === name);
+            }
+
             $scope.getDifficulties = function() {
                 $scope.choice.levels = [];
                 var currentSong = JSON.parse($scope.choice.song);
@@ -23,18 +27,21 @@ app.config(function($stateProvider) {
                 }
             };
 
-
             $scope.setUpSong = function() {
                 var currentSong = JSON.parse($scope.choice.song);
                 currentSong.offset = Number(currentSong.offset)
                 var difficulty = $scope.choice.difficulty;
 
                 var chartId = currentSong.Charts[difficulty].stepChart;
-                var mainBPM = Number(currentSong.bpms.match(/=(\d+)/)[1]);
+                var mainBPM = currentSong.bpms[0].bpm;
+
+                console.log('currentSong:');
+                console.log(currentSong);
+                console.log(`mainBPM: ${mainBPM}`);
 
                 var config = {
                     TIMING_WINDOW: 0.15,
-                    ARROW_SPEED: 520, //Factor for timing how fast arrow takes (this number / bpm for seconds)
+                    ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
                     MEASURE_TIME: 1/(mainBPM/60/4) //Number of seconds per measure
                 };
                 config.ARROW_TIME = config.ARROW_SPEED/mainBPM;
@@ -85,8 +92,11 @@ app.config(function($stateProvider) {
                 SongFactory.getChartById(chartId)
                 .then(prepSong);
             };
-
-
         }
     });
 });
+
+
+
+
+
