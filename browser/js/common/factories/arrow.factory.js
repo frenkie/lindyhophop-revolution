@@ -1,8 +1,10 @@
+/*global $*/
+
 app.factory('ArrowFactory', function () {
-    var Arrow = function (direction, player) {
+    var Arrow = function (direction, player, color) {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
-        this.el = $(`<div class="arrow"><img src="/img/${direction}.svg"></img></div>`);
+        this.el = $(`<div class="arrow"><img src="/img/${direction}-${color}.png"></img></div>`);
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
 
@@ -86,7 +88,16 @@ app.factory('ArrowFactory', function () {
                 line.forEach(function (maybeArrow, index) {
                     if (maybeArrow !== "0") { //FIX to account for freezes : D
                         var dir = Arrow.indexToDir(index);
-                        var arrow = new Arrow(dir, 1);
+                        var color;
+                        var thing = lineIndex / notes * 16;
+                        if (thing % 4 === 0) {
+                            color = 'purple';
+                        } else if (thing % 2 === 0) {
+                            color = 'orange';
+                        } else {
+                            color = 'red';
+                        }
+                        var arrow = new Arrow(dir, 1, color);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].unshift(arrow);
                     }
