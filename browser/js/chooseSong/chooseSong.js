@@ -124,6 +124,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
       	rightX < 10 ? rightX += 2 : rightX;
       	leftX > 0 ? leftX = rightX = 0 : leftX = 0;
         mouseX = -(window.innerWidth * .5) * .0004 * rightX;
+        console.log(leftX, rightX);
 
 		// mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
 		mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
@@ -131,6 +132,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
         leftX < 10 ? leftX += 2 : leftX;
       	rightX > 0 ? leftX = rightX = 0 : rightX = 0;
 		mouseX = (window.innerWidth * .5) * .0004 * leftX;
+		console.log(leftX, rightX);
 
         // mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
         mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260 ) - 200);
@@ -139,6 +141,13 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 
       } else if(event.which === 40) {
         console.log("DOWN KEY HIT: ", event)
+        
+      } else if(event.which === 27) {
+        console.log("ESC KEY HIT: ", event);
+        leftX = 0;
+        rightX = 0;
+        TweenMax.set($(`#item${target}`), {clearProps:"all"});
+        init();
         
       } else if(event.which === 13) {
 
