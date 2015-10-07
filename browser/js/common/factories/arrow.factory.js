@@ -4,7 +4,7 @@ app.factory('ArrowFactory', function () {
     var Arrow = function (direction, player, color) {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
-        this.el = $(`<div class="arrow"><img src="/img/${direction}-${color}.svg"></img></div>`);
+        this.el = $(`<div class="arrow"><img src="/img/${direction}-${color}.png"></img></div>`);
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
 
@@ -73,7 +73,7 @@ app.factory('ArrowFactory', function () {
                         }
                         console.log(color);
                         console.log('did idsd dnfakdfnnsks');
-                        var arrow = new Arrow(dir, 1, color);
+                        var arrow = new Arrow(dir, 1, 'red');
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].unshift(arrow);
                     }
