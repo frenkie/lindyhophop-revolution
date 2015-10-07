@@ -1,4 +1,4 @@
-app.config(function ($stateProvider, SongFactory) {
+app.config(function ($stateProvider) {
 
     $stateProvider.state('confirmSong', {
         url: '/confirmSong',
@@ -13,7 +13,7 @@ app.config(function ($stateProvider, SongFactory) {
 
 });
 
-app.controller('ConfirmSongCtrl', function ($scope, AuthService, $state, theSong) {
+app.controller('ConfirmSongCtrl', function ($scope, $state, theSong) {
   $scope.song = theSong;
   console.log("This is the song: ", theSong);
 

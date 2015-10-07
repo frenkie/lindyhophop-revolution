@@ -1,6 +1,6 @@
 app.factory('SongFactory', function ($http) {
 
-  
+
   var getSongs = function() {
     return $http.get('/api/songs/')
     .then(function(res) {

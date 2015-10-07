@@ -17,14 +17,16 @@ app.controller('MainMenuCtrl', function ($scope, $state) {
 
   window.addEventListener('keydown', onArrowKey, false);
   function onArrowKey(event) {
-      play();
       var active = $('.activeChoice');
       var activeNumber = parseInt(active[0].id.slice(-1));
+      console.log("active number: ", activeNumber)
     if(event.which === 40) {
+      play();
       activeNumber = activeNumber === 5? 1 : activeNumber + 1;
       active.removeClass("activeChoice");
       $('#option' + activeNumber).addClass("activeChoice");
     } else if(event.which === 38) {
+      play();
       activeNumber = activeNumber === 1? 5 : activeNumber - 1;
       active.removeClass("activeChoice");
       $('#option' + activeNumber).addClass("activeChoice");

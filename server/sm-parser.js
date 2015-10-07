@@ -80,7 +80,9 @@ function getChartData(section) {
 		else {
 			var attrs = line.split(',');
 			if (attrs.length === 5) {
-				attrs = attrs.map(num => Number(numberIdRegex.exec(num)[1]));
+				attrs = attrs.map(function(num) {
+					return Number(numberIdRegex.exec(num)[1])
+				});
 				data.grooveRadar = {
 					stream: attrs[0],
 					voltage: attrs[1],
@@ -99,6 +101,3 @@ module.exports = {
 };
 
 // readSM(process.argv[2]);
-
-
-
