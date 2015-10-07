@@ -154,6 +154,7 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
       	TweenMax.set($(`#item${target}`), {clearProps:"all"});
 		init();
 
+
       	var degrees = addX % 360;
 		var songs = carousel.children().length;
 		console.log('songs ', carousel.children());
