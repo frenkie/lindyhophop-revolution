@@ -1,3 +1,5 @@
+/* global TweenMax */
+
 app.factory('ArrowFactory', function () {
     var Arrow = function (direction, player) {
         this.direction = direction;
@@ -43,6 +45,32 @@ app.factory('ArrowFactory', function () {
         //console.log('measureTime is ',measureTime)
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
+
+    Arrow.addStops = function (stops, animationOffset, beatTime) {
+        stops.forEach(stop => {
+            this.addStop(animationOffset + beatTime * stop.beat, stop.duration);
+        })
+    }
+
+    Arrow.addBpmChanges = function (bpms, animationOffset, beatTime) {
+        bpms.forEach(bpm => {
+            if (bpm.beat === 0) return;
+            this.addBPMChange(animationOffset + beatTime * bpm.beat, bpm.duration);
+        })
+    }
+
+    // ArrowFactory.addStops(currentSong.stops, config.ARROW_TIME + currentSong.offset);
+    // ArrowFactory.addBpmChanges(currentSong.bpms, config.ARROW_TIME + currentSong.offset);
+
+    // console.log('arrow height offset',ArrowFactory.speed*4/bpm);
+    //     stops.forEach(function(stop) {
+    //         ArrowFactory.addStop(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*stop.beat, stop.duration);
+    //     })
+    //     bpms.forEach(function(bpmChange) {
+    //         if (bpmChange.beat === 0) return;
+    //         ArrowFactory.addBPMChange(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*bpmChange.beat, bpmChange.bpm/bpm);
+    //     })
+
 
     Arrow.addStop = function(timestamp, duration) {
         tl.addPause(timestamp, TweenMax.delayedCall, [duration, function(){tl.play()}]);
@@ -93,16 +121,26 @@ app.factory('ArrowFactory', function () {
                 });
             });
         });
+        console.log('arrow height offset',ArrowFactory.speed*4/bpm);
+        stops.forEach(function(stop) {
+            Arrow.addStop(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*stop.beat, stop.duration);
+        })
+        bpms.forEach(function(bpmChange) {
+            if (bpmChange.beat === 0) return;
+            Arrow.addBPMChange(measureOffset + ((ArrowFactory.speed*4)/bpm) + (measureTime/4)*bpmChange.beat, bpmChange.bpm/bpm);
+        })
+
+        Arrow.ARROW_KEYS = {
+          left: '37',
+          down: '40',
+          up: '38',
+          right: '39'
+        };
+
 
         return obj;
     };
 
-    Arrow.ARROW_KEYS = {
-      left: '37',
-      down: '40',
-      up: '38',
-      right: '39'
-    };
-
     return Arrow;
+
 })

@@ -45,6 +45,7 @@ app.config(function($stateProvider) {
                     MEASURE_TIME: 1/(mainBPM/60/4) //Number of seconds per measure
                 };
                 config.ARROW_TIME = config.ARROW_SPEED/mainBPM;
+                config.BEAT_TIME = config.MEASURE_TIME/4;
 
 
                 function prepSong(stepChart) {
@@ -61,6 +62,8 @@ app.config(function($stateProvider) {
                     var startTime = 0;
                     ArrowFactory.makeTimeline();
                     var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM);
+                    ArrowFactory.addStops(currentSong.stops, config.ARROW_TIME + currentSong.offset, config.BEAT_TIME);
+                    ArrowFactory.addBpmChanges(currentSong.bpms, config.ARROW_TIME + currentSong.offset, config.BEAT_TIME);
                     var arrowWorker = new Worker('/js/animation/animationWorker.js');
                     arrowWorker.postMessage({type: 'preChart', chart: stepChart.chart, bpm: mainBPM, offset: config.ARROW_TIME + currentSong.offset, timing: config.TIMING_WINDOW})
                     arrowWorker.onmessage = function (e) {
