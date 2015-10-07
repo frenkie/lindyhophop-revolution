@@ -69,6 +69,7 @@ function createStepCharts(parsedSM) {
                 title: parsedSM.metadata.TITLE,
                 artist: parsedSM.metadata.ARTIST,
                 bpms: parsedSM.metadata.BPMS,
+                stops: parsedSM.metadata.STOPS,
                 displayBpm: parsedSM.metadata.DISPLAYBPM,
                 offset: parsedSM.metadata.OFFSET,
                 music: parsedSM.metadata.MUSIC,
