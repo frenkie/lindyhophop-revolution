@@ -16,7 +16,7 @@ app.config(function($stateProvider) {
 
             console.log('songs:');
             console.log(songs);
-            var currentSong = findSong('Pluto Relinquish');
+            var currentSong = findSong('Caramelldansen');
             console.log(currentSong);
             var difficulty = "Hard";
             var chartId = currentSong.Charts[difficulty].stepChart;

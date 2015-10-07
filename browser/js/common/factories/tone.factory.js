@@ -53,46 +53,46 @@ app.factory('ToneFactory', function (ArrowFactory) {
         console.log('bpmRanges:', bpmRanges);
         console.log('stepChart length', stepChart.length);
 
-        bpmRanges.forEach(function(range) {
-            var tempo = range[0], beginning = range[1], end = range[2];
-            var measureDuration = 240/tempo;
-            console.log('bpm:', tempo, 'beginning:', beginning, 'end:', end, 'measureTime:', measureDuration);
+        // bpmRanges.forEach(function(range) {
+        //     var tempo = range[0], beginning = range[1], end = range[2];
+        //     var measureDuration = 240/tempo;
+        //     console.log('bpm:', tempo, 'beginning:', beginning, 'end:', end, 'measureTime:', measureDuration);
 
-            for (var i=beginning; i<end; i++) {
-                console.log('start at measure', i/4, 'start at beat', (i/4 - Math.floor(i/4))*4);
-                var measure = stepChart[i], measureIndex = i;
-                //console.log('measure undefined?', measure, i);
-                var notes = measure.length;
-                var noteTime = measureDuration / measure.length;
-                measure.forEach(function (line, lineIndex) {
-                    var timeStamp = measureTime*measureIndex + noteTime*lineIndex + timeSoFar;
-                    line.forEach(function (maybeArrow, index) {
-                        if (maybeArrow !== "0") { //FIX to account for freezes : D
-                            var dir = ArrowFactory.indexToDir(index);
-                            var arrow = new ArrowFactory(dir, 1);
-                            arrow.animate(tempo, measureIndex, lineIndex, notes);
-                            obj[indexToDir[index]].unshift({ arrow: arrow, time: timeStamp, attempted: false });
-                        }
-                    });
-                });
-            }
-        })
-
-        // stepChart.forEach(function (measure, measureIndex) {
-        //     var notes = measure.length;
-        //     var noteTime = measureTime / measure.length;
-        //     measure.forEach(function (line, lineIndex) {
-        //         var timeStamp = measureTime*measureIndex + noteTime*lineIndex + timeSoFar;
-        //         line.forEach(function (maybeArrow, index) {
-        //             if (maybeArrow !== "0") { //FIX to account for freezes : D
-        //                 var dir = ArrowFactory.indexToDir(index);
-        //                 var arrow = new ArrowFactory(dir, 1);
-        //                 arrow.animate(bpm, measureIndex, lineIndex, notes);
-        //                 obj[indexToDir[index]].unshift({ arrow: arrow, time: timeStamp, attempted: false });
-        //             }
+        //     for (var i=beginning; i<end; i++) {
+        //         console.log('start at measure', i/4, 'start at beat', (i/4 - Math.floor(i/4))*4);
+        //         var measure = stepChart[i], measureIndex = i;
+        //         //console.log('measure undefined?', measure, i);
+        //         var notes = measure.length;
+        //         var noteTime = measureDuration / measure.length;
+        //         measure.forEach(function (line, lineIndex) {
+        //             var timeStamp = measureTime*measureIndex + noteTime*lineIndex + timeSoFar;
+        //             line.forEach(function (maybeArrow, index) {
+        //                 if (maybeArrow !== "0") { //FIX to account for freezes : D
+        //                     var dir = ArrowFactory.indexToDir(index);
+        //                     var arrow = new ArrowFactory(dir, 1);
+        //                     arrow.animate(tempo, measureIndex, lineIndex, notes);
+        //                     obj[indexToDir[index]].unshift({ arrow: arrow, time: timeStamp, attempted: false });
+        //                 }
+        //             });
         //         });
-        //     });
-        // });
+        //     }
+        // })
+
+        stepChart.forEach(function (measure, measureIndex) {
+            var notes = measure.length;
+            var noteTime = measureTime / measure.length;
+            measure.forEach(function (line, lineIndex) {
+                var timeStamp = measureTime*measureIndex + noteTime*lineIndex + timeSoFar;
+                line.forEach(function (maybeArrow, index) {
+                    if (maybeArrow !== "0") { //FIX to account for freezes : D
+                        var dir = ArrowFactory.indexToDir(index);
+                        var arrow = new ArrowFactory(dir, 1);
+                        arrow.animate(bpm, measureIndex, lineIndex, notes);
+                        obj[indexToDir[index]].unshift({ arrow: arrow, time: timeStamp, attempted: false });
+                    }
+                });
+            });
+        });
 
         console.log('arrow height offset',ArrowFactory.speed*4/bpm);
         stops.forEach(function(stop) {
