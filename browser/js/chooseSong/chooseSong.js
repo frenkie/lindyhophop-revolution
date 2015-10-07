@@ -164,7 +164,8 @@ app.controller('ChooseSongCtrl', function ($scope, AuthService, $state) {
 			}
 		}
 		target !== 1 ? target = 14 - target : target;
-		// if( prevTarget === target ) $state.go('confirmSong', {songId: songs[target-1]._id})
+		// var temp = Song.findOne({title: carousel.children()[target-1].innerText});
+		if( prevTarget === target ) $state.go('confirmSong');
 		prevTarget = target;
 
 		TweenMax.to($(`#item${target}`), 1, {

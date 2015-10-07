@@ -1,7 +1,7 @@
 app.config(function ($stateProvider) {
 
     $stateProvider.state('confirmSong', {
-        url: '/confirmSong/:songId',
+        url: '/confirmSong',
         templateUrl: 'js/confirmSong/confirmSong.html',
         controller: 'ConfirmSongCtrl'
     });
