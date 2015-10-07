@@ -91,6 +91,7 @@ var respondToKey = function (time, dir) {
     }
     var diff = Math.abs(lastOne.time - time);
     if (diff < TIMING_WINDOW) {
+        console.log('diff:', diff);
         postMessage({dir, index: thisChart.length - 1})
     }
 }
