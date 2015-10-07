@@ -21,7 +21,6 @@ function readSM(title) {
 			return line.trim().charAt(0) === '#';
 		});
 
-		console.log(metadataStr);
 		var metadata = {};
 		metadataStr.forEach(function(line) {
 			var lineParse = metadataRegex.exec(line);
@@ -34,7 +33,7 @@ function readSM(title) {
 		var charts = {};
 		for (var i=1; i<sections.length; i++) {
 			// only use single charts for now
-			var section = sections[i];
+			var section = sections[i].replace(';','');
 			if (singleRegex.exec(section)[1] === 'single') {
 				// var difficulty = difficultyRegex.exec(section)[1];
 				// console.log('difficulty:',difficulty);
@@ -42,6 +41,7 @@ function readSM(title) {
 				charts[chartData.difficulty] = chartData;
 			}
 		}
+
 
 		return {
 			charts: charts,
@@ -98,7 +98,7 @@ module.exports = {
 	readSM: readSM
 };
 
-// readSM(process.argv[2]);
+//readSM(process.argv[2]);
 
 
 
