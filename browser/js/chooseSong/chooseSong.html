@@ -9,10 +9,11 @@
 			<h1>Dance Dance Evolution</h1>
 			<h3>Choose your beat</h3>
 		</header>
-		<div id="contentContainer" class="trans3d">
+		<div id="contentContainer" class="trans3d" >
 			<section id="carouselContainer" class="trans3d" ng-hide='loading'>
-				<figure id="item1" class="carouselItem trans3d" ng-click='loadSong()'><p>3, 2, 1 Steps</p></figure>
-				<figure id="item2" class="carouselItem trans3d" ng-click='loadSong()'><p>Raining Men</p></figure>
+				<figure id="item{{$index + 1}}" class="carouselItem trans3d" ng-click='loadSong()' ng-repeat="song in songs"><p>{{song.title}}</p></figure>
+				<!-- <figure id="item1" class="carouselItem trans3d" ng-click='loadSong()'><p>3, 2, 1 Steps</p></figure> -->
+				<!-- <figure id="item2" class="carouselItem trans3d" ng-click='loadSong()'><p>Raining Men</p></figure>
 				<figure id="item3" class="carouselItem trans3d" ng-click='loadSong()'><p>Sandstorm</p></figure>
 				<figure id="item4" class="carouselItem trans3d" ng-click='loadSong()'><p>Joe's Mixtape</p></figure>
 				<figure id="item5" class="carouselItem trans3d" ng-click='loadSong()'><p>Sean's Ballad</p></figure>
@@ -22,7 +23,7 @@
 				<figure id="item9" class="carouselItem trans3d" ng-click='loadSong()'><p>Kim's Musical</p></figure>
 				<figure id="item10" class="carouselItem trans3d" ng-click='loadSong()'><p>Look At Me Now</p></figure>
 				<figure id="item11" class="carouselItem trans3d" ng-click='loadSong()'><p>Alexander Hamilton</p></figure>
-				<figure id="item12" class="carouselItem trans3d" ng-click='loadSong()'><p>Smile</p></figure>
+				<figure id="item12" class="carouselItem trans3d" ng-click='loadSong()'><p>Smile</p></figure> -->
 			</section>
 		</div>
 	</div>
