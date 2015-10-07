@@ -35,9 +35,9 @@ app.config(function($stateProvider) {
                 var chartId = currentSong.Charts[difficulty].stepChart;
                 var mainBPM = currentSong.bpms[0].bpm;
 
-                console.log('currentSong:');
-                console.log(currentSong);
-                console.log(`mainBPM: ${mainBPM}`);
+                // console.log('currentSong:');
+                // console.log(currentSong);
+                // console.log(`mainBPM: ${mainBPM}`);
 
                 var config = {
                     TIMING_WINDOW: 0.15,

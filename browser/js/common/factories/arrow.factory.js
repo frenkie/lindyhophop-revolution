@@ -17,7 +17,7 @@ app.factory('ArrowFactory', function () {
 
 
     /** Arrow settings (chosen by the player) */
-    Arrow.speedModifier = 2;
+    Arrow.speedModifier = 1;
     /** */
 
     Arrow.speed = Arrow.SPEED_1X / Arrow.speedModifier;
