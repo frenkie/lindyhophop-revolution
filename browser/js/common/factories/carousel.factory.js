@@ -1,6 +1,6 @@
 app.factory('CarouselFactory', function($state) {
     // set and cache variables
-    var looperRunning, w, container, carousel, item, radius, itemLength, rY, ticker, fps;
+    var looperRunning, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
     var addX = 0;
     var leftX = 0,
@@ -29,8 +29,12 @@ app.factory('CarouselFactory', function($state) {
     };
     var counter = Object.create(fps_counter);
 
+    function getRandomInt($n) {
+        return Math.floor((Math.random() * $n) + 1);
+    }
+
     function init() {
-        w = $(window);
+        //var w = $(window);
         container = $('#contentContainer');
         carousel = $('#carouselContainer');
         item = $('.carouselItem');
@@ -63,7 +67,7 @@ app.factory('CarouselFactory', function($state) {
             animateIn($item, $block);
         }
 
-        // set looper ticker if it isn't already set
+        //set looper ticker if it isn't already set
         if (!looperRunning) {
         	ticker = setInterval(looper, 1000 / 60);
         	looperRunning = true;
@@ -74,12 +78,12 @@ app.factory('CarouselFactory', function($state) {
         var $nrX = 360 * getRandomInt(2);
         var $nrY = 360 * getRandomInt(2);
 
-        var $nx = -2000 + getRandomInt(4000)
-        var $ny = -2000 + getRandomInt(4000)
-        var $nz = -4000 + getRandomInt(4000)
+        var $nx = -2000 + getRandomInt(4000);
+        var $ny = -2000 + getRandomInt(4000);
+        var $nz = -4000 + getRandomInt(4000);
 
-        var $s = 1.5 + (getRandomInt(10) * .1)
-        var $d = 1 - (getRandomInt(8) * .1)
+        var $s = 1.5 + (getRandomInt(10) * .1);
+        var $d = 1 - (getRandomInt(8) * .1);
 
         TweenMax.set($item, {
             autoAlpha: 1,
@@ -188,9 +192,7 @@ app.factory('CarouselFactory', function($state) {
         fps.text('Framerate: ' + counter.tick() + '/60 FPS')
     }
 
-    function getRandomInt($n) {
-        return Math.floor((Math.random() * $n) + 1);
-    }
+
 
     function chooseLevel(event) {
         
