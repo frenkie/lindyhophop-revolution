@@ -48,7 +48,6 @@ app.factory('ArrowFactory', function () {
     }
 
     Arrow.addStops = function (stops, animationOffset, beatTime) {
-        console.log('stops', stops);
         stops.forEach(stop => {
             this.addStop(animationOffset + beatTime * stop.beat, stop.duration);
         })
@@ -64,10 +63,8 @@ app.factory('ArrowFactory', function () {
     };
 
     Arrow.addBpmChanges = function (bpms, animationOffset, beatTime, stops) {
-        console.log('bpms', bpms);
         bpms.forEach(bpm => {
             if (bpm.beat === 0) return;
-            // var stopTime = getStopTime(bpm.beat, stops);
             this.addBPMChange(animationOffset + beatTime * bpm.beat, bpm.bpm/bpms[0].bpm);
         })
     }
@@ -75,13 +72,11 @@ app.factory('ArrowFactory', function () {
 
     Arrow.addStop = function(timestamp, duration) {
         tl.addPause(timestamp, TweenMax.delayedCall, [duration, function(){tl.play()}]);
-        console.log('paused at',timestamp);
     }
 
     Arrow.addBPMChange = function(timestamp, tempoScale) {
         console.log(`bpm changed by ${tempoScale} times at ${timestamp}`);
         tl.add(function () {
-            console.log('changing tempo now to', tempoScale);
             tl.timeScale(tempoScale);
         }, timestamp);
     }
@@ -120,20 +115,13 @@ app.factory('ArrowFactory', function () {
                         var dir = Arrow.indexToDir(index);
                         var color;
                         var thing = lineIndex / notes * 16;
-
-                        var note = lineIndex / notes;
-                        if ((note * 4) % 1 === 0) color = 'red';
-                        else if (((note - 1/8)*4) % 1 === 0) color = 'blue';
-                        else if (((note - 1/16)*8) % 1 === 0) color = 'yellow';
-                        else color = 'green';
-
-                        // if (thing % 4 === 0) {
-                        //     color = 'red';
-                        // } else if (thing % 2 === 0) {
-                        //     color = 'blue';
-                        // } else {
-                        //     color = 'yellow';
-                        // }
+                        if (thing % 4 === 0) {
+                            color = 'purple';
+                        } else if (thing % 2 === 0) {
+                            color = 'orange';
+                        } else {
+                            color = 'red';
+                        }
                         var arrow = new Arrow(dir, 1, color);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].unshift(arrow);

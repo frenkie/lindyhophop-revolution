@@ -116,6 +116,6 @@ module.exports = {
     readSM: readSM
 };
 
+
 // for running in node bash
 //readSM(process.argv[2]);
-
