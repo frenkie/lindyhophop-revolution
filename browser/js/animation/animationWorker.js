@@ -1,3 +1,4 @@
+var startTime = 0;
 var indexToDir = {
   '0': 'left',
   '1': 'down',
@@ -6,13 +7,33 @@ var indexToDir = {
 };
 
 var chart = {
-    right: [],
-    left: [],
-    up:[],
-    down: []
+    right: {
+      list: [],
+      pointer: 0
+    },
+    left: {
+      list: [],
+      pointer: 0
+    },
+    up: {
+      list: [],
+      pointer: 0
+    },
+    down: {
+      list: [],
+      pointer: 0
+    }
 };
 
+var timeouts = [];
+
 var TIMING_WINDOW;
+
+var checkArrow = function(arrowTime) {
+  if(!arrowTime.hit) {
+    postMessage({hit: false, index: arrowTime.index})
+  }
+}
 
 var getStopTime = function (thisBeat, stops) {
     return stops.reduce(function (time, stop) {
@@ -51,29 +72,36 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function (maybeArrow, index) {
                 if (maybeArrow !== "0") {
-                    chart[indexToDir[index]].unshift({ time: timeStamp, attempted: false });
+                    //thisIndex is the index of the arrow just pushed
+                    var arrowTime = {time: timeStamp, attempted: false , hit: false};
+                    var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
+                    arrowTime.index = arrowIndex;
+                    var thisTimeout = function() {
+                      setTimeout(function () {
+                        checkArrow(arrowTime);
+                      }, (timeStamp + TIMING_WINDOW) * 1000)
+                    };
+                    timeouts.push(thisTimeout);
                 }
             });
         });
     });
 
-    console.log('chart is ready');
+    console.log('chart is ready', chart);
 };
 
 var respondToKey = function (time, dir) {
     var thisChart = chart[dir];
-    if (!thisChart.length) return;
-    var lastOne = thisChart[thisChart.length - 1];
-    while (lastOne && lastOne.time < time - TIMING_WINDOW) {
-        thisChart.pop();
-        lastOne = thisChart[thisChart.length - 1];
+    if (thisChart.pointer === thisChart.list.length) return;
+    var nextOne = thisChart.list[thisChart.pointer];
+    while (nextOne.time < time - TIMING_WINDOW) {
+        thisChart.pointer++;
+        nextOne = thisChart.list[thisChart.pointer];
     }
-    if (!lastOne) {
-        return;
-    }
-    var diff = Math.abs(lastOne.time - time);
+    var diff = Math.abs(nextOne.time - time);
     if (diff < TIMING_WINDOW) {
-        postMessage({dir, index: thisChart.length - 1})
+        nextOne.hit = true;
+        postMessage({dir, index: thisChart.pointer, hit: true})
     }
 }
 
@@ -84,6 +112,10 @@ self.onmessage = function (e) {
     else if (e.data.type === 'keyPress') {
         respondToKey(e.data.timeStamp, e.data.dir);
     }
+    else if (e.data.type === 'startTime') {
+        startTime = e.data.startTime;
+        timeouts.forEach(function(func) {
+          func();
+        })
+    }
 };
-
-
