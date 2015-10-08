@@ -1,11 +1,8 @@
 app.factory('CarouselFactory', function() {
     // set and cache variables
-    var w, container, carousel, item, radius, itemLength, rY, ticker, fps;
+    var looperRunning, w, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
-    var mouseY = 0;
-    var mouseZ = 0;
     var addX = 0;
-
 
     // fps counter created by: https://gist.github.com/sharkbrainguy/1156092,
     // no need to create my own :)
@@ -29,8 +26,6 @@ app.factory('CarouselFactory', function() {
     };
     var counter = Object.create(fps_counter);
 
-
-
     function init() {
         w = $(window);
         container = $('#contentContainer');
@@ -46,13 +41,8 @@ app.factory('CarouselFactory', function() {
             perspective: 600
         })
         TweenMax.set(carousel, {
-            z: -(radius)
+            z: -radius
         });
-
-        console.log('container ', container);
-        console.log('carousel ', carousel);
-        console.log('item ', item);
-
 
         // create carousel item props
 
@@ -66,15 +56,17 @@ app.factory('CarouselFactory', function() {
                 z: radius,
                 transformOrigin: "50% 50% " + -radius + "px"
             });
-            mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260) - 200);
 
-            animateIn($item, $block)
+            animateIn($item, $block);
         }
 
         // set mouse x and y props and looper ticker
         // window.addEventListener( "mousemove", onMouseMove, false );
         //window.addEventListener("keydown", carouselMove, false);
-        ticker = setInterval(looper, 1000 / 60);
+        if (!looperRunning) {
+        	ticker = setInterval(looper, 1000 / 60);
+        	looperRunning = true;
+        }
     }
 
     function animateIn($item, $block) {
@@ -116,35 +108,21 @@ app.factory('CarouselFactory', function() {
         })
     }
 
-    // function onMouseMove(event)
-    // {
-    //     // console.log("THIS IS THE EVENT: ", event);
-    // 	mouseX = -(-(window.innerWidth * .5) + event.pageX) * .0025;
-    // 	mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
-    // 	mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
-    // }
     var leftX = 0,
         rightX = 0,
         target,
         prevTarget;
 
     function carouselMove(event) {
-
         if (event.which === 39) {
             rightX < 10 ? rightX += 2 : rightX;
             leftX > 0 ? leftX = rightX = 0 : leftX = 0;
             mouseX = -(window.innerWidth * .5) * .0004 * rightX;
 
-            mouseY = -(-(window.innerHeight * .5) + event.pageY) * .01;
-            mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260) - 200);
         } else if (event.which === 37) {
             leftX < 10 ? leftX += 2 : leftX;
             rightX > 0 ? leftX = rightX = 0 : rightX = 0;
             mouseX = (window.innerWidth * .5) * .0004 * leftX;
-            console.log(leftX, rightX);
-
-            mouseY = -(-(window.innerHeight * .5) + event.pageY) * .01;
-            mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + 260) - 200);
         } else if (event.which === 38) {
             console.log("UP KEY HIT: ", event)
 
@@ -153,12 +131,13 @@ app.factory('CarouselFactory', function() {
 
         } else if (event.which === 27) {
             console.log("ESC KEY HIT: ", event);
-            leftX = 0;
+
+            addX = 0;
+            mouseX = 0;
             rightX = 0;
-            // addX = 0;
-            TweenMax.set($(`#item${target}`), {
-                clearProps: "all"
-            });
+            leftX = 0;
+            looper();
+            
             init();
 
         } else if (event.which === 13) {
@@ -198,23 +177,27 @@ app.factory('CarouselFactory', function() {
                 'background-color': '#E9A92E'
             });
 
-            $(`#item${target}`).trigger('click');
-
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
             addX = 0;
+            
+            mouseX = 0;
+            rightX = 0;
+            leftX = 0;
+
+            $(`#item${target}`).trigger('click');
         }
+    	console.log('carousel moves ', mouseX);
+
     }
 
     // loops and sets the carousel 3d properties
     function looper() {
         addX += mouseX;
+        console.log('mouseX is ', mouseX);
         TweenMax.to(carousel, 1, {
             rotationY: addX,
-            rotationX: mouseY,
+            rotationX: 0,
             ease: Quint.easeOut
-        })
-        TweenMax.set(carousel, {
-            z: mouseZ
         })
         fps.text('Framerate: ' + counter.tick() + '/60 FPS')
     }
@@ -249,8 +232,13 @@ app.factory('CarouselFactory', function() {
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
             });
-            init(); 
-            window.addEventListener("keydown", carouselMove, false);
+            init();
+            addX = 0;
+            mouseX = 0;
+            rightX = 0;
+            leftX = 0; 
+            // window.addEventListener("keydown", carouselMove, false);
+            $(document).on('keydown.move', carouselMove);
             $('.selected').removeClass("selected");           
 
         }

@@ -9,11 +9,6 @@
 		-ms-transform: translate3d(0, 0, 0);
 		transform-style:preserve-3d;
 		transform: translate3d(0, 0, 0);
-
-		/*-webkit-backface-visibility: hidden;
-		-moz-backface-visibility: hidden;
-		-ms-backface-visibility:hidden;
-		backface-visibility:hidden;*/
 	}
 
 	#contentContainer
@@ -23,8 +18,8 @@
 		margin-top:-23%;
 		left:50%;
 		top:50%;
-		width:1000px;
-		height:1000px;
+		min-width:1000px;
+		min-height:1000px;
 	}
 
 	#carouselContainer
@@ -34,8 +29,8 @@
 		margin-top:-500px;
 		left:50%;
 		top:50%;
-		width:1000px;
-		height:1000px;
+		min-width:1000px;
+		min-height:1000px;
 	}
 
 	.carouselItem
