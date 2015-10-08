@@ -40,7 +40,7 @@ app.config(function($stateProvider) {
                 // console.log(`mainBPM: ${mainBPM}`);
 
                 var config = {
-                    TIMING_WINDOW: 0.07,
+                    TIMING_WINDOW: 0.15,
                     ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
                     MEASURE_TIME: 1/(mainBPM/60/4) //Number of seconds per measure
                 };
