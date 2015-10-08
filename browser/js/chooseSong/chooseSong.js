@@ -20,10 +20,9 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
 
     $scope.loadSong = function(level) {
-      $scope.loading = true;
-      setTimeout(function(){
+        console.log('hi');
+        //$scope.loading = true;
         $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: level});
-      }, 5000);
     };
 
     $(document).ready(

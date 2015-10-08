@@ -1,10 +1,5 @@
 
 
-	<div class='loadingScreen' ng-show='loading'>
-		<loading></loading>
-	</div>
-
-	<div ng-hide='loading'>
 		<header>
 			<h1>Dance Dance Evolution</h1>
 			<h3>Choose your beat</h3>
@@ -19,4 +14,4 @@
 				  <div id='level{{$index}}' class='difficulty' ng-click='loadSong(level)' ng-repeat="level in choice.levels">{{level}}</div>
 				</div>
 		</div>
-	</div>
+
