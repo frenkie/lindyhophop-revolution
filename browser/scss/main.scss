@@ -7,6 +7,8 @@ $arrow-height: 120px;
 // overflow hidden to keep from seeing hidden arrow divs -- do we need to scroll ever?
 body {
   overflow: hidden;
+  // background: #464A4D; // gray color?
+  opacity: 0.8;
   background: #fdfdfd;
   height: inherit;
   weight: inherit;
@@ -75,4 +77,5 @@ body {
 @import 'chooseSong/main';
 @import 'mainMenu/main';
 @import 'loading/main';
+@import 'upload/main';
 @import 'animation'

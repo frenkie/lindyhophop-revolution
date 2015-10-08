@@ -1,10 +1,20 @@
-<form name="form">
-  Single mp3
-  <div class="button" ngf-select ng-model="song" name="song" ngf-pattern="'audio/*'"
-    accept="audio/*">Select</div>
-    Single sm file
-    <div class="button" ngf-select ng-model="sm" name="sm" ngf-pattern="'.sm'"
-    accept=".sm">Select</div>
-
-  <button type="submit" ng-click="submit()">submit</button>
-</form>
+<div class='upload'>
+  <div class='uploadTitle'>- Upload Your Own Beats! -</div>
+  <form name="form">
+    <div>
+      <span>Single mp3 file</span>
+      <span ng-hide='song' class="button" ngf-select ng-model="song" name="song" ngf-pattern="'audio/*'" accept="audio/*">
+        <span class='songUpload'>+</span>Select<span class='songUpload'>+</span>
+      </span>
+      <span ng-show='song' class='uploadFile'>{{song.name}}</span>
+    </div>
+    <div>
+      <span>Single sm file</span>
+      <span ng-hide='sm' class="button" ngf-select ng-model="sm" name="sm" ngf-pattern="'.sm'"accept=".sm">
+        <span class='smUpload'>+</span>Select<span class='smUpload'>+</span>
+      </span>
+      <span ng-show='sm' class='uploadFile'>{{sm.name}}</span>
+    </div>
+    <button class='btn-upload' type="submit" ng-click="submit()">submit</button>
+  </form>
+</div>

@@ -9,10 +9,27 @@ app.config(function($stateProvider) {
 });
 
 app.controller('uploadCtrl', function ($scope, Upload, $state) {
+
+    var blink = true;
+    setInterval(function() {
+      if(blink){
+        $('.smUpload').addClass('blink-upload');
+        $('.songUpload').removeClass('blink-upload');
+        blink = false;
+      } else {
+        $('.songUpload').addClass('blink-upload');
+        $('.smUpload').removeClass('blink-upload');
+        blink = true;
+      };
+    },300);
+
     // upload later on form submit or something similar
     $scope.submit = function() {
       if ($scope.song && !$scope.song.$error && $scope.sm && !$scope.sm.$error) {
+        console.log("now calling scope.upload")
         $scope.upload($scope.song, $scope.sm);
+      } else {
+        console.log("both files need to be in the page");
       }
     };
 
@@ -37,4 +54,5 @@ app.controller('uploadCtrl', function ($scope, Upload, $state) {
             $state.go('home');
         });
     };
+
 });
