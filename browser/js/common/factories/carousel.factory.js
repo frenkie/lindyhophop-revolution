@@ -60,7 +60,6 @@ app.factory('CarouselFactory', function($state) {
                 transformOrigin: "50% 50% " + -radius + "px"
             });
 
-            animateIn($item, $block);
         }
 
         // set looper ticker if it isn't already set
@@ -68,45 +67,6 @@ app.factory('CarouselFactory', function($state) {
         	ticker = setInterval(looper, 1000 / 60);
         	looperRunning = true;
         }
-    }
-
-    function animateIn($item, $block) {
-        var $nrX = 360 * getRandomInt(2);
-        var $nrY = 360 * getRandomInt(2);
-
-        var $nx = -2000 + getRandomInt(4000)
-        var $ny = -2000 + getRandomInt(4000)
-        var $nz = -4000 + getRandomInt(4000)
-
-        var $s = 1.5 + (getRandomInt(10) * .1)
-        var $d = 1 - (getRandomInt(8) * .1)
-
-        TweenMax.set($item, {
-            autoAlpha: 1,
-            delay: $d
-        })
-        TweenMax.set($block, {
-            z: $nz,
-            rotationY: $nrY,
-            rotationX: $nrX,
-            x: $nx,
-            y: $ny,
-            autoAlpha: 0
-        })
-        TweenMax.to($block, $s, {
-            delay: $d,
-            rotationY: 0,
-            rotationX: 0,
-            z: 0,
-            ease: Expo.easeInOut
-        })
-        TweenMax.to($block, $s - .5, {
-            delay: $d,
-            x: 0,
-            y: 0,
-            autoAlpha: 1,
-            ease: Expo.easeInOut
-        })
     }
 
     function carouselMove(event) {
