@@ -91,7 +91,7 @@ app.config(function($stateProvider) {
                       if(e.data.hit) {
                         arrows[e.data.dir][e.data.index].el.remove();
                       } else {
-                        console.log("MISSSSSEEDDDDDDDD");
+                        arrows[e.data.dir][e.data.index].el.fadeTo(50, 0.2)
                       };
                     };
                     var addListener = function () {

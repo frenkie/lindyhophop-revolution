@@ -31,7 +31,7 @@ var TIMING_WINDOW;
 
 var checkArrow = function(arrowTime) {
   if(!arrowTime.hit) {
-    postMessage({hit: false, index: arrowTime.index})
+    postMessage({hit: false, index: arrowTime.index, dir: arrowTime.dir})
   }
 }
 
@@ -72,14 +72,14 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function (maybeArrow, index) {
                 if (maybeArrow !== "0") {
-                    //thisIndex is the index of the arrow just pushed
-                    var arrowTime = {time: timeStamp, attempted: false , hit: false};
-                    var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
+                    var dir = indexToDir[index];
+                    var arrowTime = {time: timeStamp, attempted: false , hit: false, dir};
+                    var arrowIndex = chart[dir].list.push(arrowTime) - 1;
                     arrowTime.index = arrowIndex;
                     var thisTimeout = function() {
-                      setTimeout(function () {
-                        checkArrow(arrowTime);
-                      }, (timeStamp + TIMING_WINDOW) * 1000)
+                        setTimeout(function () {
+                            checkArrow(arrowTime);
+                        }, (timeStamp + TIMING_WINDOW) * 1000)
                     };
                     timeouts.push(thisTimeout);
                 }
