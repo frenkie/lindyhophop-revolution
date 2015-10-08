@@ -4,7 +4,7 @@
 
     <div class="grid__container">
 
-      <form action="" method="post" class="form form--login form--font" id="login-form" name="loginForm" ng-submit="loginForm.$valid && sendLogin(login)">
+      <form class="form form--login form--font" id="login-form" name="loginForm" ng-submit="loginForm.$valid && sendLogin(login)">
 
         <alert type="danger" ng-show="error">
             {{ error }}
@@ -12,7 +12,7 @@
 
         <div class="form__field">
           <label class="fontawesome-user" for="login__username"><span class="hidden">Username</span></label>
-          <input id="login__username" ng-model="login.email" type="text" class="form__input" placeholder="Username" required>
+          <input id="login__username" ng-model="login.username" type="text" class="form__input" placeholder="Username" required>
         </div>
 
         <div class="form__field">
