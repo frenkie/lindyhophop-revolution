@@ -97,7 +97,6 @@ app.config(function($stateProvider) {
 
 
                         var videoOffset = (config.ARROW_SPEED/mainBPM + Number(currentSong.offset))*1000;
-                        // console.log('videoOffset:', videoOffset*1000);
 
                             if (currentSong.title === 'Caramelldansen') {
                                 $scope.videoSrc = '/video/Caramelldansen.mp4';
