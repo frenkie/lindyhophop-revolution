@@ -79,7 +79,7 @@ app.config(function($stateProvider) {
                     };
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
-                            var dir = keyCodeToDir[e.which];
+                            var dir = keyCodeToDir[e.keyCode];
                             if (dir) e.preventDefault();
                             else return;
                             var timeStamp = (Date.now() - startTime) / 1000;
