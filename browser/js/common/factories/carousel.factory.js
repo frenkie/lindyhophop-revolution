@@ -62,8 +62,24 @@ app.factory('CarouselFactory', function($state) {
                 transformOrigin: "50% 50% " + -radius + "px"
             });
 
-            animateIn( $item, $block );
+            if(!looperRunning) {
+                animateIn( $item, $block );
+            }
+            else {
+                var $nrX = 360 * getRandomInt(2);
+                var $nrY = 360 * getRandomInt(2);
 
+                var $nx = -(2000) + getRandomInt( 4000 )
+                var $ny = -(2000) + getRandomInt( 4000 )
+                var $nz = -4000 +  getRandomInt( 4000 )
+
+                var $s = 1.5 + (getRandomInt( 10 ) * .1)
+                var $d = 1 - (getRandomInt( 8 ) * .1)
+                TweenMax.set( $item, { autoAlpha:1 } );
+                TweenMax.to( $block, $s, { delay:$d, rotationY:0, rotationX:0, z:0,  ease:Expo.easeInOut} );
+                TweenMax.to( $block, $s-.5, { delay:$d, x:0, y:0, autoAlpha:1, ease:Expo.easeInOut} );
+
+            }
         }
 
         // set looper ticker if it isn't already set
@@ -134,17 +150,6 @@ app.factory('CarouselFactory', function($state) {
 
             TweenMax.to($(`#item${target}`), 1, {
                 transform: 'scale(4) translateY(-140px)',
-                // z: $nz,
-	            // rotationY: 200,
-	            // rotationX: 200,
-	            // x: $nx,
-	            // y: $ny,
-	            // autoAlpha: 0,
-	            // rotationY: 200,
-             //    z: radius,
-             //    transformOrigin: "50% 50% " + -radius + "px",
-	            // rotation: 200,
-	            // transformOrigin: '50% 50%',
                 'background-color': '#E9A92E'
             });
 
