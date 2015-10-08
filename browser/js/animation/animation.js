@@ -12,10 +12,8 @@ app.config(function($stateProvider) {
         controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory, $stateParams) {
             $scope.songs = songs;
             $scope.choice = {};
-            // console.log('stateparams ', $stateParams.songId, $stateParams.chosenLevel)
 
             function findSong() {
-                // return _.find($scope.songs, song => song.title === name);
                 return SongFactory.getSongById($stateParams.songId)
                 .exec()
                 .then( function (song) {
@@ -36,8 +34,6 @@ app.config(function($stateProvider) {
             $scope.setUpSong = function() {
                 SongFactory.getSongById($stateParams.songId)
                 .then( function (currentSong) {
-                    // console.log('found song', song);
-                    // var currSong = song;
                     $scope.currentSong = currentSong;
                     $scope.currentSong.offset = Number($scope.currentSong.offset);
                     var difficulty = $stateParams.chosenLevel;
@@ -63,28 +59,6 @@ app.config(function($stateProvider) {
                     SongFactory.getChartById(chartId)
                     .then(prepSong);
                 });
-
-                // console.log('this is the song', $scope.choice.song);
-                // var currentSong = JSON.parse($scope.choice.song);
-                // currentSong.offset = Number(currentSong.offset);
-                // var difficulty = $scope.choice.difficulty;
-                // console.log('this is the difficulty', $scope.choice.difficulty);
-
-
-                // var chartId = currentSong.Charts[difficulty].stepChart;
-                // var mainBPM = currentSong.bpms[0].bpm;
-
-                // console.log('currentSong:');
-                // console.log(currentSong);
-                // console.log(`mainBPM: ${mainBPM}`);
-
-                // var config = {
-                //     TIMING_WINDOW: 0.15,
-                //     ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
-                //     MEASURE_TIME: 1/(mainBPM/60/4) //Number of seconds per measure
-                // };
-                // config.ARROW_TIME = config.ARROW_SPEED/mainBPM;
-                // config.BEAT_TIME = config.MEASURE_TIME/4;
 
 
                 function prepSong(stepChart) {
@@ -138,9 +112,6 @@ app.config(function($stateProvider) {
                         $scope.$digest();
                     };
                 };
-
-                // SongFactory.getChartById(chartId)
-                // .then(prepSong);
             };
         }
     });
