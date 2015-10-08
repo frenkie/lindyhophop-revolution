@@ -15,49 +15,7 @@ app.config(function($stateProvider) {
 
             function prepSong(stepChart) {
 
-<<<<<<< HEAD
-            function findSong(name) {
-                return _.find($scope.songs, song => song.title === name);
-            }
-
-            $scope.getDifficulties = function() {
-                $scope.choice.levels = [];
-                var currentSong = JSON.parse($scope.choice.song);
-                var charts = currentSong.Charts;
-                for(var key in charts) {
-                    $scope.choice.levels.push(key);
-                }
-            };
-
-            $scope.setUpSong = function() {
-                var currentSong = JSON.parse($scope.choice.song);
-                console.log('currentSong:', currentSong);
-
-                currentSong.offset = Number(currentSong.offset)
-                var difficulty = $scope.choice.difficulty;
-
-                var chartId = currentSong.Charts[difficulty].stepChart;
-                var mainBPM = currentSong.bpms[0].bpm;
-
-                // console.log('currentSong:');
-                // console.log(currentSong);
-                // console.log(`mainBPM: ${mainBPM}`);
-
-                var config = {
-                    TIMING_WINDOW: 0.15,
-                    ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
-                    MEASURE_TIME: 1/(mainBPM/60/4) //Number of seconds per measure
-                };
-                config.ARROW_TIME = config.ARROW_SPEED/mainBPM;
-                config.BEAT_TIME = config.MEASURE_TIME/4;
-
-
-                function prepSong(stepChart) {
-
-                    var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
-=======
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
->>>>>>> aa57a1d728a9fc8f5a3a6b8d9fdc3112704867a3
 
                     var keyCodeToDir = {
                       '37': 'left',
@@ -101,13 +59,13 @@ app.config(function($stateProvider) {
                         addListener();
 
 
-                        var videoOffset = (config.ARROW_SPEED/mainBPM + Number(currentSong.offset))*1000;
+                        var videoOffset = ($scope.config.ARROW_SPEED/$scope.mainBPM + Number($scope.currentSong.offset))*1000;
 
-                            if (currentSong.title === 'Caramelldansen') {
+                            if ($scope.currentSong.title === 'Caramelldansen') {
                                 $scope.videoSrc = '/video/Caramelldansen.mp4';
                                 videoOffset += 1000;
                             }
-                            else if (currentSong.title === 'Sandstorm') {
+                            else if ($scope.currentSong.title === 'Sandstorm') {
                                 $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
                             }
                             setTimeout(function() {
