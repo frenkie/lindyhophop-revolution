@@ -1,4 +1,5 @@
-/*global $*/
+/* global $ TweenMax */
+
 
 app.factory('ArrowFactory', function () {
     var Arrow = function (direction, player, color) {
@@ -46,14 +47,38 @@ app.factory('ArrowFactory', function () {
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
 
+    Arrow.addStops = function (stops, animationOffset, beatTime) {
+        stops.forEach(stop => {
+            this.addStop(animationOffset + beatTime * stop.beat, stop.duration);
+        })
+    }
+
+    var getStopTime = function (thisBeat, stops) {
+        return stops.reduce(function (time, stop) {
+            if (thisBeat >= stop.beat) {
+                time += stop.duration;
+            }
+            return time;
+        }, 0);
+    };
+
+    Arrow.addBpmChanges = function (bpms, animationOffset, beatTime, stops) {
+        bpms.forEach(bpm => {
+            if (bpm.beat === 0) return;
+            this.addBPMChange(animationOffset + beatTime * bpm.beat, bpm.bpm/bpms[0].bpm);
+        })
+    }
+
+
     Arrow.addStop = function(timestamp, duration) {
         tl.addPause(timestamp, TweenMax.delayedCall, [duration, function(){tl.play()}]);
-        console.log('paused at',timestamp);
     }
 
     Arrow.addBPMChange = function(timestamp, tempoScale) {
         console.log(`bpm changed by ${tempoScale} times at ${timestamp}`);
-        TweenMax.delayedCall(timestamp, TweenMax.globalTimeScale, [tempoScale]);
+        tl.add(function () {
+            tl.timeScale(tempoScale);
+        }, timestamp);
     }
 
 
@@ -105,15 +130,17 @@ app.factory('ArrowFactory', function () {
             });
         });
 
+        Arrow.ARROW_KEYS = {
+          left: '37',
+          down: '40',
+          up: '38',
+          right: '39'
+        };
+
+
         return obj;
     };
 
-    Arrow.ARROW_KEYS = {
-      left: '37',
-      down: '40',
-      up: '38',
-      right: '39'
-    };
-
     return Arrow;
+
 })
