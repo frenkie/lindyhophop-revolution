@@ -29,7 +29,7 @@ app.controller('LoginCtrl', function ($scope, AuthService, $state) {
         function onArrowKey(event) {
             if(event.keyCode === 27) {
                 window.removeEventListener('keydown', onArrowKey);
-                $state.go('mainMenu');
+                $state.go('home');
             };
     };
 
