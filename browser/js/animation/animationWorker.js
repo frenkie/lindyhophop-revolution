@@ -55,13 +55,13 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
         var noteTime = measureTime / measure.length;
         measure.forEach(function (line, lineIndex) {
             var timeStamp = measureTime*measureIndex + noteTime*lineIndex + offset;
-            var thisBeat = measureIndex * 4 + lineIndex;
+            var thisBeat = measureIndex * 4 + (lineIndex / notes) * 4;
             var stopTime = getStopTime(thisBeat, stops);
             var extraBPMTime = getBPMTime(thisBeat, bpms);
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function (maybeArrow, index) {
-                // console.log(`adding ${stopTime} extra stop time and ${extraBPMTime} extra BPM time for this ${indexToDir[index]} arrow`)
                 if (maybeArrow !== "0") {
+                    console.log(`adding ${stopTime} extra stop time and ${extraBPMTime} extra BPM time for this ${indexToDir[index]} arrow -- now at ${timeStamp}`)
                     chart[indexToDir[index]].unshift({ time: timeStamp, attempted: false });
                 }
             });
@@ -85,13 +85,17 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
 };
 
 var respondToKey = function (time, dir) {
-    // console.log(`pressed ${dir} at ${time}`);
+    console.log(`pressed ${dir} at ${time}`);
     var thisChart = chart[dir];
     if (!thisChart.length) return;
     var lastOne = thisChart[thisChart.length - 1];
     while (lastOne && lastOne.time < time - TIMING_WINDOW) {
         thisChart.pop();
         lastOne = thisChart[thisChart.length - 1];
+    }
+    if (!lastOne) {
+        console.log('too early!');
+        return;
     }
     var diff = Math.abs(lastOne.time - time);
     if (diff < TIMING_WINDOW) {
