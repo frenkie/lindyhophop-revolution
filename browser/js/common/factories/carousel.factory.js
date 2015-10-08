@@ -1,4 +1,4 @@
-app.factory('CarouselFactory', function() {
+app.factory('CarouselFactory', function($state) {
     // set and cache variables
     var looperRunning, w, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
@@ -135,6 +135,8 @@ app.factory('CarouselFactory', function() {
             mouseX = 0;
             rightX = 0;
             leftX = 0;
+
+            $state.go('mainMenu');
 
         } else if (event.keyCode === 13) {
 
