@@ -22,11 +22,17 @@ var SMparse = require('./server/sm-parser').readSM;
 var seedUsers = function() {
 
     var users = [{
+        username: 'Testing',
         email: 'testing@fsa.com',
         password: 'password'
     }, {
+        username: "President",
         email: 'obama@gmail.com',
         password: 'potus'
+    }, {
+        username: "K",
+        email: 'K@gmail.com',
+        password: 'K'
     }];
 
     return User.createAsync(users);
@@ -63,7 +69,7 @@ function createStepCharts(parsedSM) {
               };
             }
 
-            
+
 
             return Song.create({
                 title: parsedSM.metadata.TITLE,
@@ -100,12 +106,21 @@ var seedSongs = function(cb) {
 
 connectToDb.then(function() {
 
-
+    User.remove({}, function(err, removed) {
+      if (err) console.log(err);
+    });
+    Song.remove({}, function(err, removed) {
+      if (err) console.log(err);
+    });
     seedSongs()
     .then( function () {
         console.log(chalk.green('Seeding songs was super-effective!'));
+        return seedUsers();
+    }).then( function () {
+        console.log(chalk.green('Seeding users was super-effective!'));
         process.kill(0);
     });
+
 
 
 
