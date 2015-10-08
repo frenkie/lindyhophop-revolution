@@ -74,8 +74,8 @@ app.factory('CarouselFactory', function() {
         var $nrX = 360 * getRandomInt(2);
         var $nrY = 360 * getRandomInt(2);
 
-        var $nx = -(2000) + getRandomInt(4000)
-        var $ny = -(2000) + getRandomInt(4000)
+        var $nx = -2000 + getRandomInt(4000)
+        var $ny = -2000 + getRandomInt(4000)
         var $nz = -4000 + getRandomInt(4000)
 
         var $s = 1.5 + (getRandomInt(10) * .1)
@@ -140,8 +140,27 @@ app.factory('CarouselFactory', function() {
 
       		findTarget();
 
+      		var $nrX = 360 * getRandomInt(2);
+	        var $nrY = 360 * getRandomInt(2);
+
+	        var $nx = -2000 + getRandomInt(4000)
+	        var $ny = -2000 + getRandomInt(4000)
+	        var $nz = -4000 + getRandomInt(4000)
+
+
             TweenMax.to($(`#item${target}`), 1, {
                 transform: 'scale(4) translateY(-140px)',
+                // z: $nz,
+	            // rotationY: 200,
+	            // rotationX: 200,
+	            // x: $nx,
+	            // y: $ny,
+	            // autoAlpha: 0,
+	            // rotationY: 200,
+             //    z: radius,
+             //    transformOrigin: "50% 50% " + -radius + "px",
+	            // rotation: 200,
+	            // transformOrigin: '50% 50%',
                 'background-color': '#E9A92E'
             });
 
@@ -198,11 +217,6 @@ app.factory('CarouselFactory', function() {
                 clearProps: "all"
             });
             init();
-            addX = 0;
-            mouseX = 0;
-            rightX = 0;
-            leftX = 0;
-            target = undefined; 
             window.addEventListener("keydown", carouselMove, false);
             //below code screws up target finding (remembers multiple targets)
             // $(document).on('keydown.move', carouselMove);
