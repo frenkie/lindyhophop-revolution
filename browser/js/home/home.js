@@ -11,7 +11,6 @@ app.controller('HomeController', function($rootScope, $scope, $state, AuthServic
 
   var setUser = function () {
       AuthService.getLoggedInUser().then(function (user) {
-        console.log("SetUser: ", user)
           $scope.user = user;
       });
   };
@@ -39,16 +38,14 @@ app.controller('HomeController', function($rootScope, $scope, $state, AuthServic
  	var activeNumber = parseInt(active[0].id.slice(-1));
 
 
-	if(event.which === 39) { //right
+	if(event.which === 39) { 
+		//right arrow
 		play();
 		activeNumber = activeNumber === menuLength? 1 : activeNumber + 1;
-		 	console.log('activeNumber', activeNumber);
- 			console.log('active text', active.text());
- 			console.log('active sref', active[0].outerHTML);
-
 		active.removeClass("activeHome");
 		$('#option' + activeNumber).addClass("activeHome");
-	} else if(event.which === 37) { //left
+	} else if(event.which === 37) { 
+		//left arrow
 		play();
 		activeNumber = activeNumber === 1? menuLength : activeNumber - 1;
 		active.removeClass("activeHome");

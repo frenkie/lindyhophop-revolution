@@ -11,6 +11,14 @@
 		transform: translate3d(0, 0, 0);
 	}
 
+	h1 {
+  		font-family: 'EchoDeco';
+  		src: url('/img/font/EchoDeco.ttf');
+  		color: #ea4c88;
+  		font-size: 11vh;
+  		text-align: center;
+	}
+
 	#contentContainer
 	{
 		position:absolute;
