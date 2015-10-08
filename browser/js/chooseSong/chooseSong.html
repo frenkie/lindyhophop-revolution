@@ -13,6 +13,10 @@
 			<section id="carouselContainer" class="trans3d" ng-hide='loading'>
 				<figure id="item{{$index + 1}}" class="carouselItem trans3d" ng-click='getDifficulties(song)' ng-repeat="song in songs"><p>{{song.title}}</p></figure>
 				
+
 			</section>
+			<div class='choose-level'>
+				  <div id='level{{$index}}' class='difficulty' ng-repeat="level in choice.levels">{{level}}</div>
+				</div>
 		</div>
 	</div>

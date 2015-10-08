@@ -73,7 +73,7 @@ app.factory('CarouselFactory', function() {
 
         // set mouse x and y props and looper ticker
         // window.addEventListener( "mousemove", onMouseMove, false );
-        window.addEventListener("keydown", onKeyboardMove, false);
+        //window.addEventListener("keydown", carouselMove, false);
         ticker = setInterval(looper, 1000 / 60);
     }
 
@@ -128,7 +128,7 @@ app.factory('CarouselFactory', function() {
         target,
         prevTarget;
 
-    function onKeyboardMove(event) {
+    function carouselMove(event) {
 
         if (event.which === 39) {
             rightX < 10 ? rightX += 2 : rightX;
@@ -223,7 +223,46 @@ app.factory('CarouselFactory', function() {
         return Math.floor((Math.random() * $n) + 1);
     }
 
+    function chooseLevel(event) {
+        console.log($('.choose-level:last-child'));
+        if (event.which === 38) { //key up
+            if($('.selected').prev().length)
+                $('.selected').removeClass("selected").prev().addClass("selected");
+            else {
+                //$('.selected').removeClass("selected").last().addClass("selected");
+                $('.selected').removeClass("selected").siblings(':last').addClass("selected");
+            }
+
+        } else if (event.which === 40) { //key down
+            if($('.selected').next().length)
+                $('.selected').removeClass("selected").next().addClass("selected");
+            else {
+                $('.selected').removeClass("selected").siblings(':first').addClass("selected");
+            }
+
+        }
+        else if (event.which === 13) { //enter
+            
+
+        } else if (event.which === 27) { //escape
+            $('.choose-level').css("visibility", "hidden");
+            TweenMax.set($(`#item${target}`), {
+                clearProps: "all"
+            });
+            init(); 
+            window.addEventListener("keydown", carouselMove, false);
+            $('.selected').removeClass("selected");           
+
+        }
+        //class selected that lights up the choice
+        //up will go up the index
+        //down will go down the list
+        //enter takes the selected with class
+    }
+
     return {
-        init: init
+        init: init,
+        chooseLevel: chooseLevel,
+        carouselMove: carouselMove
     };
 })

@@ -28,11 +28,16 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     $(document).ready(
     	$timeout ( function () {
     		CarouselFactory.init();
-    		window.addEventListener("keydown", $scope.onKeyboardMove, false);
+    		window.addEventListener("keydown", CarouselFactory.carouselMove, false);
     	})
     );
 
     $scope.getDifficulties = function(song) {
+        $('.choose-level').css("visibility", "visible");
+        $timeout(function() {
+            $('#level0').addClass("selected");   
+        });
+        
     	$scope.choice.song = song;
         $scope.choice.levels = [];
         // var currentSong = JSON.parse($scope.choice.song);
@@ -42,7 +47,9 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         }
         console.log('levels ', $scope.choice.levels);
         console.log('song ', $scope.choice.song);
-    };
 
+        window.removeEventListener("keydown", CarouselFactory.carouselMove, false);
+        window.addEventListener("keydown", CarouselFactory.chooseLevel, false);
+    };
 
 });
