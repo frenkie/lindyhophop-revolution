@@ -14,8 +14,8 @@ describe('Song Factory', function () {
         SongFactory = _SongFactory_
     }));
 
-    it('should be an object', function () {
-        expect(SongFactory).to.be.a('function');
+    it('should be a object', function () {
+        expect(SongFactory).to.be.a('object');
     });
 
     // xdescribe('isAuthenicated', function () {

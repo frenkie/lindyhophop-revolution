@@ -8,6 +8,7 @@ module.exports = function (config) {
         'node_modules/angular-ui-router/release/angular-ui-router.js',
         'node_modules/angular-bootstrap/ui-bootstrap.js',
         'node_modules/socket.io-client/socket.io.js',
+        'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
         'public/main.js',
         'node_modules/sinon/pkg/sinon.js',
         'node_modules/angular-mocks/angular-mocks.js',
