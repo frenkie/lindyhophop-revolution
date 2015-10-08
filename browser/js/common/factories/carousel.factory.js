@@ -135,7 +135,7 @@ app.factory('CarouselFactory', function($state) {
             mouseX = 0;
             rightX = 0;
             leftX = 0;
-
+            window.removeEventListener('keydown', carouselMove);
             $state.go('mainMenu');
 
         } else if (event.keyCode === 13) {
