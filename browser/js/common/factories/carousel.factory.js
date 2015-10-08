@@ -1,6 +1,6 @@
 app.factory('CarouselFactory', function($state) {
     // set and cache variables
-    var looperRunning, w, container, carousel, item, radius, itemLength, rY, ticker, fps;
+    var looperRunning, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
     var addX = 0;
     var leftX = 0,
@@ -29,10 +29,12 @@ app.factory('CarouselFactory', function($state) {
     };
     var counter = Object.create(fps_counter);
 
-    // $(document).ready( init );
+    function getRandomInt($n) {
+        return Math.floor((Math.random() * $n) + 1);
+    }
 
     function init() {
-        w = $(window);
+        //var w = $(window);
         container = $('#contentContainer');
         carousel = $('#carouselContainer');
         item = $('.carouselItem');
@@ -82,10 +84,10 @@ app.factory('CarouselFactory', function($state) {
             }
         }
 
-        // set looper ticker if it isn't already set
+        //set looper ticker if it isn't already set
         if (!looperRunning) {
-        	ticker = setInterval(looper, 1000 / 60);
-        	looperRunning = true;
+            ticker = setInterval(looper, 1000 / 60);
+            looperRunning = true;
         }
     }
 
@@ -94,12 +96,12 @@ app.factory('CarouselFactory', function($state) {
             var $nrX = 360 * getRandomInt(2);
             var $nrY = 360 * getRandomInt(2);
 
-            var $nx = -(2000) + getRandomInt( 4000 )
-            var $ny = -(2000) + getRandomInt( 4000 )
-            var $nz = -4000 +  getRandomInt( 4000 )
+        var $nx = -2000 + getRandomInt(4000);
+        var $ny = -2000 + getRandomInt(4000);
+        var $nz = -4000 + getRandomInt(4000);
 
-            var $s = 1.5 + (getRandomInt( 10 ) * .1)
-            var $d = 1 - (getRandomInt( 8 ) * .1)
+        var $s = 1.5 + (getRandomInt(10) * .1);
+        var $d = 1 - (getRandomInt(8) * .1);
 
             TweenMax.set( $item, { autoAlpha:1, delay:$d } )
             TweenMax.set( $block, { z:$nz, rotationY:$nrY, rotationX:$nrX, x:$nx, y:$ny, autoAlpha:0} )
@@ -138,14 +140,14 @@ app.factory('CarouselFactory', function($state) {
 
         } else if (event.keyCode === 13) {
 
-      		findTarget();
+            findTarget();
 
-      		var $nrX = 360 * getRandomInt(2);
-	        var $nrY = 360 * getRandomInt(2);
+            var $nrX = 360 * getRandomInt(2);
+            var $nrY = 360 * getRandomInt(2);
 
-	        var $nx = -2000 + getRandomInt(4000)
-	        var $ny = -2000 + getRandomInt(4000)
-	        var $nz = -4000 + getRandomInt(4000)
+            var $nx = -2000 + getRandomInt(4000)
+            var $ny = -2000 + getRandomInt(4000)
+            var $nz = -4000 + getRandomInt(4000)
 
 
             TweenMax.to($(`#item${target}`), 1, {
@@ -175,28 +177,25 @@ app.factory('CarouselFactory', function($state) {
         fps.text('Framerate: ' + counter.tick() + '/60 FPS')
     }
 
-    function getRandomInt($n) {
-        return Math.floor((Math.random() * $n) + 1);
-    }
+
 
     function chooseLevel(event) {
-        
+
         if (event.keyCode === 38) { //key up
-            if($('.selected').prev().length)
+            if ($('.selected').prev().length)
                 $('.selected').removeClass("selected").prev().addClass("selected");
             else {
                 $('.selected').removeClass("selected").siblings(':last').addClass("selected");
             }
 
         } else if (event.keyCode === 40) { //key down
-            if($('.selected').next().length)
+            if ($('.selected').next().length)
                 $('.selected').removeClass("selected").next().addClass("selected");
             else {
                 $('.selected').removeClass("selected").siblings(':first').addClass("selected");
             }
 
-        }
-        else if (event.keyCode === 13) { //enter
+        } else if (event.keyCode === 13) { //enter
             $('.selected').trigger('click');
 
         } else if (event.keyCode === 27) { //escape
@@ -209,7 +208,7 @@ app.factory('CarouselFactory', function($state) {
             window.addEventListener("keydown", carouselMove, false);
             //below code screws up target finding (remembers multiple targets)
             // $(document).on('keydown.move', carouselMove);
-            $('.selected').removeClass("selected");           
+            $('.selected').removeClass("selected");
 
         }
         //class selected that lights up the choice
@@ -218,8 +217,8 @@ app.factory('CarouselFactory', function($state) {
         //enter takes the selected with class
     }
 
-    function findTarget () {
-    	var degrees = addX % 360;
+    function findTarget() {
+        var degrees = addX % 360;
         var songs = carousel.children().length;
         var delta = 360 / songs;
 
@@ -235,8 +234,8 @@ app.factory('CarouselFactory', function($state) {
     }
 
     // function freezeCarousel () {
-    // 	console.log('should freeze')
-    // 	addX = 0;
+    //  console.log('should freeze')
+    //  addX = 0;
     // }
 
     return {

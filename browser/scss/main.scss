@@ -52,7 +52,7 @@ body {
     border-color: white;
 }
 
-#video-landing {
+#video-landing, #bg-video {
   position: absolute;
   top: 0;
   left: 0;
@@ -82,4 +82,4 @@ body {
 @import 'mainMenu/main';
 @import 'loading/main';
 @import 'upload/main';
-@import 'animation'
+@import 'animation/main'

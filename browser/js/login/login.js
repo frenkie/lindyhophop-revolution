@@ -24,7 +24,6 @@ app.controller('LoginCtrl', function ($scope, AuthService, $state) {
         });
 
     };
-
     $(document).on('keydown', onArrowKey);
         function onArrowKey(event) {
             if(event.keyCode === 27) {
@@ -33,5 +32,13 @@ app.controller('LoginCtrl', function ($scope, AuthService, $state) {
             };
     };
 
+    function onArrowKey(event) {
+        if(event.keyCode === 27) {
+            window.removeEventListener('keydown', onArrowKey);
+            $state.go('home');
+        }
+    }
+
+    $(document).on('keydown', onArrowKey);
 
 });
