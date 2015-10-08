@@ -28,11 +28,11 @@
 	{
 		position:absolute;
 		margin-left:-500px;
-		margin-top:-23%;
+		margin-top:-13%;
 		left:50%;
-		top:50%;
-		min-width:1000px;
-		min-height:1000px;
+		top:45%;
+		width:1000px;
+		height:1000px;
 	}
 
 	#carouselContainer
@@ -56,6 +56,10 @@
 		margin-left:-160px;
 		margin-top:-90px;
 		visibility:hidden;
+
+		p {
+			margin-top: -15px;
+		}
 	}
 
 	.carouselItemInner
@@ -98,14 +102,21 @@
 		font-size: 32px;
 		color: #b2b2b2;
 		position: absolute;
-		top: 18%;
+		top: 14%;
 		right: 5%;
 		width: 15%;
-
+		div {
+			max-height: 9vh;
+		}
 	}
 
 	.selected {
 		font-size: 32px;
 		font-weight: bold;
 		color: white;
+	}
+
+	.activeSong {
+		background-color: #E9A92E;
+		border:10px solid #E9A92E;
 	}

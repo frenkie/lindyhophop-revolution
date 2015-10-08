@@ -151,8 +151,11 @@ app.factory('CarouselFactory', function($state) {
 
 
             TweenMax.to($(`#item${target}`), 1, {
-                transform: 'scale(4) translateY(-140px)',
-                'background-color': '#E9A92E'
+                transform: 'scale(4) translateY(-140px)'
+            });
+            $(`#item${target} > .carouselItemInner`).addClass('activeSong');
+            TweenMax.to($('.carouselContainer'), 1, {
+                transform: 'translateY(40px)'
             });
 
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
@@ -204,11 +207,15 @@ app.factory('CarouselFactory', function($state) {
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
             });
+            TweenMax.to($(`#item${target}>.carouselItemInner`), 1, {
+                'visibility': 'inherit'
+            });
             init();
             window.addEventListener("keydown", carouselMove, false);
             //below code screws up target finding (remembers multiple targets)
             // $(document).on('keydown.move', carouselMove);
-            $('.selected').removeClass("selected");
+            $('.selected').removeClass("selected");  
+            $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
 
         }
         //class selected that lights up the choice
