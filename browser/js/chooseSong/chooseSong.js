@@ -18,10 +18,11 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 	$scope.songs = songs;
 	$scope.choice = {};
 
-    $scope.loadSong = function() {
+
+    $scope.loadSong = function(level) {
       $scope.loading = true;
       setTimeout(function(){
-        $state.go('confirmSong');
+        $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: level});
       }, 5000);
     };
 
@@ -29,6 +30,8 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     	$timeout ( function () {
     		CarouselFactory.init();
     		window.addEventListener("keydown", CarouselFactory.carouselMove, false);
+    		// window.addEventListener("click", CarouselFactory.freezeCarousel);
+
     	})
     );
 

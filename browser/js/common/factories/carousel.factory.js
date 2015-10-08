@@ -111,22 +111,22 @@ app.factory('CarouselFactory', function() {
 
     function carouselMove(event) {
 
-        if (event.which === 39) {
+        if (event.keyCode === 39) {
             rightX < 10 ? rightX += 2 : rightX;
             leftX > 0 ? leftX = rightX = 0 : leftX = 0;
             mouseX = -(window.innerWidth * .5) * .0004 * rightX;
 
-        } else if (event.which === 37) {
+        } else if (event.keyCode === 37) {
             leftX < 10 ? leftX += 2 : leftX;
             rightX > 0 ? leftX = rightX = 0 : rightX = 0;
             mouseX = (window.innerWidth * .5) * .0004 * leftX;
-        } else if (event.which === 38) {
+        } else if (event.keyCode === 38) {
             console.log("UP KEY HIT: ", event)
 
-        } else if (event.which === 40) {
+        } else if (event.keyCode === 40) {
             console.log("DOWN KEY HIT: ", event)
 
-        } else if (event.which === 27) {
+        } else if (event.keyCode === 27) {
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
             });
@@ -136,32 +136,9 @@ app.factory('CarouselFactory', function() {
             rightX = 0;
             leftX = 0;
 
-        } else if (event.which === 13) {
+        } else if (event.keyCode === 13) {
 
-            // TweenMax.set($(`#item${target}`), {
-            //     clearProps: "all"
-            // });
-            // init();
-
-
-      //       var degrees = addX % 360;
-      //       var songs = carousel.children().length;
-      //       var delta = 360 / songs;
-
-
-      //       for (var i = 0; i < songs; i++) {
-      //           if (degrees >= 0) {
-      //               if (degrees < i * delta + delta / 2 && degrees > i * delta - delta / 2) target = i + 1;
-      //           } else {
-      //               if (degrees < (i - songs) * delta + delta / 2 && degrees > (i - songs) * delta - delta / 2) target = i + 1;
-      //           }
-      //       }
-      //       target !== 1 ? target = songs + 2 - target : target;
-  
-    		// // console.log($(`#item${target}`));
-      //       console.log('target is ', target);
       		findTarget();
-
 
             TweenMax.to($(`#item${target}`), 1, {
                 transform: 'scale(4) translateY(-140px)',
@@ -170,7 +147,6 @@ app.factory('CarouselFactory', function() {
 
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
             addX = 0;
-            
             mouseX = 0;
             rightX = 0;
             leftX = 0;
@@ -197,14 +173,14 @@ app.factory('CarouselFactory', function() {
 
     function chooseLevel(event) {
         
-        if (event.which === 38) { //key up
+        if (event.keyCode === 38) { //key up
             if($('.selected').prev().length)
                 $('.selected').removeClass("selected").prev().addClass("selected");
             else {
                 $('.selected').removeClass("selected").siblings(':last').addClass("selected");
             }
 
-        } else if (event.which === 40) { //key down
+        } else if (event.keyCode === 40) { //key down
             if($('.selected').next().length)
                 $('.selected').removeClass("selected").next().addClass("selected");
             else {
@@ -212,10 +188,10 @@ app.factory('CarouselFactory', function() {
             }
 
         }
-        else if (event.which === 13) { //enter
-            
+        else if (event.keyCode === 13) { //enter
+            $('.selected').trigger('click');
 
-        } else if (event.which === 27) { //escape
+        } else if (event.keyCode === 27) { //escape
 
             $('.choose-level').css("visibility", "hidden");
             TweenMax.set($(`#item${target}`), {
@@ -253,10 +229,12 @@ app.factory('CarouselFactory', function() {
             }
         }
         target !== 1 ? target = songs + 2 - target : target;
-
-        console.log('target is ', target);
-
     }
+
+    // function freezeCarousel () {
+    // 	console.log('should freeze')
+    // 	addX = 0;
+    // }
 
     return {
         init: init,
