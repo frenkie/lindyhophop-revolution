@@ -29,6 +29,8 @@ app.config(function($stateProvider) {
 
             $scope.setUpSong = function() {
                 var currentSong = JSON.parse($scope.choice.song);
+                console.log('currentSong:', currentSong);
+
                 currentSong.offset = Number(currentSong.offset)
                 var difficulty = $scope.choice.difficulty;
 
@@ -92,6 +94,23 @@ app.config(function($stateProvider) {
                         tone.start();
                         startTime = Date.now() - currentSong.offset*1000;
                         addListener();
+
+
+                        var videoOffset = (config.ARROW_SPEED/mainBPM + Number(currentSong.offset))*1000;
+                        // console.log('videoOffset:', videoOffset*1000);
+
+                            if (currentSong.title === 'Caramelldansen') {
+                                $scope.videoSrc = '/video/Caramelldansen.mp4';
+                                videoOffset += 1000;
+                            }
+                            else if (currentSong.title === 'Sandstorm') {
+                                $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
+                            }
+                            setTimeout(function() {
+                                var video = document.getElementById('bg-video');
+                                video.play();
+                            }, videoOffset);
+
                     }
 
                     Tone.Buffer.onload = function () {
