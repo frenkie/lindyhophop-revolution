@@ -20,7 +20,7 @@ app.factory('ArrowFactory', function () {
 
 
     /** Arrow settings (chosen by the player) */
-    Arrow.speedModifier = 1;
+    Arrow.speedModifier = 2;
     /** */
 
     Arrow.speed = Arrow.SPEED_1X / Arrow.speedModifier;
@@ -120,13 +120,20 @@ app.factory('ArrowFactory', function () {
                         var dir = Arrow.indexToDir(index);
                         var color;
                         var thing = lineIndex / notes * 16;
-                        if (thing % 4 === 0) {
-                            color = 'purple';
-                        } else if (thing % 2 === 0) {
-                            color = 'orange';
-                        } else {
-                            color = 'red';
-                        }
+
+                        var note = lineIndex / notes;
+                        if ((note * 4) % 1 === 0) color = 'red';
+                        else if (((note - 1/8)*4) % 1 === 0) color = 'blue';
+                        else if (((note - 1/16)*8) % 1 === 0) color = 'yellow';
+                        else color = 'green';
+
+                        // if (thing % 4 === 0) {
+                        //     color = 'red';
+                        // } else if (thing % 2 === 0) {
+                        //     color = 'blue';
+                        // } else {
+                        //     color = 'yellow';
+                        // }
                         var arrow = new Arrow(dir, 1, color);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].unshift(arrow);

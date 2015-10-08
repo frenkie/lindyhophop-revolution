@@ -99,6 +99,7 @@ var respondToKey = function (time, dir) {
     }
     var diff = Math.abs(lastOne.time - time);
     if (diff < TIMING_WINDOW) {
+        console.log('diff:', diff);
         console.log(`got it, ${dir} arrow at ${lastOne.time}!!`)
         postMessage({dir, index: thisChart.length - 1})
     }
