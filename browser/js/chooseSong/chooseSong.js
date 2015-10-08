@@ -16,8 +16,10 @@ app.config(function ($stateProvider) {
 app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout) {
 
 	$scope.songs = songs;
-    console.log('scope.songs:', $scope.songs);
 	$scope.choice = {};
+
+    $scope.selectedDifficulty;
+    $scope.selectedChart;
 
 
     $scope.loadSong = function(level) {
@@ -40,9 +42,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         $('.choose-level').css("visibility", "visible");
         $timeout(function() {
             $('#level0').addClass("selected");   
-        });
-        
-        console.log('scope.choice:', $scope.choice);   
+        }); 
     	$scope.choice.song = song;
         $scope.choice.levels = [];
         // var currentSong = JSON.parse($scope.choice.song);
@@ -51,8 +51,26 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             $scope.choice.levels.push(key);
         }
         $scope.choice.levels.reverse();
+
+        console.log('$scope.choice:', $scope.choice);
+
         window.removeEventListener("keydown", CarouselFactory.carouselMove, false);
-        window.addEventListener("keydown", CarouselFactory.chooseLevel, false);
+        window.addEventListener("keydown", function(e) {
+            CarouselFactory.chooseLevel(e);
+            viewSongInfo();
+        }, false);
     };
+
+    function viewSongInfo() {
+        $scope.selectedDifficulty = $('.selected')[0].textContent;
+        $scope.selectedChart = $scope.choice.song.Charts[$scope.selectedDifficulty];
+        console.log($scope.choice.song);
+        var {level, grooveRadar} = $scope.selectedChart;
+        console.log(`Difficulty: ${$scope.selectedDifficulty}; Feet: ${level}`);
+        //console.log('chart:', $scope.selectedChart);
+        Object.keys(grooveRadar).forEach(category => {
+            console.log(`${category}: ${grooveRadar[category]}`);
+        });
+    }
 
 });

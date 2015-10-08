@@ -226,6 +226,7 @@ app.factory('CarouselFactory', function($state) {
             $('.selected').removeClass("selected");
 
         }
+
         //class selected that lights up the choice
         //up will go up the index
         //down will go down the list
