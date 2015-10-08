@@ -45,8 +45,8 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         for(var key in charts) {
             $scope.choice.levels.push(key);
         }
-
-        $(document).off("keydown.move");
+        $scope.choice.levels.reverse();
+        window.removeEventListener("keydown", CarouselFactory.carouselMove, false);
         window.addEventListener("keydown", CarouselFactory.chooseLevel, false);
     };
 

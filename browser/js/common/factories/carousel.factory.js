@@ -3,6 +3,9 @@ app.factory('CarouselFactory', function() {
     var looperRunning, w, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
     var addX = 0;
+    var leftX = 0,
+        rightX = 0,
+        target;
 
     // fps counter created by: https://gist.github.com/sharkbrainguy/1156092,
     // no need to create my own :)
@@ -60,9 +63,7 @@ app.factory('CarouselFactory', function() {
             animateIn($item, $block);
         }
 
-        // set mouse x and y props and looper ticker
-        // window.addEventListener( "mousemove", onMouseMove, false );
-        //window.addEventListener("keydown", carouselMove, false);
+        // set looper ticker if it isn't already set
         if (!looperRunning) {
         	ticker = setInterval(looper, 1000 / 60);
         	looperRunning = true;
@@ -108,12 +109,8 @@ app.factory('CarouselFactory', function() {
         })
     }
 
-    var leftX = 0,
-        rightX = 0,
-        target,
-        prevTarget;
-
     function carouselMove(event) {
+
         if (event.which === 39) {
             rightX < 10 ? rightX += 2 : rightX;
             leftX > 0 ? leftX = rightX = 0 : leftX = 0;
@@ -130,46 +127,40 @@ app.factory('CarouselFactory', function() {
             console.log("DOWN KEY HIT: ", event)
 
         } else if (event.which === 27) {
-            console.log("ESC KEY HIT: ", event);
+            TweenMax.set($(`#item${target}`), {
+                clearProps: "all"
+            });
 
             addX = 0;
             mouseX = 0;
             rightX = 0;
             leftX = 0;
-            looper();
-            
-            init();
 
         } else if (event.which === 13) {
 
-            TweenMax.set($(`#item${target}`), {
-                clearProps: "all"
-            });
-            init();
+            // TweenMax.set($(`#item${target}`), {
+            //     clearProps: "all"
+            // });
+            // init();
 
 
-            var degrees = addX % 360;
-            var songs = carousel.children().length;
-            console.log('songs ', carousel.children());
-            var delta = 360 / songs;
+      //       var degrees = addX % 360;
+      //       var songs = carousel.children().length;
+      //       var delta = 360 / songs;
 
 
-            console.log('degrees is ', degrees);
-            var upper = degrees + delta / 2;
-            var lower = degrees - delta / 2;
-
-            for (var i = 0; i < songs; i++) {
-                if (degrees >= 0) {
-                    if (degrees < i * delta + delta / 2 && degrees > i * delta - delta / 2) target = i + 1;
-                } else {
-                    if (degrees < (i - songs) * delta + delta / 2 && degrees > (i - songs) * delta - delta / 2) target = i + 1;
-                }
-            }
-            target !== 1 ? target = songs + 2 - target : target;
-            // var temp = Song.findOne({title: carousel.children()[target-1].innerText});
-            if (prevTarget === target) $state.go('confirmSong');
-            prevTarget = target;
-    		// console.log($(`#item${target}`));
+      //       for (var i = 0; i < songs; i++) {
+      //           if (degrees >= 0) {
+      //               if (degrees < i * delta + delta / 2 && degrees > i * delta - delta / 2) target = i + 1;
+      //           } else {
+      //               if (degrees < (i - songs) * delta + delta / 2 && degrees > (i - songs) * delta - delta / 2) target = i + 1;
+      //           }
+      //       }
+      //       target !== 1 ? target = songs + 2 - target : target;
+  
+    		// // console.log($(`#item${target}`));
+      //       console.log('target is ', target);
+      		findTarget();
 
 
             TweenMax.to($(`#item${target}`), 1, {
@@ -186,14 +177,12 @@ app.factory('CarouselFactory', function() {
 
             $(`#item${target}`).trigger('click');
         }
-    	console.log('carousel moves ', mouseX);
 
     }
 
     // loops and sets the carousel 3d properties
     function looper() {
         addX += mouseX;
-        console.log('mouseX is ', mouseX);
         TweenMax.to(carousel, 1, {
             rotationY: addX,
             rotationX: 0,
@@ -207,12 +196,11 @@ app.factory('CarouselFactory', function() {
     }
 
     function chooseLevel(event) {
-        console.log($('.choose-level:last-child'));
+        
         if (event.which === 38) { //key up
             if($('.selected').prev().length)
                 $('.selected').removeClass("selected").prev().addClass("selected");
             else {
-                //$('.selected').removeClass("selected").last().addClass("selected");
                 $('.selected').removeClass("selected").siblings(':last').addClass("selected");
             }
 
@@ -228,6 +216,7 @@ app.factory('CarouselFactory', function() {
             
 
         } else if (event.which === 27) { //escape
+
             $('.choose-level').css("visibility", "hidden");
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
@@ -236,9 +225,11 @@ app.factory('CarouselFactory', function() {
             addX = 0;
             mouseX = 0;
             rightX = 0;
-            leftX = 0; 
-            // window.addEventListener("keydown", carouselMove, false);
-            $(document).on('keydown.move', carouselMove);
+            leftX = 0;
+            target = undefined; 
+            window.addEventListener("keydown", carouselMove, false);
+            //below code screws up target finding (remembers multiple targets)
+            // $(document).on('keydown.move', carouselMove);
             $('.selected').removeClass("selected");           
 
         }
@@ -246,6 +237,25 @@ app.factory('CarouselFactory', function() {
         //up will go up the index
         //down will go down the list
         //enter takes the selected with class
+    }
+
+    function findTarget () {
+    	var degrees = addX % 360;
+        var songs = carousel.children().length;
+        var delta = 360 / songs;
+
+
+        for (var i = 0; i < songs; i++) {
+            if (degrees >= 0) {
+                if (degrees < i * delta + delta / 2 && degrees > i * delta - delta / 2) target = i + 1;
+            } else {
+                if (degrees < (i - songs) * delta + delta / 2 && degrees > (i - songs) * delta - delta / 2) target = i + 1;
+            }
+        }
+        target !== 1 ? target = songs + 2 - target : target;
+
+        console.log('target is ', target);
+
     }
 
     return {
