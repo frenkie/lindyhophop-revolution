@@ -16,6 +16,7 @@ app.config(function ($stateProvider) {
 app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout) {
 
 	$scope.songs = songs;
+    console.log('scope.songs:', $scope.songs);
 	$scope.choice = {};
 
 
@@ -41,6 +42,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             $('#level0').addClass("selected");   
         });
         
+        console.log('scope.choice:', $scope.choice);   
     	$scope.choice.song = song;
         $scope.choice.levels = [];
         // var currentSong = JSON.parse($scope.choice.song);

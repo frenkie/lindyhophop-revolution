@@ -19,6 +19,10 @@ app.factory('ToneFactory', function () {
         // this.transport.start(this.measureOffset, "0:0:0");
     }
 
+    ToneFactory.prototype.stop = function () {
+        this.player.stop();
+    }
+
 
     return ToneFactory;
 })

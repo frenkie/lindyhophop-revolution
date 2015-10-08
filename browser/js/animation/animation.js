@@ -9,7 +9,7 @@ app.config(function($stateProvider) {
                 return SongFactory.getSongs();
             }
         },
-        controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory, $stateParams) {
+        controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory, $stateParams, $state) {
             $scope.songs = songs;
             $scope.choice = {};
 
@@ -21,7 +21,9 @@ app.config(function($stateProvider) {
                       '37': 'left',
                       '40': 'down',
                       '38': 'up',
-                      '39': 'right'
+                      '39': 'right',
+                      '27': 'escape',
+                      '9': 'tab',
                     };
 
                     var startTime = 0;
@@ -43,14 +45,40 @@ app.config(function($stateProvider) {
                         arrows[e.data.dir][e.data.index].el.remove();
                     };
                     var addListener = function () {
+                        var escapeHeld = false;
+                        var interval;
+
                         document.body.addEventListener('keydown', function (e) {
                             var dir = keyCodeToDir[e.keyCode];
                             if (dir) e.preventDefault();
                             else return;
+
+                            /** kill music (ToneFactory) and animation timeline, go back to select screen */
+                            if (dir === 'escape') {
+                                //escapeHeld = true;
+                                tone.stop();
+                                ArrowFactory.killTimeline();
+                                $state.go('chooseSong');
+                                // if (!interval && escapeHeld) {
+                                //     interval = setInterval(function() {
+                                //         tone.stop();
+                                //         ArrowFactory.killTimeline();
+                                //         $state.go('chooseSong');
+                                //     }, 2500);
+                                // }
+                            }
+
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
                         });
-                    }
+
+                        // document.body.addEventListener('keyup', function(e) {
+                        //     escapeHeld = false;
+                        //     clearInterval(interval);
+                        //     interval = null;
+                        // });
+
+                    };
 
                     $scope.runInit = function () {
                         ArrowFactory.resumeTimeline();
@@ -68,6 +96,9 @@ app.config(function($stateProvider) {
                             else if ($scope.currentSong.title === 'Sandstorm') {
                                 $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
                             }
+                            // else if ($scope.currentSong.title === '桜') {
+                            //     $scope.videoSrc = '/video/SAKURA.avi';
+                            // }
                             setTimeout(function() {
                                 var video = document.getElementById('bg-video');
                                 video.play();
