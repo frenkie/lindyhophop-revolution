@@ -1,5 +1,3 @@
-/* global */
-
 var indexToDir = {
   '0': 'left',
   '1': 'down',
@@ -8,12 +6,6 @@ var indexToDir = {
 };
 
 var chart = {
-    right: [],
-    left: [],
-    up:[],
-    down: []
-};
-var oldChart = {
     right: [],
     left: [],
     up:[],
@@ -32,8 +24,6 @@ var getStopTime = function (thisBeat, stops) {
 };
 
 var getBPMTime = function (thisBeat, bpms) {
-    // var currBPM = bpms[0];
-    // var prevBPM = bpms[0];
     var addedTime = 0;
     for (var i = 1; i < bpms.length && thisBeat > bpms[i].beat; i++) {
         var oldBeatTime = 60 / bpms[i - 1].bpm;
@@ -61,31 +51,16 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function (maybeArrow, index) {
                 if (maybeArrow !== "0") {
-                    console.log(`adding ${stopTime} extra stop time and ${extraBPMTime} extra BPM time for this ${indexToDir[index]} arrow -- now at ${timeStamp}`)
                     chart[indexToDir[index]].unshift({ time: timeStamp, attempted: false });
                 }
             });
         });
     });
 
-    // stepChart.forEach(function (measure, measureIndex) {
-    //     var noteTime = measureTime / measure.length;
-    //     measure.forEach(function (line, lineIndex) {
-    //         var timeStamp = measureTime*measureIndex + noteTime*lineIndex + offset;
-    //         line.forEach(function (maybeArrow, index) {
-    //             if (maybeArrow !== "0") {
-    //                 oldChart[indexToDir[index]].unshift({ time: timeStamp, attempted: false });
-    //             }
-    //         });
-    //     });
-    // });
-
-    // console.log('oldChart:', oldChart);
-    console.log('newChart:', chart);
+    console.log('chart is ready');
 };
 
 var respondToKey = function (time, dir) {
-    console.log(`pressed ${dir} at ${time}`);
     var thisChart = chart[dir];
     if (!thisChart.length) return;
     var lastOne = thisChart[thisChart.length - 1];
@@ -94,13 +69,10 @@ var respondToKey = function (time, dir) {
         lastOne = thisChart[thisChart.length - 1];
     }
     if (!lastOne) {
-        console.log('too early!');
         return;
     }
     var diff = Math.abs(lastOne.time - time);
     if (diff < TIMING_WINDOW) {
-        console.log('diff:', diff);
-        console.log(`got it, ${dir} arrow at ${lastOne.time}!!`)
         postMessage({dir, index: thisChart.length - 1})
     }
 }
