@@ -74,10 +74,10 @@ app.config(function($stateProvider) {
                             video.play();
                         }, videoOffset);
 
-                        setTimeout(function() {
-                            $scope.ready = true;
-                            $scope.$digest();
-                        }, 3000);
+                      
+                        $scope.ready = true;
+                        $scope.$digest();
+                       
                         //This is only so the user can read the loading screen and have heightened anticipation!
 
                     }
@@ -114,7 +114,10 @@ app.config(function($stateProvider) {
 
             };
 
-            setUpSong();
+            setTimeout(function() {
+                setUpSong();
+                
+            }, 2000);
         }
     });
 });
