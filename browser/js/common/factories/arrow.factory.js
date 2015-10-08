@@ -114,21 +114,14 @@ app.factory('ArrowFactory', function () {
                     if (maybeArrow !== "0") { //FIX to account for freezes : D
                         var dir = Arrow.indexToDir(index);
                         var color;
-
-                        var note = lineIndex / notes;
-                        if ((note * 4) % 1 === 0) color = 'red';
-                        else if (((note - 1/8)*4) % 1 === 0) color = 'blue';
-                        else if (((note - 1/16)*8) % 1 === 0) color = 'yellow';
-                        else color = 'green';
-
                         var thing = lineIndex / notes * 16;
-                        // if (thing % 4 === 0) {
-                        //     color = 'red';
-                        // } else if (thing % 2 === 0) {
-                        //     color = 'blue';
-                        // } else {
-                        //     color = 'yellow';
-                        // }
+                        if (thing % 4 === 0) {
+                            color = 'purple';
+                        } else if (thing % 2 === 0) {
+                            color = 'orange';
+                        } else {
+                            color = 'red';
+                        }
                         var arrow = new Arrow(dir, 1, color);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].unshift(arrow);
