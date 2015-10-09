@@ -5,12 +5,13 @@ app.config(function($stateProvider) {
         url: '/animation/:songId/:chosenLevel',
         templateUrl: 'js/animation/animation.html',
         resolve: {
-            songs: function(SongFactory) {
-                return SongFactory.getSongs();
+            song: function(SongFactory, $stateParams) {
+                return SongFactory.getSongById($stateParams.songId);
             }
         },
-        controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory, $stateParams) {
-            $scope.songs = songs;
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams) {
+            $scope.ready = false;
+            $scope.currentSong = song;
             $scope.choice = {};
 
             function prepSong(stepChart) {
@@ -52,7 +53,7 @@ app.config(function($stateProvider) {
                         });
                     }
 
-                    $scope.runInit = function () {
+                    var runInit = function () {
                         ArrowFactory.resumeTimeline();
                         tone.start();
                         startTime = Date.now() - $scope.currentSong.offset*1000;
@@ -61,67 +62,62 @@ app.config(function($stateProvider) {
 
                         var videoOffset = ($scope.config.ARROW_SPEED/$scope.mainBPM + Number($scope.currentSong.offset))*1000;
 
-                            if ($scope.currentSong.title === 'Caramelldansen') {
-                                $scope.videoSrc = '/video/Caramelldansen.mp4';
-                                videoOffset += 1000;
-                            }
-                            else if ($scope.currentSong.title === 'Sandstorm') {
-                                $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
-                            }
-                            setTimeout(function() {
-                                var video = document.getElementById('bg-video');
-                                video.play();
-                            }, videoOffset);
+                        if ($scope.currentSong.title === 'Caramelldansen') {
+                            $scope.videoSrc = '/video/Caramelldansen.mp4';
+                            videoOffset += 1000;
+                        }
+                        else if ($scope.currentSong.title === 'Sandstorm') {
+                            $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
+                        }
+                        setTimeout(function() {
+                            var video = document.getElementById('bg-video');
+                            video.play();
+                        }, videoOffset);
+
+                      
+                        $scope.ready = true;
+                        $scope.$digest();
+                       
+                        //This is only so the user can read the loading screen and have heightened anticipation!
 
                     }
 
                     Tone.Buffer.onload = function () {
-                        $scope.ready = true;
-                        $scope.$digest();
+                        runInit();
                     };
                 };
 
-            $scope.getDifficulties = function() {
-                $scope.choice.levels = [];
-                var currentSong = JSON.parse($scope.choice.song);
-                var charts = currentSong.Charts;
-                for(var key in charts) {
-                    $scope.choice.levels.push(key);
-                }
-            };
+            var setUpSong = function() {
 
-            $scope.setUpSong = function() {
-                SongFactory.getSongById($stateParams.songId)
-                .then( function (currentSong) {
-                    $scope.currentSong = currentSong;
-                    $scope.currentSong.offset = parseFloat($scope.currentSong.offset);
-                    var difficulty = $stateParams.chosenLevel;
-                    console.log($scope.currentSong);
-                    console.log(difficulty);
+                $scope.currentSong.offset = parseFloat($scope.currentSong.offset);
 
-                    var chartId = $scope.currentSong.Charts[difficulty].stepChart;
-                    console.log(chartId);
+                var difficulty = $stateParams.chosenLevel;
 
-                    $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
+                var chartId = $scope.currentSong.Charts[difficulty].stepChart;
 
-                    $scope.config = {
-                    TIMING_WINDOW: 0.15,
-                    ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
-                    MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
-                    };
-                    $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
-                    $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
+                $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
 
-                    return chartId;
-                })
-                .then( function (chartId) {
-                    SongFactory.getChartById(chartId)
-                    .then(prepSong);
-                });
+                $scope.config = {
+                TIMING_WINDOW: 0.15,
+                ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
+                MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
+                };
+                $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
+                $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
 
-
+            
+                SongFactory.getChartById(chartId)
+                .then(prepSong);
+                
 
             };
+
+
+            setTimeout(function() {
+                setUpSong();
+                
+            }, 2000);
+
         }
     });
 });
