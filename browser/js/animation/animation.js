@@ -26,6 +26,7 @@ app.config(function($stateProvider) {
                       '27': 'escape',
                     };
 
+
                     var startTime = 0;
                     ArrowFactory.makeTimeline();
                     var arrows = ArrowFactory.makeArrows(stepChart.chart, $scope.mainBPM);
@@ -42,10 +43,12 @@ app.config(function($stateProvider) {
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
+
+                    var activeArrows = $('.activeArrow');
                     arrowWorker.onmessage = function (e) {
                         arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-                        if($('.activeArrow').length === 0) {
+                        if(activeArrows.length === 0) {
                             setTimeout(function() {
                                 tone.stop();
                                 arrowWorker.terminate();
