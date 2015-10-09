@@ -1,12 +1,12 @@
 /* global Tone */
 
-app.factory('ToneFactory', function (ArrowFactory) {
+app.factory('ToneFactory', function () {
     var ToneFactory = function (path, bpm, offset, config) {
 
         this.config = config;
         this.path = path;
         this.bpm = bpm;
-        this.syncOffset = config.ARROW_SPEED/bpm + Number(offset);
+        this.syncOffset = config.ARROW_SPEED/bpm + parseInt(offset, 10);
         this.player = new Tone.Player(this.path).toMaster();
         this.transport = Tone.Transport;
         this.transport.bpm.value = this.bpm;
@@ -17,13 +17,6 @@ app.factory('ToneFactory', function (ArrowFactory) {
     ToneFactory.prototype.start = function () {
         this.player.start(`+${this.syncOffset}`);
         // this.transport.start(this.measureOffset, "0:0:0");
-    }
-
-    var indexToDir = {
-        0: 'left',
-        1: 'down',
-        2: 'up',
-        3: 'right'
     }
 
 
