@@ -9,7 +9,8 @@ app.config(function($stateProvider) {
                 return SongFactory.getSongById($stateParams.songId);
             }
         },
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, $state) {
+
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory) {
             $scope.ready = false;
             $scope.currentSong = song;
             $scope.choice = {};
@@ -44,10 +45,11 @@ app.config(function($stateProvider) {
                     arrowWorker.onmessage = function (e) {
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
-                            $scope.score = ScoreFactory.addPoint();
+                            $scope.score = ScoreFactory.addScore();
+                            $scope.combo = ScoreFactory.addCombo();
                         } else {
-                            arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
-                            $scope.score = ScoreFactory.resetPoints();
+                            // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                            $scope.combo = ScoreFactory.resetCombo();
                         };
                         console.log(e);
                         //console.log($scope.score);

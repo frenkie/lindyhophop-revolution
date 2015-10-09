@@ -4,7 +4,6 @@
 
 
 
-
 <div class='animContainer' ng-show='ready'>
   <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/2HQaBWziYvY" frameborder="0" allowfullscreen></iframe> -->
   <video id='bg-video' ng-src="{{videoSrc}}" muted loop>
@@ -14,6 +13,7 @@
 
 
 <div class='trackContainer' ng-show='ready'>
+  <score ng-show='ready'></score>
   <div class='track'>
   </div>
 </div>
