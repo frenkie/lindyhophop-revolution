@@ -71,7 +71,7 @@ var preChart = function (stepChart, bpm, arrowOffset, songOffset,  timing, bpms,
             var extraBPMTime = getBPMTime(thisBeat, bpms);
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function (maybeArrow, index) {
-                if (maybeArrow !== "0") {
+                if (maybeArrow === "1" || maybeArrow === "2") {
                     //thisIndex is the index of the arrow just pushed
                     var arrowTime = {dir: indexToDir[index], time: timeStamp, attempted: false , hit: false};
                     var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;

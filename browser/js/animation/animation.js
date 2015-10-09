@@ -22,7 +22,8 @@ app.config(function($stateProvider) {
                       '37': 'left',
                       '40': 'down',
                       '38': 'up',
-                      '39': 'right'
+                      '39': 'right',
+                      '27': 'escape',
                     };
 
                     var startTime = 0;

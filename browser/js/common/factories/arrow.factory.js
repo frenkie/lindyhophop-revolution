@@ -93,7 +93,7 @@ app.factory('ArrowFactory', function () {
             var notes = measure.length;
             measure.forEach(function (line, lineIndex) {
                 line.forEach(function (maybeArrow, index) {
-                    if (maybeArrow !== "0") { //FIX to account for freezes : D
+                    if (maybeArrow === "1" || maybeArrow === "2") { //FIX to account for freezes : D
                         var dir = indexToDir[index];
                         var color;
                         var note = lineIndex / notes;
