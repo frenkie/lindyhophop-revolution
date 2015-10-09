@@ -45,7 +45,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         $scope.choice.levels = [];
         // var currentSong = JSON.parse($scope.choice.song);
         var charts = song.Charts;
-        for(var key in charts) {
+        Object.keys(charts).forEach(function(key) { 
             $scope.choice.levels.push(key);
         }
         $scope.choice.levels.reverse();
