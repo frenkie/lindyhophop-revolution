@@ -33,6 +33,11 @@ app.factory('ArrowFactory', function () {
 
     Arrow.resumeTimeline = function () {
         tl.resume();
+    };
+
+    Arrow.killTimeline = function () {
+        tl.pause(0, true);      // sets steps back to beginning
+        tl.remove();
     }
 
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
