@@ -17,6 +17,8 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
 	$scope.songs = songs;
 	$scope.choice = {};
+    // $scope.speedMod = ArrowFactory.speedModifier;
+    // ArrowFactory.setSpeed($scope.speedMod);
 
     function viewSongInfo() {
         var $selected = $('.selected');

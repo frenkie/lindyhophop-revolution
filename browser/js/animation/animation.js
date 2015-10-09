@@ -15,8 +15,10 @@ app.config(function($stateProvider) {
             $scope.currentSong = song;
             $scope.choice = {};
 
-            function prepSong(stepChart) {
 
+
+            function prepSong(stepChart) {
+                    ScoreFactory.setTotalArrows(stepChart);
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
                     var keyCodeToDir = {
@@ -46,17 +48,22 @@ app.config(function($stateProvider) {
                     arrowWorker.onmessage = function (e) {
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
-                            $scope.score = ScoreFactory.addScore();
-                            $scope.combo = ScoreFactory.addCombo();
+                            console.log('difff is ', e.data.diff);
+                            $scope.score = ScoreFactory.addScore(e.data.diff);
+                            $scope.combo = ScoreFactory.addCombo(e.data.diff);
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
-                            $scope.combo = ScoreFactory.resetCombo();
+                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
                         };
                         //console.log($scope.score);
                         $scope.$digest();
                     };
                     var addListener = function () {
                         var stopSong = function (e) {
+                            if(e.keyCode === 48) {
+                                console.log(ScoreFactory.finalScore());
+                                console.log(ScoreFactory.accuracyCountGuy);
+                            };
                             var dir = keyCodeToDir[e.keyCode];
                             if (dir) e.preventDefault();
                             else return;
@@ -134,7 +141,6 @@ app.config(function($stateProvider) {
 
                 SongFactory.getChartById(chartId)
                 .then(prepSong);
-
 
             };
 

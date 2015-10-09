@@ -40,6 +40,10 @@ app.factory('ArrowFactory', function () {
         tl.remove();
     }
 
+    Arrow.setSpeed = function (num) {
+        Arrow.speedModifier = num;
+    }
+
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
         if (!tl) throw Error('Make a timeline first');
         var animationLength = (Arrow.speed * 4)/bpm;
