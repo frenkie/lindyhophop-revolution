@@ -4,6 +4,8 @@ app.directive('gamepad', function () {
     return {
         restrict: 'EA',
         link: function () {
+            if (window.gamepads) return;
+
             var gamepadConfig = {
                 axisThreshold: 0,
                 indices: {
@@ -93,6 +95,8 @@ app.directive('gamepad', function () {
                     }, 100);
                 }
             }
+
+            window.gamepads = gamepads;
         }
     }
 });
