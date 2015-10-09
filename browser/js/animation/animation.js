@@ -78,7 +78,7 @@ app.config(function($stateProvider) {
                 SongFactory.getSongById($stateParams.songId)
                 .then( function (currentSong) {
                     $scope.currentSong = currentSong;
-                    $scope.currentSong.offset = Number($scope.currentSong.offset);
+                    $scope.currentSong.offset = parseFloat($scope.currentSong.offset);
                     var difficulty = $stateParams.chosenLevel;
                     console.log($scope.currentSong);
                     console.log(difficulty);
@@ -104,7 +104,7 @@ app.config(function($stateProvider) {
                 });
 
 
-                
+
             };
         }
     });
