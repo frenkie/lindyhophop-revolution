@@ -5,7 +5,7 @@ app.factory('ArrowFactory', function () {
     var Arrow = function (direction, player, color) {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
-        this.el = $(`<div class="arrow"><img src="/img/${direction}-${color}.png"></img></div>`);
+        this.el = $(`<div class="arrow"><img src="/img/arrows/${direction}-${color}.png"></img></div>`);
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
 
@@ -35,10 +35,14 @@ app.factory('ArrowFactory', function () {
         tl.resume();
     };
 
-    Arrow.killTimeline = function() {
-        tl.pause(0, true);      // sets arrows back to beginning
+    Arrow.killTimeline = function () {
+        tl.pause(0, true);      // sets steps back to beginning
         tl.remove();
-    };
+    }
+
+    Arrow.setSpeed = function (num) {
+        Arrow.speedModifier = num;
+    }
 
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
         if (!tl) throw Error('Make a timeline first');
@@ -47,8 +51,6 @@ app.factory('ArrowFactory', function () {
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
         this.startTime = startTime;
-        //console.log('animationLength is', animationLength);
-        //console.log('measureTime is ',measureTime)
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
 
@@ -71,7 +73,6 @@ app.factory('ArrowFactory', function () {
     }
 
     Arrow.addBPMChange = function(timestamp, tempoScale) {
-        console.log(`bpm changed by ${tempoScale} times at ${timestamp}`);
         tl.add(function () {
             tl.timeScale(tempoScale);
         }, timestamp);
@@ -98,7 +99,7 @@ app.factory('ArrowFactory', function () {
             var notes = measure.length;
             measure.forEach(function (line, lineIndex) {
                 line.forEach(function (maybeArrow, index) {
-                    if (maybeArrow !== "0") { //FIX to account for freezes : D
+                    if (maybeArrow === "1" || maybeArrow === "2") { //FIX to account for freezes : D
                         var dir = indexToDir[index];
                         var color;
                         var note = lineIndex / notes;
@@ -110,7 +111,7 @@ app.factory('ArrowFactory', function () {
                         
                         var arrow = new Arrow(dir, 1, color);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
-                        obj[indexToDir[index]].unshift(arrow);
+                        obj[indexToDir[index]].push(arrow);
                     }
                 });
             });

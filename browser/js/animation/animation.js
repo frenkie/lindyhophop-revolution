@@ -5,16 +5,20 @@ app.config(function($stateProvider) {
         url: '/animation/:songId/:chosenLevel',
         templateUrl: 'js/animation/animation.html',
         resolve: {
-            songs: function(SongFactory) {
-                return SongFactory.getSongs();
+            song: function(SongFactory, $stateParams) {
+                return SongFactory.getSongById($stateParams.songId);
             }
         },
-        controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory, $stateParams, $state) {
-            $scope.songs = songs;
+
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state) {
+            $scope.ready = false;
+            $scope.currentSong = song;
             $scope.choice = {};
 
-            function prepSong(stepChart) {
 
+
+            function prepSong(stepChart) {
+                    ScoreFactory.setTotalArrows(stepChart);
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
                     var keyCodeToDir = {
@@ -22,8 +26,7 @@ app.config(function($stateProvider) {
                       '40': 'down',
                       '38': 'up',
                       '39': 'right',
-                      '27': 'escape',
-                      '9': 'tab',
+                      '27': 'escape'
                     };
 
                     var startTime = 0;
@@ -36,128 +39,118 @@ app.config(function($stateProvider) {
                         type: 'preChart',
                         chart: stepChart.chart,
                         bpm: $scope.mainBPM,
-                        offset: $scope.config.ARROW_TIME + $scope.currentSong.offset,
+                        arrowOffset: $scope.config.ARROW_TIME + $scope.currentSong.offset,
+                        songOffset: $scope.currentSong.offset,
                         timing: $scope.config.TIMING_WINDOW,
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
                     arrowWorker.onmessage = function (e) {
-                        arrows[e.data.dir][e.data.index].el.remove();
+                        if(e.data.hit) {
+                            arrows[e.data.dir][e.data.index].el.remove();
+                            console.log('difff is ', e.data.diff);
+                            $scope.score = ScoreFactory.addScore(e.data.diff);
+                            $scope.combo = ScoreFactory.addCombo(e.data.diff);
+                        } else {
+                            // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
+                            ScoreFactory.addScore(e.data.diff);
+                        };
+                        //console.log($scope.score);
+                        $scope.$digest();
                     };
                     var addListener = function () {
-                        var escapeHeld = false;
-                        var interval;
 
-                        document.body.addEventListener('keydown', function (e) {
+                        var stopSong = function (e) {
+                            if(e.keyCode === 48) {
+                                console.log(ScoreFactory.finalScore());
+                                console.log(ScoreFactory.accuracyCountGuy);
+                            };
                             var dir = keyCodeToDir[e.keyCode];
                             if (dir) e.preventDefault();
                             else return;
-
-                            /** kill music (ToneFactory) and animation timeline, go back to select screen */
-                            if (dir === 'escape') {
-                                //escapeHeld = true;
+                            if (dir === 'escape') { 
+                                /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
                                 tone.stop();
+                                arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
+                                document.body.removeEventListener('keydown', stopSong);
                                 $state.go('chooseSong');
-                                // if (!interval && escapeHeld) {
-                                //     interval = setInterval(function() {
-                                //         tone.stop();
-                                //         ArrowFactory.killTimeline();
-                                //         $state.go('chooseSong');
-                                //     }, 2500);
-                                // }
                             }
 
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
-                        });
+                        }
+                        document.body.addEventListener('keydown', stopSong);
+                    }
 
-                        // document.body.addEventListener('keyup', function(e) {
-                        //     escapeHeld = false;
-                        //     clearInterval(interval);
-                        //     interval = null;
-                        // });
-
-                    };
-
-                    $scope.runInit = function () {
+                    var runInit = function () {
                         ArrowFactory.resumeTimeline();
                         tone.start();
                         startTime = Date.now() - $scope.currentSong.offset*1000;
+                        arrowWorker.postMessage({
+                          type: 'startTime',
+                          startTime
+                        });
                         addListener();
 
 
                         var videoOffset = ($scope.config.ARROW_SPEED/$scope.mainBPM + Number($scope.currentSong.offset))*1000;
 
-                            if ($scope.currentSong.title === 'Caramelldansen') {
-                                $scope.videoSrc = '/video/Caramelldansen.mp4';
-                                videoOffset += 1000;
-                            }
-                            else if ($scope.currentSong.title === 'Sandstorm') {
-                                $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
-                            }
-                            // else if ($scope.currentSong.title === '桜') {
-                            //     $scope.videoSrc = '/video/SAKURA.avi';
-                            // }
-                            setTimeout(function() {
-                                var video = document.getElementById('bg-video');
-                                video.play();
-                            }, videoOffset);
+                        if ($scope.currentSong.title === 'Caramelldansen') {
+                            $scope.videoSrc = '/video/Caramelldansen.mp4';
+                            videoOffset += 1000;
+                        }
+                        else if ($scope.currentSong.title === 'Sandstorm') {
+                            $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
+                        }
+                        setTimeout(function() {
+                            var video = document.getElementById('bg-video');
+                            video.play();
+                        }, videoOffset);
+
+                        $scope.ready = true;
+                        $scope.$digest();
+
+                        //This is only so the user can read the loading screen and have heightened anticipation!
 
                     }
 
                     Tone.Buffer.onload = function () {
-                        $scope.ready = true;
-                        $scope.$digest();
+                        runInit();
                     };
                 };
 
-            $scope.getDifficulties = function() {
-                $scope.choice.levels = [];
-                var currentSong = JSON.parse($scope.choice.song);
-                var charts = currentSong.Charts;
-                for(var key in charts) {
-                    $scope.choice.levels.push(key);
-                }
-            };
+            var setUpSong = function() {
 
-            $scope.setUpSong = function() {
-                SongFactory.getSongById($stateParams.songId)
-                .then( function (currentSong) {
-                    $scope.currentSong = currentSong;
-                    $scope.currentSong.offset = Number($scope.currentSong.offset);
-                    var difficulty = $stateParams.chosenLevel;
-                    console.log($scope.currentSong);
-                    console.log(difficulty);
+                $scope.currentSong.offset = parseFloat($scope.currentSong.offset);
 
-                    var chartId = $scope.currentSong.Charts[difficulty].stepChart;
-                    console.log(chartId);
+                var difficulty = $stateParams.chosenLevel;
 
-                    $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
+                var chartId = $scope.currentSong.Charts[difficulty].stepChart;
 
-                    $scope.config = {
+                $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
+
+                $scope.config = {
                     TIMING_WINDOW: 0.15,
                     ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
                     MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
-                    };
-                    $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
-                    $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
-
-                    return chartId;
-                })
-                .then( function (chartId) {
-                    SongFactory.getChartById(chartId)
-                    .then(prepSong);
-                });
+                };
+                $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
+                $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
 
 
-                
+                SongFactory.getChartById(chartId)
+                .then(prepSong);
+
             };
+
+
+            setTimeout(function() {
+                setUpSong();
+
+            }, 2000);
+
         }
     });
 });
-
-
-
-
-

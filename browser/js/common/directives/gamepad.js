@@ -4,6 +4,8 @@ app.directive('gamepad', function () {
     return {
         restrict: 'EA',
         link: function () {
+            if (window.gamepads) return;
+
             var gamepadConfig = {
                 axisThreshold: 0,
                 indices: {
@@ -58,10 +60,24 @@ app.directive('gamepad', function () {
                         key: 'Escape',
                         keyCode: 27
                     }
+                },
+                start: {
+                    detail: {
+                        key: 'Number 1',
+                        keyCode: 49
+                    }
+                },
+                select: {
+                    detail: {
+                        key: 'Number 2',
+                        keyCode: 50
+                    }
                 }
             }
 
             gamepads.polling = false;
+
+            window.gamepads = gamepads
 
             if (gamepads.gamepadsSupported) {
                 gamepads.updateStatus = function () {
@@ -80,6 +96,10 @@ app.directive('gamepad', function () {
                     window.cancelAnimationFrame(gamepads.updateStatus);
                 };
 
+                window.addEventListener('gamepadconnected', function () {
+                    console.log('Gamepad is connected');
+                });
+
                 // At the time of this writing, Firefox is the only browser that correctly
                 // fires the `gamepadconnected` event. For the other browsers
                 // <https://crbug.com/344556>, we start polling every 100ms until the
@@ -93,6 +113,8 @@ app.directive('gamepad', function () {
                     }, 100);
                 }
             }
+
+            window.gamepads = gamepads;
         }
     }
 });
