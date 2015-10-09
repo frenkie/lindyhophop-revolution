@@ -54,6 +54,7 @@ app.config(function($stateProvider) {
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
+                            ScoreFactory.addScore(e.data.diff);
                         };
                         //console.log($scope.score);
                         $scope.$digest();
