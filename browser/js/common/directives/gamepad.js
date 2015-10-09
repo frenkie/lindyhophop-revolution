@@ -60,6 +60,18 @@ app.directive('gamepad', function () {
                         key: 'Escape',
                         keyCode: 27
                     }
+                },
+                start: {
+                    detail: {
+                        key: 'Number 1',
+                        keyCode: 49
+                    }
+                },
+                select: {
+                    detail: {
+                        key: 'Number 2',
+                        keyCode: 50
+                    }
                 }
             }
 
@@ -81,6 +93,10 @@ app.directive('gamepad', function () {
 
                     window.cancelAnimationFrame(gamepads.updateStatus);
                 };
+
+                window.addEventListener('gamepadconnected', function () {
+                    console.log('Gamepad is connected');
+                });
 
                 // At the time of this writing, Firefox is the only browser that correctly
                 // fires the `gamepadconnected` event. For the other browsers
