@@ -44,17 +44,19 @@ app.config(function($stateProvider) {
                         stops: $scope.currentSong.stops
                     });
 
-                    var activeArrows = $('.activeArrow');
+                    console.log(tone);
+                    var activeArrows
                     arrowWorker.onmessage = function (e) {
                         arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-                        if(activeArrows.length === 0) {
+
+                        if($('.activeArrow').length === 0) {
                             setTimeout(function() {
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
                                 $state.go('chooseSong');
-                            }, 2000);
+                            }, 3000);
                         }
 
                         if(e.data.hit) {
