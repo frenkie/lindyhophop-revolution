@@ -19,8 +19,8 @@ app.controller('MainMenuCtrl', function ($scope, $state) {
   };
 
   var menuLength = $('.menuXParent').children().length;
-
-  window.addEventListener('keydown', onArrowKey)
+  var $document = $(document);
+  $document.on('keydown', onArrowKey)
   function onArrowKey(event) {
       var active = $('.activeChoice');
       var activeNumber = parseInt(active[0].id.slice(-1));
@@ -37,10 +37,10 @@ app.controller('MainMenuCtrl', function ($scope, $state) {
       $('#option' + activeNumber).addClass("activeChoice");
     } else if(event.keyCode === 13) {
       var uiState = active[0].outerHTML.split('"');
-      window.removeEventListener('keydown', onArrowKey);
+      $document.off('keydown', onArrowKey);
       $state.go(uiState[menuLength]);
     } else if(event.keyCode === 27) {
-      window.removeEventListener('keydown', onArrowKey);
+      $document.off('keydown', onArrowKey);
       $state.go('home');
     };
   };
