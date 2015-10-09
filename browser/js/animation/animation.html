@@ -1,4 +1,11 @@
-<div class='animContainer'>
+<div class='loadingScreen' ng-hide='ready'>
+  <loading></loading>
+</div>
+
+
+
+
+<div class='animContainer' ng-show='ready'>
   <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/2HQaBWziYvY" frameborder="0" allowfullscreen></iframe> -->
   <video id='bg-video' ng-src="{{videoSrc}}" muted loop>
     <!-- <source ng-src="{{videoSrc}}" type='video/mp4'></source> -->
@@ -6,15 +13,15 @@
 </div>
 
 
-<div class='trackContainer'>
+<div class='trackContainer' ng-show='ready'>
   <div class='track'>
   </div>
 </div>
 
-<div class="container">
-<score></score>
+
+<div class="container" ng-show='ready'>
   <div class="row">
-    <div class="col-sm-6 player-1">
+    <div class="col-sm-offset-3 col-sm-6 player-1">
       <div class="row">
         <div class="col-sm-3 left-arrow-col arrow-col-0 arrow-col">
             <div class="arrowPlace"><img src="/img/left-blank.png"></img></div>
@@ -33,17 +40,13 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-6 player-2">
+    <!-- <div class="col-sm-6 player-2">
       <div class="row">
         <div class="col-sm-3 left-arrow-col"></div>
         <div class="col-sm-3 down-arrow-col"></div>
         <div class="col-sm-3 up-arrow-col"></div>
         <div class="col-sm-3 right-arrow-col"></div>
       </div>
-      <div class="row">
-        <button ng-click="setUpSong()" >SET IT UP</button>
-        <button ng-click="runInit()" ng-show="ready">START SHIZ</button>
-      </div>
-    </div>
+    </div> -->
   </div>
 </div>

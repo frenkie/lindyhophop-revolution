@@ -1,6 +1,7 @@
 .arrow {
   position: absolute;
   top: 100vh;
+  transition: opacity 0.2s;
   // left: 0;
 
   text-align: center;
@@ -32,13 +33,14 @@
   background-color: rgba(0, 0, 0, 0.7);;
   height: 100%;
   width: 45%;
-  margin-left: 7%;
+  margin: 0 auto;
   position: relative;
   z-index: 2;
   top: -100%;
 }
 
 .container {
+  margin-top: 4%;
   position: relative;
   z-index: 3;
   top: -200%;

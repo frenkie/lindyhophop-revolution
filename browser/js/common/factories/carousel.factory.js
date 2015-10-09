@@ -199,6 +199,7 @@ app.factory('CarouselFactory', function($state) {
             }
 
         } else if (event.keyCode === 13) { //enter
+
             $('.selected').trigger('click');
 
         } else if (event.keyCode === 27) { //escape
