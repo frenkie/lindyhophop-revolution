@@ -105,7 +105,7 @@ app.factory('ArrowFactory', function () {
                         
                         var arrow = new Arrow(dir, 1, color);
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
-                        obj[indexToDir[index]].unshift(arrow);
+                        obj[indexToDir[index]].push(arrow);
                     }
                 });
             });
