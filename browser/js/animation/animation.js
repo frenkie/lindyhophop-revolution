@@ -35,13 +35,18 @@ app.config(function($stateProvider) {
                         type: 'preChart',
                         chart: stepChart.chart,
                         bpm: $scope.mainBPM,
-                        offset: $scope.config.ARROW_TIME + $scope.currentSong.offset,
+                        arrowOffset: $scope.config.ARROW_TIME + $scope.currentSong.offset,
+                        songOffset: $scope.currentSong.offset,
                         timing: $scope.config.TIMING_WINDOW,
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
                     arrowWorker.onmessage = function (e) {
-                        arrows[e.data.dir][e.data.index].el.remove();
+                        if(e.data.hit) {
+                            arrows[e.data.dir][e.data.index].el.remove();
+                        } else {
+                            arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                        };
                     };
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
@@ -57,6 +62,10 @@ app.config(function($stateProvider) {
                         ArrowFactory.resumeTimeline();
                         tone.start();
                         startTime = Date.now() - $scope.currentSong.offset*1000;
+                        arrowWorker.postMessage({
+                          type: 'startTime',
+                          startTime
+                        });
                         addListener();
 
 
@@ -74,10 +83,10 @@ app.config(function($stateProvider) {
                             video.play();
                         }, videoOffset);
 
-                      
+
                         $scope.ready = true;
                         $scope.$digest();
-                       
+
                         //This is only so the user can read the loading screen and have heightened anticipation!
 
                     }
@@ -98,31 +107,26 @@ app.config(function($stateProvider) {
                 $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
 
                 $scope.config = {
-                TIMING_WINDOW: 0.15,
-                ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
-                MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
+                    TIMING_WINDOW: 0.15,
+                    ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
+                    MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
                 };
                 $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
                 $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
 
-            
+
                 SongFactory.getChartById(chartId)
                 .then(prepSong);
-                
+
 
             };
 
 
             setTimeout(function() {
                 setUpSong();
-                
+
             }, 2000);
 
         }
     });
 });
-
-
-
-
-
