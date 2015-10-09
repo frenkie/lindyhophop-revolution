@@ -76,7 +76,7 @@ app.config(function($stateProvider) {
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
                             var dir = keyCodeToDir[e.keyCode];
-                            placeArrows[dir].addClass('arrowPlacePressed');
+                            
                             if (dir) e.preventDefault();
                             else return;
 
@@ -87,6 +87,8 @@ app.config(function($stateProvider) {
                                 ArrowFactory.killTimeline();
                                 $state.go('chooseSong');
                             }
+
+                            placeArrows[dir].addClass('arrowPlacePressed');
 
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
