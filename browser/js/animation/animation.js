@@ -52,6 +52,7 @@ app.config(function($stateProvider) {
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
                             var dir = keyCodeToDir[e.keyCode];
+                            $(`.${dir}-arrow-col .arrowPlace`).addClass('arrowPlacePressed');
                             if (dir) e.preventDefault();
                             else return;
 
@@ -66,6 +67,11 @@ app.config(function($stateProvider) {
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
                         });
+
+                        document.body.addEventListener('keyup', function(e) {
+                            $(`.arrowPlace`).removeClass('arrowPlacePressed');
+                            console.log('keyup!');
+                        })
                     }
 
                     var runInit = function () {
