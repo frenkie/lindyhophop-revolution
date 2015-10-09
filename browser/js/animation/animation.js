@@ -87,15 +87,14 @@ app.config(function($stateProvider) {
                     };
                 };
 
-            var setUpSong = function() {
-
-                    $scope.currentSong.offset = Number($scope.currentSong.offset);
+            $scope.setUpSong = function() {
+                SongFactory.getSongById($stateParams.songId)
+                .then( function (currentSong) {
+                    $scope.currentSong = currentSong;
+                    $scope.currentSong.offset = parseInt($scope.currentSong.offset, 10);
                     var difficulty = $stateParams.chosenLevel;
-                    console.log($scope.currentSong);
-                    console.log(difficulty);
 
                     var chartId = $scope.currentSong.Charts[difficulty].stepChart;
-                    console.log(chartId);
 
                     $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
 
