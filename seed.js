@@ -44,6 +44,7 @@ var seedUsers = function() {
 function createStepCharts(parsedSM) {
     var promises = [];
     for (var difficulty in parsedSM.charts) {
+        console.log("difficulty: ", difficulty, parsedSM)
         promises.push(StepChart.create({
             title: parsedSM.metadata.TITLE,
             difficulty: difficulty,
