@@ -46,7 +46,7 @@ app.config(function($stateProvider) {
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
                         } else {
-                            arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                            // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                         };
                     };
                     var addListener = function () {
@@ -55,7 +55,7 @@ app.config(function($stateProvider) {
                             if (dir) e.preventDefault();
                             else return;
 
-                            if (dir === 'escape') {                            
+                            if (dir === 'escape') {
                                 /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
                                 tone.stop();
                                 arrowWorker.terminate();
