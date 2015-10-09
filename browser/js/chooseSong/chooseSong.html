@@ -13,6 +13,12 @@
 	</section>
 
 	<div class='choose-level'>
-		  <div id='level{{$index}}' class='difficulty' ng-click='loadSong(level)' ng-repeat="level in choice.levels">{{level}}</div>
+		  <div id='level{{$index}}' class='difficulty' ng-click='loadSong(level)' ng-repeat="chart in choice.levels">
+		  	{{chart}}
+		  </div>
+	</div>
+	<div id='chart-info'>
+		<div>
 		</div>
+	</div>
 </div>

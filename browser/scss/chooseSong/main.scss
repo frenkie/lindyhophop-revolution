@@ -110,6 +110,18 @@
 		}
 	}
 
+	#chart-info {
+		font-size: 32px;
+		color: #b2b2b2;
+		position: absolute;
+		top: 14%;
+		left: 5%;
+		width: 15%;
+		div {
+			max-height: 9vh;
+		}
+	}
+
 	.selected {
 		font-size: 32px;
 		font-weight: bold;

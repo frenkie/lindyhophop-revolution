@@ -44,12 +44,37 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         $scope.choice.levels = [];
         // var currentSong = JSON.parse($scope.choice.song);
         var charts = song.Charts;
+        $scope.charts = Object.keys(charts);
+        //console.log('charts:', song.Charts);
         Object.keys(charts).forEach(function(key) { 
             $scope.choice.levels.push(key);
         });
+        console.log('levels:', $scope.choice.levels);
         $scope.choice.levels.reverse();
         window.removeEventListener("keydown", CarouselFactory.carouselMove, false);
-        window.addEventListener("keydown", CarouselFactory.chooseLevel, false);
+        window.addEventListener("keydown", function(e) {
+            CarouselFactory.chooseLevel(e);
+            viewSongInfo();
+        }, false);
     };
+
+    function viewSongInfo() {
+        var $selected = $('.selected');
+        if ($selected) $scope.selectedDifficulty = $selected[0].textContent.trim();
+        console.log('selectedDifficulty:', $scope.selectedDifficulty);
+        $scope.selectedChart = $scope.choice.song.Charts[$scope.selectedDifficulty];
+        var {level, grooveRadar} = $scope.selectedChart;
+
+        console.log(`Selected chart:`);
+        console.log($scope.selectedChart);
+        console.log(`Difficulty: ${$scope.selectedDifficulty}; Feet: ${level}`);
+        Object.keys(grooveRadar).forEach(category => {
+            console.log(`${category}: ${grooveRadar[category]}`);
+        });
+
+
+
+
+    }
 
 });

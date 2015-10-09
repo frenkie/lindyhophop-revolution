@@ -47,8 +47,6 @@ app.factory('ArrowFactory', function () {
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
         this.startTime = startTime;
-        //console.log('animationLength is', animationLength);
-        //console.log('measureTime is ',measureTime)
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
 
@@ -71,7 +69,6 @@ app.factory('ArrowFactory', function () {
     }
 
     Arrow.addBPMChange = function(timestamp, tempoScale) {
-        console.log(`bpm changed by ${tempoScale} times at ${timestamp}`);
         tl.add(function () {
             tl.timeScale(tempoScale);
         }, timestamp);
