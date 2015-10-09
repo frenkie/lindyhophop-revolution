@@ -77,6 +77,8 @@ app.config(function($stateProvider) {
                         });
 
                         document.body.addEventListener('keyup', function(e) {
+                            var dir = keyCodeToDir[e.keyCode];
+                            if (!dir) return;
                             allPlaceArrows.removeClass('arrowPlacePressed');
                         })
                     }
