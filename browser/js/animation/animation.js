@@ -49,14 +49,22 @@ app.config(function($stateProvider) {
                             arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                         };
                     };
+                    var placeArrows = {
+                        left: $(`.left-arrow-col .arrowPlace`),
+                        right: $(`.right-arrow-col .arrowPlace`),
+                        up: $(`.up-arrow-col .arrowPlace`),
+                        down: $(`.down-arrow-col .arrowPlace`)
+                    };
+                    var allPlaceArrows = $(`.arrowPlace`);
+
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
                             var dir = keyCodeToDir[e.keyCode];
-                            $(`.${dir}-arrow-col .arrowPlace`).addClass('arrowPlacePressed');
+                            placeArrows[dir].addClass('arrowPlacePressed');
                             if (dir) e.preventDefault();
                             else return;
 
-                            if (dir === 'escape') {                            
+                            if (dir === 'escape') {
                                 /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
                                 tone.stop();
                                 arrowWorker.terminate();
@@ -69,7 +77,7 @@ app.config(function($stateProvider) {
                         });
 
                         document.body.addEventListener('keyup', function(e) {
-                            $(`.arrowPlace`).removeClass('arrowPlacePressed');
+                            allPlaceArrows.removeClass('arrowPlacePressed');
                         })
                     }
 
