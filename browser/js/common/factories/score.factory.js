@@ -10,8 +10,14 @@ app.factory('ScoreFactory', function () {
 		return ++score;
 	};
 
+	function resetPoints(){
+		score = 0;
+		return score;
+	}
+
 	return {
 		getScore, getScore,
-		addPoint: addPoint
+		addPoint: addPoint,
+		resetPoints: resetPoints
 	};
 });

@@ -22,7 +22,11 @@ app.config(function($stateProvider) {
                       '37': 'left',
                       '40': 'down',
                       '38': 'up',
-                      '39': 'right'
+                      '39': 'right',
+                      '68': 'left',
+                      '70': 'down',
+                      '74': 'up',
+                      '75': 'right',
                     };
 
                     var startTime = 0;
@@ -42,12 +46,16 @@ app.config(function($stateProvider) {
                         stops: $scope.currentSong.stops
                     });
                     arrowWorker.onmessage = function (e) {
-
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
+                            $scope.score = ScoreFactory.addPoint();
                         } else {
                             arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                            $scope.score = ScoreFactory.resetPoints();
                         };
+                        console.log(e);
+                        //console.log($scope.score);
+                        $scope.$digest();
                     };
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
