@@ -78,10 +78,13 @@ app.config(function($stateProvider) {
                 SongFactory.getSongById($stateParams.songId)
                 .then( function (currentSong) {
                     $scope.currentSong = currentSong;
-                    $scope.currentSong.offset = parseInt($scope.currentSong.offset, 10);
+                    $scope.currentSong.offset = parseFloat($scope.currentSong.offset);
                     var difficulty = $stateParams.chosenLevel;
+                    console.log($scope.currentSong);
+                    console.log(difficulty);
 
                     var chartId = $scope.currentSong.Charts[difficulty].stepChart;
+                    console.log(chartId);
 
                     $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
 
@@ -101,7 +104,7 @@ app.config(function($stateProvider) {
                 });
 
 
-                
+
             };
         }
     });
