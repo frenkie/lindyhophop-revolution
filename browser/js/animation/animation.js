@@ -70,7 +70,6 @@ app.config(function($stateProvider) {
 
                         document.body.addEventListener('keyup', function(e) {
                             $(`.arrowPlace`).removeClass('arrowPlacePressed');
-                            console.log('keyup!');
                         })
                     }
 
