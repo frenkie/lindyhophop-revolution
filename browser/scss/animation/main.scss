@@ -5,7 +5,6 @@
   // left: 0;
 
   text-align: center;
-  // background-color: blue;
   img {
     position: relative;
     z-index: 4;
@@ -30,8 +29,15 @@
     position: absolute;
     top: 0;
     height: 15vh;
+    opacity: 0.6;
+    z-index: 5;
     // width: 15vw;
 }
+
+.arrowPlacePressed img {
+  opacity: 1;
+}
+
 
 .animContainer {
   width: 100%;

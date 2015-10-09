@@ -41,6 +41,11 @@ app.factory('ArrowFactory', function () {
 
     Arrow.resumeTimeline = function () {
         tl.resume();
+    };
+
+    Arrow.killTimeline = function () {
+        tl.pause(0, true);      // sets steps back to beginning
+        tl.remove();
     }
 
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
@@ -50,9 +55,12 @@ app.factory('ArrowFactory', function () {
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
         this.startTime = startTime;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         //console.log('animationLength is', animationLength);
         //console.log('measureTime is ',measureTime)
+=======
+>>>>>>> master
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
 =======
         tl.to(this.el, animationLength * 10, {top: '-900vh', ease:Linear.easeNone}, startTime);
@@ -78,7 +86,6 @@ app.factory('ArrowFactory', function () {
     }
 
     Arrow.addBPMChange = function(timestamp, tempoScale) {
-        console.log(`bpm changed by ${tempoScale} times at ${timestamp}`);
         tl.add(function () {
             tl.timeScale(tempoScale);
         }, timestamp);

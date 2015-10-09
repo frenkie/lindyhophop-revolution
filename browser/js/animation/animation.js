@@ -9,7 +9,7 @@ app.config(function($stateProvider) {
                 return SongFactory.getSongById($stateParams.songId);
             }
         },
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, $state) {
             $scope.ready = false;
             $scope.currentSong = song;
             $scope.choice = {};
@@ -22,7 +22,8 @@ app.config(function($stateProvider) {
                       '37': 'left',
                       '40': 'down',
                       '38': 'up',
-                      '39': 'right'
+                      '39': 'right',
+                      '27': 'escape',
                     };
 
                     var startTime = 0;
@@ -48,14 +49,38 @@ app.config(function($stateProvider) {
                             arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                         };
                     };
+                    var placeArrows = {
+                        left: $(`.left-arrow-col .arrowPlace`),
+                        right: $(`.right-arrow-col .arrowPlace`),
+                        up: $(`.up-arrow-col .arrowPlace`),
+                        down: $(`.down-arrow-col .arrowPlace`)
+                    };
+                    var allPlaceArrows = $(`.arrowPlace`);
+
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
                             var dir = keyCodeToDir[e.keyCode];
+                            placeArrows[dir].addClass('arrowPlacePressed');
                             if (dir) e.preventDefault();
                             else return;
+
+                            if (dir === 'escape') {
+                                /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
+                                tone.stop();
+                                arrowWorker.terminate();
+                                ArrowFactory.killTimeline();
+                                $state.go('chooseSong');
+                            }
+
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
                         });
+
+                        document.body.addEventListener('keyup', function(e) {
+                            var dir = keyCodeToDir[e.keyCode];
+                            if (!dir) return;
+                            allPlaceArrows.removeClass('arrowPlacePressed');
+                        })
                     }
 
                     var runInit = function () {
