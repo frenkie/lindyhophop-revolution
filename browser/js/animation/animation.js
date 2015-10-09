@@ -56,22 +56,23 @@ app.config(function($stateProvider) {
                         $scope.$digest();
                     };
                     var addListener = function () {
-                        document.body.addEventListener('keydown', function (e) {
+                        var stopSong = function (e) {
                             var dir = keyCodeToDir[e.keyCode];
                             if (dir) e.preventDefault();
                             else return;
                             if (dir === 'escape') { 
-                            console.log('hit esc');                          
                                 /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
+                                document.body.removeEventListener('keydown', stopSong);
                                 $state.go('chooseSong');
                             }
 
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
-                        });
+                        }
+                        document.body.addEventListener('keydown', stopSong);
                     }
 
                     var runInit = function () {
