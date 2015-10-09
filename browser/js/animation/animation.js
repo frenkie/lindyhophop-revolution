@@ -46,7 +46,7 @@ app.config(function($stateProvider) {
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
                         } else {
-                            // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                            // you missed an arrow!
                         };
                     };
                     var placeArrows = {
