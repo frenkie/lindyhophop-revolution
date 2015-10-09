@@ -27,7 +27,7 @@ app.config(function($stateProvider) {
 
                     var startTime = 0;
                     ArrowFactory.makeTimeline();
-                    var arrows = ArrowFactory.makeArrows(stepChart.chart, $scope.mainBPM);
+                    var arrows = ArrowFactory.makeArrows(stepChart.chart, $scope.mainBPM, $scope.config);
                     ArrowFactory.addStops($scope.currentSong.stops, $scope.config.ARROW_TIME, $scope.config.BEAT_TIME);
                     ArrowFactory.addBpmChanges($scope.currentSong.bpms, $scope.config.ARROW_TIME, $scope.config.BEAT_TIME, $scope.currentSong.stops);
                     var arrowWorker = new Worker('/js/animation/animationWorker.js');
@@ -113,6 +113,8 @@ app.config(function($stateProvider) {
                 };
                 $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
                 $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
+
+                $scope.config.BEAT_VH = 100/((ArrowFactory.speed * 4)/$scope.mainBPM) * $scope.config.BEAT_TIME;
 
 
                 SongFactory.getChartById(chartId)
