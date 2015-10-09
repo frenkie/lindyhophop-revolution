@@ -33,6 +33,11 @@ app.factory('ArrowFactory', function () {
 
     Arrow.resumeTimeline = function () {
         tl.resume();
+    };
+
+    Arrow.killTimeline = function () {
+        tl.pause(0, true);      // sets steps back to beginning
+        tl.remove();
     }
 
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
@@ -42,8 +47,6 @@ app.factory('ArrowFactory', function () {
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
         this.startTime = startTime;
-        //console.log('animationLength is', animationLength);
-        //console.log('measureTime is ',measureTime)
         tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
     }
 
@@ -66,7 +69,6 @@ app.factory('ArrowFactory', function () {
     }
 
     Arrow.addBPMChange = function(timestamp, tempoScale) {
-        console.log(`bpm changed by ${tempoScale} times at ${timestamp}`);
         tl.add(function () {
             tl.timeScale(tempoScale);
         }, timestamp);
@@ -93,7 +95,7 @@ app.factory('ArrowFactory', function () {
             var notes = measure.length;
             measure.forEach(function (line, lineIndex) {
                 line.forEach(function (maybeArrow, index) {
-                    if (maybeArrow !== "0") { //FIX to account for freezes : D
+                    if (maybeArrow === "1" || maybeArrow === "2") { //FIX to account for freezes : D
                         var dir = indexToDir[index];
                         var color;
                         var note = lineIndex / notes;
