@@ -6,7 +6,7 @@ app.factory('ToneFactory', function () {
         this.config = config;
         this.path = path;
         this.bpm = bpm;
-        this.syncOffset = config.ARROW_SPEED/bpm + parseInt(offset, 10);
+        this.syncOffset = config.ARROW_SPEED/bpm + Number(offset);
         this.player = new Tone.Player(this.path).toMaster();
         this.transport = Tone.Transport;
         this.transport.bpm.value = this.bpm;
