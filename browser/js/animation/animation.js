@@ -89,37 +89,35 @@ app.config(function($stateProvider) {
 
             var setUpSong = function() {
 
-            $scope.setUpSong = function() {
-                SongFactory.getSongById($stateParams.songId)
-                .then( function (currentSong) {
-                    $scope.currentSong = currentSong;
-                    $scope.currentSong.offset = parseInt($scope.currentSong.offset, 10);
+                $scope.currentSong.offset = parseFloat($scope.currentSong.offset);
 
-                    var difficulty = $stateParams.chosenLevel;
+                var difficulty = $stateParams.chosenLevel;
 
-                    var chartId = $scope.currentSong.Charts[difficulty].stepChart;
+                var chartId = $scope.currentSong.Charts[difficulty].stepChart;
 
-                    $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
+                $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
 
-                    $scope.config = {
-                    TIMING_WINDOW: 0.15,
-                    ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
-                    MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
-                    };
-                    $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
-                    $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
+                $scope.config = {
+                TIMING_WINDOW: 0.15,
+                ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
+                MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
+                };
+                $scope.config.ARROW_TIME = $scope.config.ARROW_SPEED/$scope.mainBPM;
+                $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
 
-                
-                    SongFactory.getChartById(chartId)
-                    .then(prepSong);
+            
+                SongFactory.getChartById(chartId)
+                .then(prepSong);
                 
 
             };
+
 
             setTimeout(function() {
                 setUpSong();
                 
             }, 2000);
+
         }
     });
 });
