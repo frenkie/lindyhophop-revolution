@@ -57,7 +57,7 @@ var getBPMTime = function (thisBeat, bpms) {
 }
 
 
-var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
+var preChart = function (stepChart, bpm, arrowOffset, songOffset,  timing, bpms, stops) {
     TIMING_WINDOW = timing;
     var measureTime = 1/(bpm/60/4);    // number of seconds per measure
 
@@ -65,21 +65,21 @@ var preChart = function (stepChart, bpm, offset, timing, bpms, stops) {
         var notes = measure.length;
         var noteTime = measureTime / measure.length;
         measure.forEach(function (line, lineIndex) {
-            var timeStamp = measureTime*measureIndex + noteTime*lineIndex + offset;
+            var timeStamp = measureTime*measureIndex + noteTime*lineIndex + arrowOffset;
             var thisBeat = measureIndex * 4 + (lineIndex / notes) * 4;
             var stopTime = getStopTime(thisBeat, stops);
             var extraBPMTime = getBPMTime(thisBeat, bpms);
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function (maybeArrow, index) {
                 if (maybeArrow !== "0") {
-                    var dir = indexToDir[index];
-                    var arrowTime = {time: timeStamp, attempted: false , hit: false, dir};
-                    var arrowIndex = chart[dir].list.push(arrowTime) - 1;
+                    //thisIndex is the index of the arrow just pushed
+                    var arrowTime = {dir: indexToDir[index], time: timeStamp, attempted: false , hit: false};
+                    var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
                     arrowTime.index = arrowIndex;
                     var thisTimeout = function() {
-                        setTimeout(function () {
-                            checkArrow(arrowTime);
-                        }, (timeStamp + TIMING_WINDOW) * 1000)
+                      setTimeout(function () {
+                        checkArrow(arrowTime);
+                      }, (timeStamp + TIMING_WINDOW - songOffset) * 1000)
                     };
                     timeouts.push(thisTimeout);
                 }
@@ -107,7 +107,7 @@ var respondToKey = function (time, dir) {
 
 self.onmessage = function (e) {
     if (e.data.type === 'preChart') {
-        preChart(e.data.chart, e.data.bpm, e.data.offset, e.data.timing, e.data.bpms, e.data.stops);
+        preChart(e.data.chart, e.data.bpm, e.data.arrowOffset, e.data.songOffset, e.data.timing, e.data.bpms, e.data.stops);
     }
     else if (e.data.type === 'keyPress') {
         respondToKey(e.data.timeStamp, e.data.dir);

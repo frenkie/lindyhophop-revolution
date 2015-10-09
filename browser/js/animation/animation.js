@@ -82,17 +82,18 @@ app.config(function($stateProvider) {
                         type: 'preChart',
                         chart: stepChart.chart,
                         bpm: $scope.mainBPM,
-                        offset: $scope.config.ARROW_TIME + $scope.currentSong.offset,
+                        arrowOffset: $scope.config.ARROW_TIME + $scope.currentSong.offset,
+                        songOffset: $scope.currentSong.offset,
                         timing: $scope.config.TIMING_WINDOW,
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
                     arrowWorker.onmessage = function (e) {
-                      if(e.data.hit) {
-                        arrows[e.data.dir][e.data.index].el.remove();
-                      } else {
-                        arrows[e.data.dir][e.data.index].el.fadeTo(50, 0.2)
-                      };
+                        if(e.data.hit) {
+                            arrows[e.data.dir][e.data.index].el.remove();
+                        } else {
+                            arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                        };
                     };
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
@@ -110,7 +111,7 @@ app.config(function($stateProvider) {
                         startTime = Date.now() - $scope.currentSong.offset*1000;
                         arrowWorker.postMessage({
                           type: 'startTime',
-                          startTime: startTime
+                          startTime
                         });
                         addListener();
                     }
