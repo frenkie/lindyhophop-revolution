@@ -10,7 +10,7 @@ app.config(function($stateProvider) {
             }
         },
 
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state) {
             $scope.ready = false;
             $scope.currentSong = song;
             $scope.choice = {};
@@ -23,7 +23,8 @@ app.config(function($stateProvider) {
                       '37': 'left',
                       '40': 'down',
                       '38': 'up',
-                      '39': 'right'
+                      '39': 'right',
+                      '27': 'escape'
                     };
 
                     var startTime = 0;
@@ -51,7 +52,6 @@ app.config(function($stateProvider) {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             $scope.combo = ScoreFactory.resetCombo();
                         };
-                        console.log(e);
                         //console.log($scope.score);
                         $scope.$digest();
                     };
@@ -60,8 +60,8 @@ app.config(function($stateProvider) {
                             var dir = keyCodeToDir[e.keyCode];
                             if (dir) e.preventDefault();
                             else return;
-
-                            if (dir === 'escape') {                            
+                            if (dir === 'escape') { 
+                            console.log('hit esc');                          
                                 /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
                                 tone.stop();
                                 arrowWorker.terminate();
