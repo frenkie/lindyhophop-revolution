@@ -9,7 +9,7 @@ app.config(function($stateProvider) {
                 return SongFactory.getSongs();
             }
         },
-        controller: function($scope, ArrowFactory, ToneFactory, songs, SongFactory, $stateParams) {
+        controller: function($scope, ArrowFactory, ToneFactory, ScoreFactory, songs, SongFactory, $stateParams) {
             $scope.songs = songs;
             $scope.choice = {};
 
@@ -41,6 +41,9 @@ app.config(function($stateProvider) {
                     });
                     arrowWorker.onmessage = function (e) {
                         arrows[e.data.dir][e.data.index].el.remove();
+                        $scope.score = ScoreFactory.addPoint();
+                        console.log($scope.score);
+                        $scope.$digest();
                     };
                     var addListener = function () {
                         document.body.addEventListener('keydown', function (e) {
