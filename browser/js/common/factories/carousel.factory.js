@@ -188,7 +188,6 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
         if (event.keyCode === 38) { //key up
             if ($('.selected').prev().length) {
                 $('.selected').removeClass("selected").prev().addClass("selected");
-                console.log('wtf');
             }
             else {
                 $('.selected').removeClass("selected").siblings(':last').addClass("selected");
@@ -197,7 +196,6 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
         } else if (event.keyCode === 40) { //key down
             if ($('.selected').next().length) {
                 $('.selected').removeClass("selected").next().addClass("selected");
-                console.log('wth');
             }
             else {
                 $('.selected').removeClass("selected").siblings(':first').addClass("selected");

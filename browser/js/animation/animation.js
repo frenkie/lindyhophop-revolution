@@ -54,7 +54,6 @@ app.config(function($stateProvider) {
                     arrowWorker.onmessage = function (e) {
                         arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-                        console.log(`activeArrow length: ${$('.activeArrow').length}`);
                         if($('.activeArrow').length === 0) {
                             setTimeout(function() {
                                 console.log('exited out here :(')
