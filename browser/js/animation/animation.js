@@ -15,6 +15,8 @@ app.config(function($stateProvider) {
             $scope.currentSong = song;
             $scope.choice = {};
 
+            const TIMING_WINDOW = 0.10;
+
 
 
             function prepSong(stepChart) {
@@ -140,6 +142,9 @@ app.config(function($stateProvider) {
                         else if ($scope.currentSong.title === 'Sandstorm') {
                             $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
                         }
+                        else {
+                            $scope.imageSrc = `/img/background/${$scope.currentSong.title}-bg.png`;
+                        }
                         setTimeout(function() {
                             var video = document.getElementById('bg-video');
                             video.play();
@@ -168,7 +173,7 @@ app.config(function($stateProvider) {
                 $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
 
                 $scope.config = {
-                    TIMING_WINDOW: 0.15,
+                    TIMING_WINDOW: TIMING_WINDOW,
                     ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
                     MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
                 };
