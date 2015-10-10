@@ -42,6 +42,12 @@ app.config(function($stateProvider) {
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
+                    var faders = {
+                        left: $(`.left-arrow-col .fader`),
+                        right: $(`.right-arrow-col .fader`),
+                        up: $(`.up-arrow-col .fader`),
+                        down: $(`.down-arrow-col .fader`)
+                    };
                     arrowWorker.onmessage = function (e) {
                         if (e.data.hit) {
                             var domArrow = arrows[e.data.dir][e.data.index].el[0];
@@ -50,6 +56,7 @@ app.config(function($stateProvider) {
                             if (e.data.freeze) {
                                 var freeze = domArrow.children[1];
                                 freeze.style.top = '7.5vh';
+                                faders[e.data.dir][0].style['background-color'] = "rgba(30,30,30,1)";
                             }
                             arrow.style.display = 'none';
                         } else if (e.data.freeze) {
