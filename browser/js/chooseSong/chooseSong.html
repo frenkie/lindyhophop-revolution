@@ -5,6 +5,9 @@
 	<section id="carouselContainer" class="trans3d" ng-hide='loading'>
 		<figure id="item{{$index + 1}}" class="carouselItem trans3d" ng-click='getDifficulties(song)' ng-repeat="song in songs">
 			<span class="carouselItemInner trans3d">
+				<div>
+					<img class="song-banner" ng-src='/img/banner/{{song.title}}.png' />
+				</div>
 				<p>
 					{{song.title}}
 				</p>
