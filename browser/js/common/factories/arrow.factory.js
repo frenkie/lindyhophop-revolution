@@ -13,9 +13,12 @@ app.factory('ArrowFactory', function () {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
         this.el = $(`<div class="arrow"><img src="/img/${direction}-${color}.png"></img></div>`);
+        console.log('found freeze, appending');
         this.el.append($(`<div class="freeze"></div>`));
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
+
+    FreezeArrow.prototype = Object.create(Arrow.prototype);
 
     var tl;
 
@@ -134,14 +137,17 @@ app.factory('ArrowFactory', function () {
                         if (maybeArrow === "1") {
                             arrow = new Arrow(dir, 1, color);
                         } else if (maybeArrow === "2") {
+                            console.log('found freeze');
                             freezes[dir].firstBeat = thisBeat;
                             arrow = new FreezeArrow(dir, 1, color);
                             freezes[dir].arrow = arrow;
+                            console.log(arrow, 'freeze found in column', dir);
                         }
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].push(arrow);
                     } else if (maybeArrow === "3") {
-                        freezes[dir].children[1].css('height', `${config.BEAT_VH}`);
+                        var length = config.BEAT_VH * (thisBeat - freezes[dir].firstBeat);
+                        $(freezes[dir].arrow.el[0].children[1]).css('height', `${length}vh`);
                     }
                 });
             });
