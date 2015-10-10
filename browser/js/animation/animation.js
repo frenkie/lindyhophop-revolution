@@ -146,10 +146,7 @@ app.config(function($stateProvider) {
             };
 
 
-            setTimeout(function() {
-                setUpSong();
-
-            }, 2000);
+            setTimeout(setUpSong, 2000);
 
         }
     });
