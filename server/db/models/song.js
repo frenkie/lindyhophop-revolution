@@ -28,6 +28,18 @@ var schema = new mongoose.Schema({
     type: String,
     required: true
   },
+  sampleStart: {
+    type: Number
+  },
+  sampleLength: {
+    type: Number
+  },
+  banner: {
+    type: String
+  },
+  background: {
+    type: String
+  },
   Charts: {
     Beginner: {
       stepChart: {

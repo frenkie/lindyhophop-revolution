@@ -111,7 +111,12 @@ var respondToKey = function(time, dir) {
     if (diff < TIMING_WINDOW) {
         nextOne.hit = true;
         postMessage({
-            dir, index: thisChart.pointer, hit: true
+            dir, index: thisChart.pointer, hit: true, diff: diff
+        })
+    }
+    else {
+        postMessage({
+            dir, index: thisChart.pointer, hit: false, diff: diff
         })
     }
 }

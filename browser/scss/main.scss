@@ -94,9 +94,21 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  background-size: contain;
   min-width: 100%;
   overflow: hidden;
 }
+
+#bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: contain;
+  min-width: 100%;
+  overflow: hidden;
+  opacity: 0.7;
+}
+
 
 @mixin clearfix {
   &:after {
