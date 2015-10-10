@@ -55,16 +55,10 @@ app.factory('ArrowFactory', function () {
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
         this.startTime = startTime;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
         //console.log('animationLength is', animationLength);
         //console.log('measureTime is ',measureTime)
-=======
->>>>>>> master
-        tl.to(this.el, animationLength * 1.5, {top: '-50vh', ease:Linear.easeNone}, startTime);
-=======
+
         tl.to(this.el, animationLength * 10, {top: '-900vh', ease:Linear.easeNone}, startTime);
->>>>>>> Stashed changes
     }
 
     Arrow.addStops = function (stops, animationOffset, beatTime) {
