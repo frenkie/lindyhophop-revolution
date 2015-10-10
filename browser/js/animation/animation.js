@@ -52,9 +52,10 @@ app.config(function($stateProvider) {
                     arrowWorker.onmessage = function (e) {
                         arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-
+                        console.log(`activeArrow length: ${$('.activeArrow').length}`);
                         if($('.activeArrow').length === 0) {
                             setTimeout(function() {
+                                console.log('exited out here :(')
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
@@ -105,7 +106,7 @@ app.config(function($stateProvider) {
                                 $state.go('chooseSong');
                             }
 
-                            placeArrows[dir].addClass('arrowPlacePressed');
+                            if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
 
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
