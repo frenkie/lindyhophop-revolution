@@ -36,21 +36,6 @@ var timeouts = [];
 
 var TIMING_WINDOW;
 
-var checkArrow = function(arrowTime) {
-    if (!arrowTime.hit) {
-        postMessage({
-            hit: false,
-            index: arrowTime.index,
-            dir: arrowTime.dir
-        })
-    }
-    if (arrowTime.freezeUp) {
-        postMessage({
-            freezeUp: true,
-            dir: arrowTime.dir
-        })
-    }
-}
 
 var getStopTime = function(thisBeat, stops) {
     return stops.reduce(function(time, stop) {
@@ -73,6 +58,29 @@ var getBPMTime = function(thisBeat, bpms) {
     return addedTime;
 }
 
+var inFreeze = {
+    left: false,
+    down: false,
+    up: false,
+    right: false
+}
+
+var checkArrow = function(arrowTime) {
+    if (!arrowTime.hit) {
+        postMessage({
+            hit: false,
+            index: arrowTime.index,
+            dir: arrowTime.dir
+        })
+    }
+    if (arrowTime.freezeUp) {
+        postMessage({
+            freezeUp: true,
+            dir: arrowTime.dir
+        });
+        inFreeze[arrowTime.dir] = false;
+    }
+}
 
 var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, stops) {
     TIMING_WINDOW = timing;
@@ -88,32 +96,52 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
             var extraBPMTime = getBPMTime(thisBeat, bpms);
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function(maybeArrow, index) {
-                if (maybeArrow === "1" || maybeArrow === "2" || maybeArrow === "3") {
-                    var arrowTime = {
+                var arrowTime,
+                    thisTimeout;
+                if (maybeArrow === "1" || maybeArrow === "2") {
+                    arrowTime = {
                         dir: indexToDir[index],
                         time: timeStamp,
                         attempted: false,
                         hit: false,
                         freeze: maybeArrow === "2" ? true : false,
-                        freezeUp: maybeArrow === "3" ? true : false,
                     };
-                    if (maybeArrow !== '3') {
-                        var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
-                        arrowTime.index = arrowIndex;
-                    }
-                    var thisTimeout = function() {
+                    var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
+                    arrowTime.index = arrowIndex;
+                    thisTimeout = function() {
                         setTimeout(function() {
                             checkArrow(arrowTime);
                         }, (timeStamp + TIMING_WINDOW - songOffset) * 1000)
                     };
-                    timeouts.push(thisTimeout);
+                } else if (maybeArrow === "3") {
+                    arrowTime = {
+                        dir: indexToDir[index],
+                        time: timeStamp,
+                        freezeUp: true
+                    };
+                    thisTimeout = function() {
+                        setTimeout(function() {
+                            checkArrow(arrowTime);
+                        }, (timeStamp - songOffset) * 1000)
+                    };
                 }
+                timeouts.push(thisTimeout);
             });
         });
     });
 
     console.log('chart is ready', chart);
 };
+
+var checkIfFreeze = function (dir) {
+    if (inFreeze[dir]) {
+        postMessage({
+            dir,
+            hit: false,
+
+        })
+    }
+}
 
 var respondToKey = function(time, dir) {
     var thisChart = chart[dir];
@@ -131,7 +159,8 @@ var respondToKey = function(time, dir) {
             index: thisChart.pointer,
             hit: true,
             freeze: nextOne.freeze
-        })
+        });
+        if (nextOne.freeze) inFreeze[dir] = true;
     }
 }
 
@@ -147,6 +176,6 @@ self.onmessage = function(e) {
             func();
         })
     } else if (e.data.type === 'keyUp') {
-        keysPressed[e.data.dir] = false;
+        checkIfFreeze(e.data.dir);
     }
 };
