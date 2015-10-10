@@ -231,7 +231,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
 
     function findTarget() {
         var degrees = addX % 360;
-        var songs = carousel.children().length;
+        var songs = carousel.children('.carouselItem').length;
         var delta = 360 / songs;
 
 
