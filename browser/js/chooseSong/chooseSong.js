@@ -13,10 +13,12 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout) {
+app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory) {
 
 	$scope.songs = songs;
 	$scope.choice = {};
+    // $scope.speedMod = ArrowFactory.speedModifier;
+    // ArrowFactory.setSpeed($scope.speedMod);
 
     function viewSongInfo() {
         var $selected = $('.selected');
@@ -45,10 +47,17 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     function chooseLevel(e) {
         CarouselFactory.chooseLevel(e);
         if (e.keyCode === 38 || e.keyCode === 40) {
+            ToneFactory.play('blop');
             viewSongInfo();          
+        }
+        if (e.keyCode === 27) {
+            window.removeEventListener("keydown", chooseLevel, false);
         }
     }
 
+
+    $scope.selectedDifficulty;
+    $scope.selectedChart;
 
 
 
@@ -78,12 +87,16 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         });
         console.log('levels:', $scope.choice.levels);
         $scope.choice.levels.reverse();
+
+        console.log('$scope.choice:', $scope.choice);
+
         window.removeEventListener("keydown", CarouselFactory.carouselMove, false);
         window.addEventListener("keydown", chooseLevel, false);
     };
 
+
     $scope.loadSong = function(level) {
-        //$scope.loading = true;
+        ToneFactory.play('start');
         window.removeEventListener("keydown", chooseLevel, false);
         $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: level});
     };
