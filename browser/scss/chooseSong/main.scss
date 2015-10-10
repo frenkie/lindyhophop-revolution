@@ -17,6 +17,7 @@
 	}
 
 	h1 {
+			margin-top: 3.5%;
   		font-family: 'EchoDeco';
   		src: url('/img/font/EchoDeco.ttf');
   		color: #ea4c88;
@@ -28,11 +29,11 @@
 	{
 		position:absolute;
 		margin-left:-500px;
-		margin-top:-13%;
+		margin-top:-5%;
 		left:50%;
 		top:45%;
 		width:1000px;
-		height:1000px;
+		height:100%;
 	}
 
 	#carouselContainer
@@ -102,7 +103,7 @@
 		font-size: 32px;
 		color: #b2b2b2;
 		position: absolute;
-		top: 14%;
+		top: 3%;
 		right: 5%;
 		width: 15%;
 		div {

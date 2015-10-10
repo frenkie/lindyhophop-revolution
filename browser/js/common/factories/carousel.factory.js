@@ -152,7 +152,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
 
 
             TweenMax.to($(`#item${target}`), 1, {
-                transform: 'scale(4) translateY(-140px)'
+                transform: 'scale(4) translateY(-23vh)' //was -140px, 160 is pretty good
             });
             $(`#item${target} > .carouselItemInner`).addClass('activeSong');
             TweenMax.to($('.carouselContainer'), 1, {

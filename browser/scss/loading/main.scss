@@ -13,8 +13,11 @@ div.loadingScreen.ng-scope {
   margin-top: 10%;
   font-family: EchoDeco;
   font-weight: 10;
-  font-size: 40px;
+  font-size: 4.5vh;
   color: #ea4c88;
   padding-top: 2%;
   text-align: center;
+  div {
+    padding: 30px;
+  }
 }

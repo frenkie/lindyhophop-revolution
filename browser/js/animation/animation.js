@@ -29,6 +29,7 @@ app.config(function($stateProvider) {
                       '27': 'escape'
                     };
 
+
                     var startTime = 0;
                     ArrowFactory.makeTimeline();
                     var arrows = ArrowFactory.makeArrows(stepChart.chart, $scope.mainBPM);
@@ -45,7 +46,22 @@ app.config(function($stateProvider) {
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
+
+                    console.log(tone);
+                    var activeArrows
                     arrowWorker.onmessage = function (e) {
+                        arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
+
+
+                        if($('.activeArrow').length === 0) {
+                            setTimeout(function() {
+                                tone.stop();
+                                arrowWorker.terminate();
+                                ArrowFactory.killTimeline();
+                                $state.go('chooseSong');
+                            }, 3000);
+                        }
+
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
                             console.log('difff is ', e.data.diff);
@@ -59,6 +75,14 @@ app.config(function($stateProvider) {
                         //console.log($scope.score);
                         $scope.$digest();
                     };
+                    var placeArrows = {
+                        left: $(`.left-arrow-col .arrowPlace`),
+                        right: $(`.right-arrow-col .arrowPlace`),
+                        up: $(`.up-arrow-col .arrowPlace`),
+                        down: $(`.down-arrow-col .arrowPlace`)
+                    };
+                    var allPlaceArrows = $(`.arrowPlace`);
+
                     var addListener = function () {
 
                         var stopSong = function (e) {
@@ -67,8 +91,10 @@ app.config(function($stateProvider) {
                                 console.log(ScoreFactory.accuracyCountGuy);
                             };
                             var dir = keyCodeToDir[e.keyCode];
+                            
                             if (dir) e.preventDefault();
                             else return;
+
                             if (dir === 'escape') { 
                                 ToneFactory.play('back');
                                 /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
@@ -79,10 +105,18 @@ app.config(function($stateProvider) {
                                 $state.go('chooseSong');
                             }
 
+                            placeArrows[dir].addClass('arrowPlacePressed');
+
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
                         }
                         document.body.addEventListener('keydown', stopSong);
+
+                        document.body.addEventListener('keyup', function(e) {
+                            var dir = keyCodeToDir[e.keyCode];
+                            if (!dir) return;
+                            allPlaceArrows.removeClass('arrowPlacePressed');
+                        })
                     }
 
                     var runInit = function () {
