@@ -2,17 +2,17 @@ div#main.ng-enter, div#main.ng-leave {
   position: absolute;
   left: 0;
   right: 0;
-  -webkit-transition:all 0.4s ease-in-out;
-    -moz-transition:all 0.4s ease-in-out;
-    -o-transition:all 0.4s ease-in-out;
-    transition:all 0.4s ease-in-out;
+  -webkit-transition:all 0.3s ease-in-out;
+    -moz-transition:all 0.3s ease-in-out;
+    -o-transition:all 0.3s ease-in-out;
+    transition:all 0.3s ease-in-out;
 }
 
 div#main.ng-enter {
   opacity: 0;
-  -webkit-transform:scale3d(0.5, 0.5, 0.5);
-  -moz-transform:scale3d(0.5, 0.5, 0.5);
-  transform:scale3d(0.5, 0.5, 0.5);
+  -webkit-transform:scale3d(0, 0, 0);
+  -moz-transform:scale3d(0, 0, 0);
+  transform:scale3d(0, 0, 0);
 }
 
 div#main.ng-enter-active {
@@ -31,9 +31,9 @@ div#main.ng-leave {
 
 div#main.ng-leave-active {
   opacity: 0;
-  -webkit-transform:scale3d(0.5, 0.5, 0.5);
-  -moz-transform:scale3d(0.5, 0.5, 0.5);
-  transform:scale3d(0.5, 0.5, 0.5);
+  -webkit-transform:scale3d(0, 0, 0);
+  -moz-transform:scale3d(0, 0, 0);
+  transform:scale3d(0, 0, 0);
 }
 
 * {
