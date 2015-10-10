@@ -6,6 +6,13 @@ var indexToDir = {
     '3': 'right'
 };
 
+var keysPressed = {
+    up: false,
+    right: false,
+    down: false,
+    left: false
+}
+
 var chart = {
     right: {
         list: [],
@@ -76,12 +83,12 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function(maybeArrow, index) {
                 if (maybeArrow === "1" || maybeArrow === "2") {
-                    //thisIndex is the index of the arrow just pushed
                     var arrowTime = {
                         dir: indexToDir[index],
                         time: timeStamp,
                         attempted: false,
-                        hit: false
+                        hit: false,
+                        freeze: maybeArrow === "2" ? true : false
                     };
                     var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
                     arrowTime.index = arrowIndex;
@@ -111,7 +118,10 @@ var respondToKey = function(time, dir) {
     if (diff < TIMING_WINDOW) {
         nextOne.hit = true;
         postMessage({
-            dir, index: thisChart.pointer, hit: true
+            dir,
+            index: thisChart.pointer,
+            hit: true,
+            freeze: nextOne.freeze
         })
     }
 }
@@ -119,12 +129,15 @@ var respondToKey = function(time, dir) {
 self.onmessage = function(e) {
     if (e.data.type === 'preChart') {
         preChart(e.data.chart, e.data.bpm, e.data.arrowOffset, e.data.songOffset, e.data.timing, e.data.bpms, e.data.stops);
-    } else if (e.data.type === 'keyPress') {
+    } else if (e.data.type === 'keyDown') {
         respondToKey(e.data.timeStamp, e.data.dir);
+        keysPressed[e.data.dir] = true;
     } else if (e.data.type === 'startTime') {
         startTime = e.data.startTime;
         timeouts.forEach(function(func) {
             func();
         })
+    } else if (e.data.type === 'keyUp') {
+        keysPressed[e.data.dir] = false;
     }
 };

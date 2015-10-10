@@ -147,7 +147,7 @@ app.factory('ArrowFactory', function () {
                         obj[indexToDir[index]].push(arrow);
                     } else if (maybeArrow === "3") {
                         var length = config.BEAT_VH * (thisBeat - freezes[dir].firstBeat);
-                        $(freezes[dir].arrow.el[0].children[1]).css('height', `${length}vh`);
+                        freezes[dir].arrow.el[0].children[1].style.height = `${length}vh`;
                     }
                 });
             });

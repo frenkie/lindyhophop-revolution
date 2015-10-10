@@ -43,8 +43,17 @@ app.config(function($stateProvider) {
                         stops: $scope.currentSong.stops
                     });
                     arrowWorker.onmessage = function (e) {
-                        if(e.data.hit) {
-                            arrows[e.data.dir][e.data.index].el.remove();
+                        if (e.data.hit) {
+                            var domArrow = arrows[e.data.dir][e.data.index].el[0];
+                            console.dir(domArrow);
+                            var arrow = domArrow.children[0];
+                            if (e.data.freeze) {
+                                var freeze = domArrow.children[1];
+                                freeze.style.top = '7.5vh';
+                            }
+                            arrow.style.display = 'none';
+                        } else if (e.data.freeze) {
+
                         } else {
                             arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                         };
@@ -73,13 +82,15 @@ app.config(function($stateProvider) {
                             }
 
                             var timeStamp = (Date.now() - startTime) / 1000;
-                            arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
+                            arrowWorker.postMessage({type: 'keyDown', timeStamp, dir});
                         });
 
                         document.body.addEventListener('keyup', function(e) {
                             var dir = keyCodeToDir[e.keyCode];
                             if (!dir) return;
                             allPlaceArrows.removeClass('arrowPlacePressed');
+                            arrowWorker.postMessage({type: 'keyUp', dir});
+
                         })
                     }
 
