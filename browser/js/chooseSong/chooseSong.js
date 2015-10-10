@@ -50,6 +50,9 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             ToneFactory.play('blop');
             viewSongInfo();          
         }
+        if (e.keyCode === 27) {
+            window.removeEventListener("keydown", chooseLevel, false);
+        }
     }
 
 

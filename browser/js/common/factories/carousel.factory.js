@@ -186,15 +186,19 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
     function chooseLevel(event) {
 
         if (event.keyCode === 38) { //key up
-            if ($('.selected').prev().length)
+            if ($('.selected').prev().length) {
                 $('.selected').removeClass("selected").prev().addClass("selected");
+                console.log('wtf');
+            }
             else {
                 $('.selected').removeClass("selected").siblings(':last').addClass("selected");
             }
 
         } else if (event.keyCode === 40) { //key down
-            if ($('.selected').next().length)
+            if ($('.selected').next().length) {
                 $('.selected').removeClass("selected").next().addClass("selected");
+                console.log('wth');
+            }
             else {
                 $('.selected').removeClass("selected").siblings(':first').addClass("selected");
             }
