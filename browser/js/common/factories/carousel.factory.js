@@ -141,13 +141,13 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
 
         } else if (event.keyCode === 13) {
 
+            findTarget();
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
             addX = 0;
             mouseX = 0;
             rightX = 0;
             leftX = 0;
             
-            findTarget();
 
             var $nrX = 360 * getRandomInt(2);
             var $nrY = 360 * getRandomInt(2);
@@ -163,9 +163,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             $(`#item${target} > .carouselItemInner`).addClass('activeSong');
             TweenMax.to($('.carouselContainer'), 1, {
                 transform: 'translateY(40px)'
-            });
-
-            
+            });  
 
             $(`#item${target}`).trigger('click');
         }
