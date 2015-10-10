@@ -44,6 +44,12 @@ var checkArrow = function(arrowTime) {
             dir: arrowTime.dir
         })
     }
+    if (arrowTime.freezeUp) {
+        postMessage({
+            freezeUp: true,
+            dir: arrowTime.dir
+        })
+    }
 }
 
 var getStopTime = function(thisBeat, stops) {
@@ -82,16 +88,19 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
             var extraBPMTime = getBPMTime(thisBeat, bpms);
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function(maybeArrow, index) {
-                if (maybeArrow === "1" || maybeArrow === "2") {
+                if (maybeArrow === "1" || maybeArrow === "2" || maybeArrow === "3") {
                     var arrowTime = {
                         dir: indexToDir[index],
                         time: timeStamp,
                         attempted: false,
                         hit: false,
-                        freeze: maybeArrow === "2" ? true : false
+                        freeze: maybeArrow === "2" ? true : false,
+                        freezeUp: maybeArrow === "3" ? true : false,
                     };
-                    var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
-                    arrowTime.index = arrowIndex;
+                    if (maybeArrow !== '3') {
+                        var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
+                        arrowTime.index = arrowIndex;
+                    }
                     var thisTimeout = function() {
                         setTimeout(function() {
                             checkArrow(arrowTime);

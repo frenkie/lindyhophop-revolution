@@ -56,11 +56,13 @@ app.config(function($stateProvider) {
                             if (e.data.freeze) {
                                 var freeze = domArrow.children[1];
                                 freeze.style.top = '7.5vh';
-                                faders[e.data.dir][0].style['background-color'] = "rgba(30,30,30,1)";
+                                console.log('adding freeze-eater class');
+                                faders[e.data.dir][0].className += " freeze-eater";
                             }
-                            arrow.style.display = 'none';
-                        } else if (e.data.freeze) {
-
+                            arrow.hidden = true;
+                        } else if (e.data.freezeUp) {
+                            console.log('removing freeze-eater class');
+                            faders[e.data.dir][0].className = "fader";
                         } else {
                             // you missed an arrow!
                         };
