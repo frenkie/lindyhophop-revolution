@@ -65,8 +65,8 @@
 
 	.carouselItemInner
 	{
-		width:384px;
-		height:120px;
+		width:320px;	//384px
+		height:130px;	//120px
 		position:absolute;
 		background-color:rgba(234, 76, 136, .75);
 		//border:10px solid rgba(212, 65, 121, .5);
@@ -141,5 +141,4 @@
 		background-size: contain;
 		min-width: 100%;
 		overflow: hidden;
-		//opacity: 0.8;
 	}
