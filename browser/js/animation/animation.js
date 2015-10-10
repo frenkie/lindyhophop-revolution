@@ -70,6 +70,7 @@ app.config(function($stateProvider) {
                             if (dir) e.preventDefault();
                             else return;
                             if (dir === 'escape') { 
+                                ToneFactory.play('back');
                                 /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
                                 tone.stop();
                                 arrowWorker.terminate();

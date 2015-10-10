@@ -13,7 +13,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout) {
+app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory) {
 
 	$scope.songs = songs;
 	$scope.choice = {};
@@ -47,6 +47,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     function chooseLevel(e) {
         CarouselFactory.chooseLevel(e);
         if (e.keyCode === 38 || e.keyCode === 40) {
+            ToneFactory.play('blop');
             viewSongInfo();          
         }
     }
@@ -92,7 +93,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
 
     $scope.loadSong = function(level) {
-        //$scope.loading = true;
+        ToneFactory.play('start');
         window.removeEventListener("keydown", chooseLevel, false);
         $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: level});
     };

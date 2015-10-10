@@ -1,4 +1,4 @@
-app.factory('CarouselFactory', function($state) {
+app.factory('CarouselFactory', function($state, ToneFactory) {
     // set and cache variables
     var looperRunning, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
@@ -127,6 +127,7 @@ app.factory('CarouselFactory', function($state) {
             console.log("DOWN KEY HIT: ", event)
 
         } else if (event.keyCode === 27) {
+            ToneFactory.play('back');
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
             });
