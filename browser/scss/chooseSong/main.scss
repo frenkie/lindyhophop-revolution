@@ -100,14 +100,14 @@
 	}
 
 	.choose-level {
-		font-size: 70px;
+		font-size: 32px;
 		color: #b2b2b2;
-		position: relative;
-		top: -80vh;
-		left: 120%;
+		position: absolute;
+		top: 3%;
+		right: 5%;
 		width: 15%;
 		div {
-			max-height: 19vh;
+			max-height: 9vh;
 		}
 	}
 
@@ -124,7 +124,7 @@
 	}
 
 	.selected {
-		font-size: 80px;
+		font-size: 32px;
 		font-weight: bold;
 		color: white;
 	}

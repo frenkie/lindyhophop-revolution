@@ -5,9 +5,8 @@ app.config(function ($stateProvider) {
         templateUrl: 'js/highScores/highScores.html',
         controller: 'HighScoresCtrl',
         resolve: {
-          highScores: function(ScoreFactory) {
+          highScores: function() {
             // return with a promise that will resolve with the highScores;
-            return ScoreFactory.finalScore();
           }
         }
     });
