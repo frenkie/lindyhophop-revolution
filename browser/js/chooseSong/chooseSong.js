@@ -1,3 +1,5 @@
+/* global Tone */
+
 app.config(function ($stateProvider) {
 
     $stateProvider.state('chooseSong', {
@@ -16,17 +18,27 @@ app.config(function ($stateProvider) {
 app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory) {
 
 	$scope.songs = songs;
+
 	$scope.choice = {};
+
+    $scope.songPreview;
     // $scope.speedMod = ArrowFactory.speedModifier;
     // ArrowFactory.setSpeed($scope.speedMod);
+    console.log(`All songs: (Count: ${songs.length})`);
+    console.log(songs.map(s => s.title).sort().join(', '));
 
     function viewSongInfo() {
         var $selected = $('.selected');
+        console.log(`$selected:`)
+        console.log($selected);
         if ($selected) $scope.selectedDifficulty = $selected[0].textContent.trim();
         console.log('selectedDifficulty:', $scope.selectedDifficulty);
 
         console.log('selected song:', $scope.choice.song);
-        var {title, artist, displayBpm, music} = $scope.choice.song;
+        var {title, artist, displayBpm, music, offset, sampleStart, sampleLength} = $scope.choice.song;
+
+        console.log('sampleStart:', sampleStart);
+        console.log('sampleLength:', sampleLength);
 
         $scope.selectedChart = $scope.choice.song.Charts[$scope.selectedDifficulty];
         var {level, grooveRadar} = $scope.selectedChart;
@@ -41,10 +53,15 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             return output.concat(`${category}: ${grooveRadar[category]}`);
         }, []).join(' | '));
 
+        if (!$scope.songPreview) {
+            $scope.songPreview = new ToneFactory("/audio/"+music, null, offset, null, sampleStart, sampleLength);
+            $scope.songPreview.previewStart();           
+        }
 
     }
 
     function chooseLevel(e) {
+        if ($scope.choice.levels < 2) return;
         CarouselFactory.chooseLevel(e);
         if (e.keyCode === 38 || e.keyCode === 40) {
             ToneFactory.play('blop');
@@ -52,6 +69,10 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         }
         if (e.keyCode === 27) {
             window.removeEventListener("keydown", chooseLevel, false);
+            if ($scope.songPreview) {
+                $scope.songPreview.previewStop();
+                $scope.songPreview = null;
+            }
         }
     }
 
@@ -66,7 +87,6 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             CarouselFactory.init();
             window.addEventListener("keydown", CarouselFactory.carouselMove, false);
             // window.addEventListener("click", CarouselFactory.freezeCarousel);
-
         })
     );
 
