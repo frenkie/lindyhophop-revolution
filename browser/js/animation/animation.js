@@ -12,16 +12,20 @@ app.config(function($stateProvider) {
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state) {
             $scope.ready = false;
-            $scope.showCombo = false;
             $scope.currentSong = song;
             $scope.choice = {};
+            //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
+            $scope.showCombo = false;
 
             const TIMING_WINDOW = 0.10;
 
 
 
             function prepSong(stepChart) {
+                    //when prepping song, score factory will get the total number of arrows in the stepchart
+                    //for score calculation purposes
                     ScoreFactory.setTotalArrows(stepChart);
+                    
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
                     var keyCodeToDir = {
@@ -67,14 +71,19 @@ app.config(function($stateProvider) {
 
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
+                            //calculate the score, combo of the successful hit to display
                             $scope.score = ScoreFactory.addScore1(e.data.diff);
                             $scope.combo = ScoreFactory.addCombo1(e.data.diff);
-                            $scope.combo > 0 ? $scope.showCombo = true : $sope.showCombo = false;
+                            //as long as there is a combo to show, make it so
+                            $scope.combo > 0 ? $scope.showCombo = true : $scope.showCombo = false;
+                            //as long as there is a measure of accuracy to show, make it so
                             $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
-                            $scope.combo = ScoreFactory.resetCombo1(e.data.accuracy);
+                            //add to the number of misses
                             ScoreFactory.addScore1(e.data.diff);
+                            //reset combo, don't show it and show 'Boo' on miss
+                            $scope.combo = ScoreFactory.resetCombo1(e.data.accuracy);
                             $scope.showCombo = false;
                             $scope.accuracy = "Boo";
                         };
@@ -93,8 +102,7 @@ app.config(function($stateProvider) {
 
                         var stopSong = function (e) {
                             if(e.keyCode === 48) {
-                                console.log(ScoreFactory.finalScore1());
-                                console.log(ScoreFactory.player1Guy.accuracyCount);
+                                //should probably remove this if altogether
                             };
                             var dir = keyCodeToDir[e.keyCode];
 
