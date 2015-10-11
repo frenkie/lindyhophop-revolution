@@ -50,97 +50,140 @@ app.factory('ScoreFactory', function() {
         return playerNum === 2 ? player2Guy : player1Guy;
     }
 
-    function addScore1(diff) {
-        if (diff <= TIMINGWINDOWS.Flawless) {
-            player1Guy.score += POINTS.Flawless;
-            player1Guy.accuracyCount.Flawless++;
-        } else if (diff <= TIMINGWINDOWS.Marvelous) {
-            player1Guy.score += POINTS.Marvelous;
-            player1Guy.accuracyCount.Marvelous++;
-        } else if (diff <= TIMINGWINDOWS.Great) {
-            player1Guy.score += POINTS.Great;
-            player1Guy.accuracyCount.Great++;
+    function addScore(diff, playerNum) {
+        if (playerNum === 2) {
+            if (diff <= TIMINGWINDOWS.Flawless) {
+                player2Guy.score += POINTS.Flawless;
+                player2Guy.accuracyCount.Flawless++;
+            } else if (diff <= TIMINGWINDOWS.Marvelous) {
+                player2Guy.score += POINTS.Marvelous;
+                player2Guy.accuracyCount.Marvelous++;
+            } else if (diff <= TIMINGWINDOWS.Great) {
+                player2Guy.score += POINTS.Great;
+                player2Guy.accuracyCount.Great++;
+            } else {
+                player2Guy.accuracyCount.Miss++;
+            }
+            return player2Guy.score;
         } else {
-            player1Guy.accuracyCount.Miss++;
+            if (diff <= TIMINGWINDOWS.Flawless) {
+                player1Guy.score += POINTS.Flawless;
+                player1Guy.accuracyCount.Flawless++;
+            } else if (diff <= TIMINGWINDOWS.Marvelous) {
+                player1Guy.score += POINTS.Marvelous;
+                player1Guy.accuracyCount.Marvelous++;
+            } else if (diff <= TIMINGWINDOWS.Great) {
+                player1Guy.score += POINTS.Great;
+                player1Guy.accuracyCount.Great++;
+            } else {
+                player1Guy.accuracyCount.Miss++;
+            }
+            return player1Guy.score;
         }
-        return player1Guy.score;
     }
 
-    function addScore2(diff) {
-        if (diff <= TIMINGWINDOWS.Flawless) {
-            player2Guy.score += POINTS.Flawless;
-            player2Guy.accuracyCount.Flawless++;
-        } else if (diff <= TIMINGWINDOWS.Marvelous) {
-            player2Guy.score += POINTS.Marvelous;
-            player2Guy.accuracyCount.Marvelous++;
-        } else if (diff <= TIMINGWINDOWS.Great) {
-            player2Guy.score += POINTS.Great;
-            player2Guy.accuracyCount.Great++;
+    // function addScore2(diff) {
+    //     if (diff <= TIMINGWINDOWS.Flawless) {
+    //         player2Guy.score += POINTS.Flawless;
+    //         player2Guy.accuracyCount.Flawless++;
+    //     } else if (diff <= TIMINGWINDOWS.Marvelous) {
+    //         player2Guy.score += POINTS.Marvelous;
+    //         player2Guy.accuracyCount.Marvelous++;
+    //     } else if (diff <= TIMINGWINDOWS.Great) {
+    //         player2Guy.score += POINTS.Great;
+    //         player2Guy.accuracyCount.Great++;
+    //     } else {
+    //         player2Guy.accuracyCount.Miss++;
+    //     }
+    //     return player2Guy.score;
+    // }
+
+    function addCombo(diff, playerNum) {
+        if (playerNum === 2) {
+            if (diff <= TIMINGWINDOWS.Great) {
+                player2Guy.combo++;
+                if (player2Guy.combo > player2Guy.maxCombo) player2Guy.maxCombo = player2Guy.combo;
+            }
+            return player2Guy.combo;
         } else {
-            player2Guy.accuracyCount.Miss++;
-        }
-        return player2Guy.score;
-    }
-
-    function addCombo1(diff) {
-        if (diff <= TIMINGWINDOWS.Great) {
-            player1Guy.combo++;
-            if (player1Guy.combo > player1Guy.maxCombo) player1Guy.maxCombo = player1Guy.combo;
-        }
-        return player1Guy.combo;
-    }
-
-    function addCombo2(diff) {
-        if (diff <= TIMINGWINDOWS.Great) {
-            player2Guy.combo++;
-            if (player2Guy.combo > player2Guy.maxCombo) player2Guy.maxCombo = player2Guy.combo;
-        }
-        return player2Guy.combo;
-    }
-
-    function resetPlayer1() {
-        player1Guy = {
-            score: 0,
-            combo: 0,
-            maxCombo: 0,
-            totalArrowGuy: 0,
-            mult: 0.005,
-            scaleFactor: 1,
-            accuracyCount: {
-                Flawless: 0,
-                Marvelous: 0,
-                Great: 0,
-                Miss: 0
-            },
-            realScore: 0
+            if (diff <= TIMINGWINDOWS.Great) {
+                player1Guy.combo++;
+                if (player1Guy.combo > player1Guy.maxCombo) player1Guy.maxCombo = player1Guy.combo;
+            }
+            return player1Guy.combo;
         }
     }
 
-    function resetPlayer2() {
-        player2Guy = {
-            score: 0,
-            combo: 0,
-            maxCombo: 0,
-            totalArrowGuy: 0,
-            mult: 0.005,
-            scaleFactor: 1,
-            accuracyCount: {
-                Flawless: 0,
-                Marvelous: 0,
-                Great: 0,
-                Miss: 0
-            },
-            realScore: 0
+    // function addCombo2(diff) {
+    //     if (diff <= TIMINGWINDOWS.Great) {
+    //         player2Guy.combo++;
+    //         if (player2Guy.combo > player2Guy.maxCombo) player2Guy.maxCombo = player2Guy.combo;
+    //     }
+    //     return player2Guy.combo;
+    // }
+
+    function resetPlayer(playerNum) {
+        if (playerNum === 2) {
+            player2Guy = {
+                score: 0,
+                combo: 0,
+                maxCombo: 0,
+                totalArrowGuy: 0,
+                mult: 0.005,
+                scaleFactor: 1,
+                accuracyCount: {
+                    Flawless: 0,
+                    Marvelous: 0,
+                    Great: 0,
+                    Miss: 0
+                },
+                realScore: 0
+            };
+        } else {
+            player1Guy = {
+                score: 0,
+                combo: 0,
+                maxCombo: 0,
+                totalArrowGuy: 0,
+                mult: 0.005,
+                scaleFactor: 1,
+                accuracyCount: {
+                    Flawless: 0,
+                    Marvelous: 0,
+                    Great: 0,
+                    Miss: 0
+                },
+                realScore: 0
+            };
         }
     }
 
-    function resetCombo1() {
-        player1Guy.combo = 0;
+    // function resetPlayer2() {
+    //     player2Guy = {
+    //         score: 0,
+    //         combo: 0,
+    //         maxCombo: 0,
+    //         totalArrowGuy: 0,
+    //         mult: 0.005,
+    //         scaleFactor: 1,
+    //         accuracyCount: {
+    //             Flawless: 0,
+    //             Marvelous: 0,
+    //             Great: 0,
+    //             Miss: 0
+    //         },
+    //         realScore: 0
+    //     }
+    // }
+
+    function resetCombo(playerNum) {
+        if (playerNum === 2) player2Guy.combo = 0;
+        else player1Guy.combo = 0;
     }
 
-    function resetCombo2() {
-        player2Guy.combo = 0;
-    }
+    // function resetCombo2() {
+    //     player2Guy.combo = 0;
+    // }
 
     function setTotalArrows(stepChart) {
         console.log('stepChart:', stepChart);
@@ -154,28 +197,35 @@ app.factory('ScoreFactory', function() {
         }, 0);
     }
 
-    function finalScore1() {
+    function finalScore(playerNum) {
         var temp;
-        (player1Guy.score + player1Guy.maxCombo > player1Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player1Guy.score + player1Guy.maxCombo) * 1000000 / (player1Guy.totalArrowGuy * POINTS.Flawless);
-        player1Guy.realScore = (Math.floor(temp  + 1000000)/2);
-        return player1Guy.realScore;
+        if (playerNum === 2) {
+            (player2Guy.score + player2Guy.maxCombo > player2Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player2Guy.score + player2Guy.maxCombo) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
+            player2Guy.realScore = (Math.floor(temp  + 1000000)/2);
+            return player2Guy.realScore;
+        } else {
+            (player1Guy.score + player1Guy.maxCombo > player1Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player1Guy.score + player1Guy.maxCombo) * 1000000 / (player1Guy.totalArrowGuy * POINTS.Flawless);
+            player1Guy.realScore = (Math.floor(temp  + 1000000)/2);
+            return player1Guy.realScore;
+        }
     }
 
-    function finalScore2() {
-        var temp;
-        (player2Guy.score + player2Guy.maxCombo > player2Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player2Guy.score + player2Guy.maxCombo) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
-        player2Guy.realScore = (Math.floor(temp  + 1000000)/2);
-        return player2Guy.realScore;
+    // function finalScore2() {
+    //     var temp;
+    //     (player2Guy.score + player2Guy.maxCombo > player2Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player2Guy.score + player2Guy.maxCombo) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
+    //     player2Guy.realScore = (Math.floor(temp  + 1000000)/2);
+    //     return player2Guy.realScore;
+    // }
+
+    //Cannot just do totalArrowGuy - Miss because miss is overcounting
+    function getPercent(playerNum) {
+        if (playerNum === 2) return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
+        else return parseFloat((player1Guy.accuracyCount.Flawless + player1Guy.accuracyCount.Marvelous + player1Guy.accuracyCount.Great)/player1Guy.totalArrowGuy);
     }
 
-    //Cannot just do totalArrowGuy - Miss because miss overcounts
-    function getPercent1() {
-        return parseFloat((player1Guy.accuracyCount.Flawless + player1Guy.accuracyCount.Marvelous + player1Guy.accuracyCount.Great)/player1Guy.totalArrowGuy);
-    }
-
-    function getPercent2() {
-        return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
-    }
+    // function getPercent2() {
+    //     return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
+    // }
 
     function getAccuracy (diff) {
         for( var prop in TIMINGWINDOWS ) {
@@ -187,21 +237,15 @@ app.factory('ScoreFactory', function() {
     }
 
     return {
-        addScore1: addScore1,
-        addCombo1: addCombo1,
-        resetPlayer1: resetPlayer1,
-        resetCombo1: resetCombo1,
-        finalScore1: finalScore1,
-        finalScore2: finalScore2,
+        addScore: addScore,
+        addCombo: addCombo,
+        resetPlayer: resetPlayer,
+        resetCombo: resetCombo,
+        finalScore: finalScore,
         setTotalArrows: setTotalArrows,
         totalArrowGuy: totalArrowGuy,
         getPlayer: getPlayer,
-        addScore2: addScore2,
-        addCombo2: addCombo2,
-        resetPlayer2: resetPlayer2,
-        resetCombo2: resetCombo2,
-        getPercent1: getPercent1,
-        getPercent2: getPercent2,
+        getPercent: getPercent,
         getAccuracy: getAccuracy
     };
 });

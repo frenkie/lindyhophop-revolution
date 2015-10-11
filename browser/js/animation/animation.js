@@ -72,8 +72,8 @@ app.config(function($stateProvider) {
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
                             //calculate the score, combo of the successful hit to display
-                            $scope.score = ScoreFactory.addScore1(e.data.diff);
-                            $scope.combo = ScoreFactory.addCombo1(e.data.diff);
+                            $scope.score = ScoreFactory.addScore(e.data.diff, 1);
+                            $scope.combo = ScoreFactory.addCombo(e.data.diff, 1);
                             //as long as there is a combo to show, make it so
                             $scope.combo > 0 ? $scope.showCombo = true : $scope.showCombo = false;
                             //as long as there is a measure of accuracy to show, make it so
@@ -81,9 +81,9 @@ app.config(function($stateProvider) {
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             //add to the number of misses
-                            ScoreFactory.addScore1(e.data.diff);
+                            ScoreFactory.addScore(e.data.diff, 1);
                             //reset combo, don't show it and show 'Boo' on miss
-                            $scope.combo = ScoreFactory.resetCombo1(e.data.accuracy);
+                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
                             $scope.showCombo = false;
                             $scope.accuracy = "Boo";
                         };

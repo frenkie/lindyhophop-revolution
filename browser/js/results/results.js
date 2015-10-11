@@ -5,25 +5,25 @@ app.config(function($stateProvider) {
         templateUrl: 'js/results/results.html',
         controller: 'ResultsCtrl',
         resolve: {
-            player1: function(ScoreFactory) {
-                return ScoreFactory.getPlayer();
+            player: function(ScoreFactory) {
+                return ScoreFactory.getPlayer(1);
             },
-            percent1: function(ScoreFactory) {
-                return ScoreFactory.getPercent1();
+            percent: function(ScoreFactory) {
+                return ScoreFactory.getPercent(1);
             },
-            score1: function(ScoreFactory) {
-                return ScoreFactory.finalScore1();
+            score: function(ScoreFactory) {
+                return ScoreFactory.finalScore(1);
             }
         }
     });
 
 });
 
-app.controller('ResultsCtrl', function($scope, player1, percent1, score1, ScoreFactory, $state, ToneFactory) {
-    $scope.player1 = player1;
-    $scope.percent1 = percent1;
-    $scope.score1 = parseInt(score1);
-    ScoreFactory.resetPlayer1();
+app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFactory, $state, ToneFactory) {
+    $scope.player1 = player;
+    $scope.percent = percent;
+    $scope.score = parseInt(score);
+    ScoreFactory.resetPlayer(1);
 
     function play(fx) {
       ToneFactory.play(fx);
