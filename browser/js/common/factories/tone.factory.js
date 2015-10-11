@@ -23,6 +23,11 @@ app.factory('ToneFactory', function () {
         this.player.stop();
     }
 
+    ToneFactory.play = function (fx) {
+      var audio = new Audio(`/audio/soundEffects/${fx}.mp3`);
+      audio.play();
+    };
+
 
     return ToneFactory;
 })

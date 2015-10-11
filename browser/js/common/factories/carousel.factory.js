@@ -1,4 +1,4 @@
-app.factory('CarouselFactory', function($state) {
+app.factory('CarouselFactory', function($state, ToneFactory) {
     // set and cache variables
     var looperRunning, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
@@ -127,6 +127,7 @@ app.factory('CarouselFactory', function($state) {
             console.log("DOWN KEY HIT: ", event)
 
         } else if (event.keyCode === 27) {
+            ToneFactory.play('back');
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
             });
@@ -185,15 +186,17 @@ app.factory('CarouselFactory', function($state) {
     function chooseLevel(event) {
 
         if (event.keyCode === 38) { //key up
-            if ($('.selected').prev().length)
+            if ($('.selected').prev().length) {
                 $('.selected').removeClass("selected").prev().addClass("selected");
+            }
             else {
                 $('.selected').removeClass("selected").siblings(':last').addClass("selected");
             }
 
         } else if (event.keyCode === 40) { //key down
-            if ($('.selected').next().length)
+            if ($('.selected').next().length) {
                 $('.selected').removeClass("selected").next().addClass("selected");
+            }
             else {
                 $('.selected').removeClass("selected").siblings(':first').addClass("selected");
             }
@@ -219,6 +222,7 @@ app.factory('CarouselFactory', function($state) {
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
 
         }
+
         //class selected that lights up the choice
         //up will go up the index
         //down will go down the list

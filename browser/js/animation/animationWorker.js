@@ -158,7 +158,8 @@ var respondToKey = function(time, dir) {
             dir,
             index: thisChart.pointer,
             hit: true,
-            freeze: nextOne.freeze
+            freeze: nextOne.freeze,
+            diff: diff
         });
         if (nextOne.freeze) inFreeze[dir] = true;
     }

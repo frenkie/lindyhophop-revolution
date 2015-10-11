@@ -5,7 +5,7 @@ app.factory('ArrowFactory', function () {
     var Arrow = function (direction, player, color) {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
-        this.el = $(`<div class="arrow"><img src="/img/${direction}-${color}.png"></img></div>`);
+        this.el = $(`<div class="arrow activeArrow"><img src="/img/arrows/${direction}-${color}.png"></img></div>`);
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
 
@@ -49,6 +49,10 @@ app.factory('ArrowFactory', function () {
     Arrow.killTimeline = function () {
         tl.pause(0, true);      // sets steps back to beginning
         tl.remove();
+    }
+
+    Arrow.setSpeed = function (num) {
+        Arrow.speedModifier = num;
     }
 
     Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {

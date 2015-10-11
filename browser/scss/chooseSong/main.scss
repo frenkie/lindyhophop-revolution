@@ -65,11 +65,11 @@
 
 	.carouselItemInner
 	{
-		width:320px;
-		height:130px;
+		width:320px;	//384px
+		height:130px;	//120px
 		position:absolute;
 		background-color:rgba(234, 76, 136, .75);
-		border:10px solid rgba(212, 65, 121, .5);
+		//border:10px solid rgba(212, 65, 121, .5);
 		color:#eee;
 		font-size:30px;
 		left:50%;
@@ -131,5 +131,14 @@
 
 	.activeSong {
 		background-color: #E9A92E;
-		border:10px solid #E9A92E;
+		//border:10px solid #E9A92E;
+	}
+
+	.song-banner {
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-size: contain;
+		min-width: 100%;
+		overflow: hidden;
 	}
