@@ -6,7 +6,7 @@
 .resultsContainer {
 	width: 80%;
 	margin: auto;
-	border: 5px double #ea4c88;
+	padding-top: 3%;
 	max-height: 100%;
 }
 
@@ -15,7 +15,8 @@
 	color: white;
 	float: left;
 	padding-top: 2%;
-	width: 50%;
+	width: 50.5%;
+	margin-left: -0.5%;
 }
 
 .scoreBreakdown {
@@ -23,8 +24,8 @@
 	color: white;
 	float: right;
 	padding-top: 2%;
-	width: 50%;
-	margin-right: -3%;
+	width: 50.5%;
+	margin-right: -0.5%;
 }
 
 h1 {
