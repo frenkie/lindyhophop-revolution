@@ -80,8 +80,6 @@ app.config(function($stateProvider) {
                             $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
-                            //add to the number of misses
-                            ScoreFactory.addScore(e.data.diff, 1);
                             //reset combo, don't show it and show 'Boo' on miss
                             $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
                             $scope.showCombo = false;

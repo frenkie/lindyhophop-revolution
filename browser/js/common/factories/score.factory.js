@@ -12,8 +12,7 @@ app.factory('ScoreFactory', function() {
         accuracyCount: {
             Flawless: 0,
             Marvelous: 0,
-            Great: 0,
-            Miss: 0
+            Great: 0
         },
         realScore: 0
     };
@@ -28,8 +27,7 @@ app.factory('ScoreFactory', function() {
         accuracyCount: {
             Flawless: 0,
             Marvelous: 0,
-            Great: 0,
-            Miss: 0
+            Great: 0
         },
         realScore: 0
     };
@@ -82,22 +80,6 @@ app.factory('ScoreFactory', function() {
         }
     }
 
-    // function addScore2(diff) {
-    //     if (diff <= TIMINGWINDOWS.Flawless) {
-    //         player2Guy.score += POINTS.Flawless;
-    //         player2Guy.accuracyCount.Flawless++;
-    //     } else if (diff <= TIMINGWINDOWS.Marvelous) {
-    //         player2Guy.score += POINTS.Marvelous;
-    //         player2Guy.accuracyCount.Marvelous++;
-    //     } else if (diff <= TIMINGWINDOWS.Great) {
-    //         player2Guy.score += POINTS.Great;
-    //         player2Guy.accuracyCount.Great++;
-    //     } else {
-    //         player2Guy.accuracyCount.Miss++;
-    //     }
-    //     return player2Guy.score;
-    // }
-
     function addCombo(diff, playerNum) {
         if (playerNum === 2) {
             if (diff <= TIMINGWINDOWS.Great) {
@@ -114,14 +96,6 @@ app.factory('ScoreFactory', function() {
         }
     }
 
-    // function addCombo2(diff) {
-    //     if (diff <= TIMINGWINDOWS.Great) {
-    //         player2Guy.combo++;
-    //         if (player2Guy.combo > player2Guy.maxCombo) player2Guy.maxCombo = player2Guy.combo;
-    //     }
-    //     return player2Guy.combo;
-    // }
-
     function resetPlayer(playerNum) {
         if (playerNum === 2) {
             player2Guy = {
@@ -134,8 +108,7 @@ app.factory('ScoreFactory', function() {
                 accuracyCount: {
                     Flawless: 0,
                     Marvelous: 0,
-                    Great: 0,
-                    Miss: 0
+                    Great: 0
                 },
                 realScore: 0
             };
@@ -150,40 +123,17 @@ app.factory('ScoreFactory', function() {
                 accuracyCount: {
                     Flawless: 0,
                     Marvelous: 0,
-                    Great: 0,
-                    Miss: 0
+                    Great: 0
                 },
                 realScore: 0
             };
         }
     }
 
-    // function resetPlayer2() {
-    //     player2Guy = {
-    //         score: 0,
-    //         combo: 0,
-    //         maxCombo: 0,
-    //         totalArrowGuy: 0,
-    //         mult: 0.005,
-    //         scaleFactor: 1,
-    //         accuracyCount: {
-    //             Flawless: 0,
-    //             Marvelous: 0,
-    //             Great: 0,
-    //             Miss: 0
-    //         },
-    //         realScore: 0
-    //     }
-    // }
-
     function resetCombo(playerNum) {
         if (playerNum === 2) player2Guy.combo = 0;
         else player1Guy.combo = 0;
     }
-
-    // function resetCombo2() {
-    //     player2Guy.combo = 0;
-    // }
 
     function setTotalArrows(stepChart) {
         console.log('stepChart:', stepChart);
@@ -210,22 +160,11 @@ app.factory('ScoreFactory', function() {
         }
     }
 
-    // function finalScore2() {
-    //     var temp;
-    //     (player2Guy.score + player2Guy.maxCombo > player2Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player2Guy.score + player2Guy.maxCombo) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
-    //     player2Guy.realScore = (Math.floor(temp  + 1000000)/2);
-    //     return player2Guy.realScore;
-    // }
-
     //Cannot just do totalArrowGuy - Miss because miss is overcounting
     function getPercent(playerNum) {
         if (playerNum === 2) return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
         else return parseFloat((player1Guy.accuracyCount.Flawless + player1Guy.accuracyCount.Marvelous + player1Guy.accuracyCount.Great)/player1Guy.totalArrowGuy);
     }
-
-    // function getPercent2() {
-    //     return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
-    // }
 
     function getAccuracy (diff) {
         for( var prop in TIMINGWINDOWS ) {
