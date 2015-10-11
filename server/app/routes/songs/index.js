@@ -47,6 +47,10 @@ function createStepCharts(parsedSM) {
                 displayBpm: parsedSM.metadata.DISPLAYBPM,
                 offset: parsedSM.metadata.OFFSET,
                 music: parsedSM.metadata.MUSIC,
+                sampleStart: parsedSM.metadata.SAMPLESTART,
+                sampleLength: parsedSM.metadata.SAMPLELENGTH,
+                banner: parsedSM.metadata.BANNER,
+                background: parsedSM.metadata.BACKGROUND,
                 Charts: chartsObj
             });
         }).then(function(song) {

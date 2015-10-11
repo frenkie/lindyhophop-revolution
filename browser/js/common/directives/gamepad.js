@@ -77,6 +77,8 @@ app.directive('gamepad', function () {
 
             gamepads.polling = false;
 
+            window.gamepads = gamepads
+
             if (gamepads.gamepadsSupported) {
                 gamepads.updateStatus = function () {
                     gamepads.polling = true;

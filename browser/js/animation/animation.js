@@ -9,13 +9,18 @@ app.config(function($stateProvider) {
                 return SongFactory.getSongById($stateParams.songId);
             }
         },
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, $state) {
+
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state) {
             $scope.ready = false;
             $scope.currentSong = song;
             $scope.choice = {};
 
-            function prepSong(stepChart) {
+            const TIMING_WINDOW = 0.10;
 
+
+
+            function prepSong(stepChart) {
+                    ScoreFactory.setTotalArrows(stepChart);
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
                     var keyCodeToDir = {
@@ -23,8 +28,9 @@ app.config(function($stateProvider) {
                       '40': 'down',
                       '38': 'up',
                       '39': 'right',
-                      '27': 'escape',
+                      '27': 'escape'
                     };
+
 
                     var startTime = 0;
                     ArrowFactory.makeTimeline();
@@ -42,12 +48,34 @@ app.config(function($stateProvider) {
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
+
+                    console.log(tone);
+                    var activeArrows
                     arrowWorker.onmessage = function (e) {
+                        arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
+
+                        if($('.activeArrow').length === 0) {
+                            setTimeout(function() {
+                                console.log('exited out here :(')
+                                tone.stop();
+                                arrowWorker.terminate();
+                                ArrowFactory.killTimeline();
+                                $state.go('chooseSong');
+                            }, 3000);
+                        }
+
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
+                            console.log('difff is ', e.data.diff);
+                            $scope.score = ScoreFactory.addScore(e.data.diff);
+                            $scope.combo = ScoreFactory.addCombo(e.data.diff);
                         } else {
-                            // you missed an arrow!
+                            // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
+                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
+                            ScoreFactory.addScore(e.data.diff);
                         };
+                        //console.log($scope.score);
+                        $scope.$digest();
                     };
                     var placeArrows = {
                         left: $(`.left-arrow-col .arrowPlace`),
@@ -58,23 +86,33 @@ app.config(function($stateProvider) {
                     var allPlaceArrows = $(`.arrowPlace`);
 
                     var addListener = function () {
-                        document.body.addEventListener('keydown', function (e) {
+
+                        var stopSong = function (e) {
+                            if(e.keyCode === 48) {
+                                console.log(ScoreFactory.finalScore());
+                                console.log(ScoreFactory.accuracyCountGuy);
+                            };
                             var dir = keyCodeToDir[e.keyCode];
-                            placeArrows[dir].addClass('arrowPlacePressed');
+
                             if (dir) e.preventDefault();
                             else return;
 
                             if (dir === 'escape') {
+                                ToneFactory.play('back');
                                 /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
+                                document.body.removeEventListener('keydown', stopSong);
                                 $state.go('chooseSong');
                             }
 
+                            if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
+
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
-                        });
+                        }
+                        document.body.addEventListener('keydown', stopSong);
 
                         document.body.addEventListener('keyup', function(e) {
                             var dir = keyCodeToDir[e.keyCode];
@@ -103,11 +141,13 @@ app.config(function($stateProvider) {
                         else if ($scope.currentSong.title === 'Sandstorm') {
                             $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
                         }
+                        else {
+                            $scope.imageSrc = `/img/background/${$scope.currentSong.title}-bg.png`;
+                        }
                         setTimeout(function() {
                             var video = document.getElementById('bg-video');
                             video.play();
                         }, videoOffset);
-
 
                         $scope.ready = true;
                         $scope.$digest();
@@ -132,7 +172,7 @@ app.config(function($stateProvider) {
                 $scope.mainBPM = $scope.currentSong.bpms[0].bpm;
 
                 $scope.config = {
-                    TIMING_WINDOW: 0.15,
+                    TIMING_WINDOW: TIMING_WINDOW,
                     ARROW_SPEED: ArrowFactory.speed * 4, //Factor for timing how fast arrow takes (this number / bpm for seconds)
                     MEASURE_TIME: 1/($scope.mainBPM/60/4) //Number of seconds per measure
                 };
@@ -143,14 +183,10 @@ app.config(function($stateProvider) {
                 SongFactory.getChartById(chartId)
                 .then(prepSong);
 
-
             };
 
 
-            setTimeout(function() {
-                setUpSong();
-
-            }, 2000);
+            setTimeout(setUpSong, 2000);
 
         }
     });
