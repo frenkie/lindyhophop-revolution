@@ -6,7 +6,7 @@ app.config(function ($stateProvider) {
         controller: 'ResultsCtrl',
         resolve: {
           results: function(ScoreFactory) {
-            return ScoreFactory.getScore();
+            return ScoreFactory.finalScore();
           },
           maxCombo: function(ScoreFactory) {
             return ScoreFactory.getMaxCombo();
@@ -16,8 +16,12 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ResultsCtrl', function ($scope, $state, results) {
+app.controller('ResultsCtrl', function ($scope, $state, results, maxCombo) {
   $scope.results = results;
+  $scope.maxCombo = maxCombo;
+
   console.log("This are the results: ", results);
+  console.log("Your max combo was ", maxCombo);
+
 
 });
