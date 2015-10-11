@@ -196,13 +196,15 @@ app.factory('ScoreFactory', function() {
     }
 
     function finalScore1() {
-        var temp = (player1Guy.score + player1Guy.maxCombo * 5) * 1000000 / (player1Guy.totalArrowGuy * POINTS.Flawless);
-        player1Guy.realScore = (Math.floor(temp  + 1000000)/2);
+        var temp;
+        // (player1Guy.score + player1Guy.maxCombo * 5 > player1Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player1Guy.score + player1Guy.maxCombo * 5) * 1000000 / (player1Guy.totalArrowGuy * POINTS.Flawless);
+        // player1Guy.realScore = (Math.floor(temp  + 1000000)/2);
         return player1Guy.realScore;
     }
 
     function finalScore2() {
-        var temp = (player2Guy.score + player1Guy.maxCombo * 5) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
+        var temp;
+        (player2Guy.score + player2Guy.maxCombo * 5 > player2Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player2Guy.score + player2Guy.maxCombo * 5) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
         player2Guy.realScore = (Math.floor(temp  + 1000000)/2);
         return player2Guy.realScore;
     }
