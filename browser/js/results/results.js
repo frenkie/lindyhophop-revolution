@@ -5,8 +5,11 @@ app.config(function ($stateProvider) {
         templateUrl: 'js/results/results.html',
         controller: 'ResultsCtrl',
         resolve: {
-          results: function($stateParams) {
-            // return with a promise that will resolve with the results from the ScoreFactory;
+          results: function(ScoreFactory) {
+            return ScoreFactory.getScore();
+          },
+          maxCombo: function(ScoreFactory) {
+            return ScoreFactory.getMaxCombo();
           }
         }
     });

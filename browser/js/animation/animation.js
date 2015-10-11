@@ -56,11 +56,10 @@ app.config(function($stateProvider) {
 
                         if($('.activeArrow').length === 0) {
                             setTimeout(function() {
-                                console.log('exited out here :(')
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
-                                $state.go('chooseSong');
+                                $state.go('results');
                             }, 3000);
                         }
 
