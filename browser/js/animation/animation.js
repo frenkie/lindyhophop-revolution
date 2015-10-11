@@ -86,6 +86,10 @@ app.config(function($stateProvider) {
                             // removing arrow with freeze from dom so it doesn't show up again
                             var domArrow = arrows[e.data.dir][e.data.index].el[0];
                             domArrow.innerHTML = "";
+                        } else if (e.data.brokeFreeze) {
+                            // you broke the freeze you silly
+                            console.log('you broke the freeze you silly')
+                            faders[e.data.dir][0].className = "fader";
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);

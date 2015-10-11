@@ -154,12 +154,12 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
     console.log('chart is ready', chart);
 };
 
+// checks on keyup whether we were in a freeze at that dir or not
 var checkIfFreeze = function (dir) {
-    if (inFreeze[dir]) {
+    if (inFreeze[dir].freeze) {
         postMessage({
             dir,
-            hit: false,
-
+            brokeFreeze: true
         })
     }
 }
@@ -182,7 +182,7 @@ var respondToKey = function(time, dir) {
             freeze: nextOne.freeze,
             diff: diff
         });
-        if (nextOne.freeze) inFreeze[dir] = true;
+        if (nextOne.freeze) inFreeze[dir].freeze = true;
     }
 }
 
