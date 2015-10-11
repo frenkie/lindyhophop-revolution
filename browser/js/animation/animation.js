@@ -60,7 +60,7 @@ app.config(function($stateProvider) {
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
-                                $state.go('chooseSong');
+                                $state.go('results');
                             }, 3000);
                         }
 

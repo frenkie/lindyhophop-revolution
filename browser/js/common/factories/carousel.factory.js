@@ -114,12 +114,12 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
         if (event.keyCode === 39) {
             rightX < 10 ? rightX += 2 : rightX;
             leftX > 0 ? leftX = rightX = 0 : leftX = 0;
-            mouseX = -(window.innerWidth * .5) * .0004 * rightX;
+            mouseX = -(window.innerWidth * .5) * .0003 * rightX;
 
         } else if (event.keyCode === 37) {
             leftX < 10 ? leftX += 2 : leftX;
             rightX > 0 ? leftX = rightX = 0 : rightX = 0;
-            mouseX = (window.innerWidth * .5) * .0004 * leftX;
+            mouseX = (window.innerWidth * .5) * .0003 * leftX;
         } else if (event.keyCode === 38) {
             console.log("UP KEY HIT: ", event)
 
@@ -142,6 +142,12 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
         } else if (event.keyCode === 13) {
 
             findTarget();
+            //HACKY HACK to move chosen song to front view by moving carousel to degree 0
+            addX = 0;
+            mouseX = 0;
+            rightX = 0;
+            leftX = 0;
+            
 
             var $nrX = 360 * getRandomInt(2);
             var $nrY = 360 * getRandomInt(2);
@@ -157,13 +163,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             $(`#item${target} > .carouselItemInner`).addClass('activeSong');
             TweenMax.to($('.carouselContainer'), 1, {
                 transform: 'translateY(40px)'
-            });
-
-            //HACKY HACK to move chosen song to front view by moving carousel to degree 0
-            addX = 0;
-            mouseX = 0;
-            rightX = 0;
-            leftX = 0;
+            });  
 
             $(`#item${target}`).trigger('click');
         }
@@ -231,7 +231,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
 
     function findTarget() {
         var degrees = addX % 360;
-        var songs = carousel.children().length;
+        var songs = carousel.children('.carouselItem').length;
         var delta = 360 / songs;
 
 
