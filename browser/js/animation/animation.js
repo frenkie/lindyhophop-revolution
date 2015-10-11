@@ -134,14 +134,9 @@ app.config(function($stateProvider) {
                             if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
 
                             var timeStamp = (Date.now() - startTime) / 1000;
-<<<<<<< HEAD
                             arrowWorker.postMessage({type: 'keyDown', timeStamp, dir});
-                        });
-=======
-                            arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
                         }
                         document.body.addEventListener('keydown', stopSong);
->>>>>>> fader
 
                         document.body.addEventListener('keyup', function(e) {
                             var dir = keyCodeToDir[e.keyCode];
