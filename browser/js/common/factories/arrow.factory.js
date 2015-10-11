@@ -12,8 +12,7 @@ app.factory('ArrowFactory', function () {
     var FreezeArrow = function (direction, player, color) {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
-        this.el = $(`<div class="arrow"><img src="/img/${direction}-${color}.png"></img></div>`);
-        console.log('found freeze, appending');
+        this.el = $(`<div class="arrow"><img src="/img/arrows/${direction}-${color}.png"></img></div>`);
         this.el.append($(`<div class="freeze"></div>`));
         $(`.player-${player} .${direction}-arrow-col`).append(this.el);
     };
@@ -141,11 +140,9 @@ app.factory('ArrowFactory', function () {
                         if (maybeArrow === "1") {
                             arrow = new Arrow(dir, 1, color);
                         } else if (maybeArrow === "2") {
-                            console.log('found freeze');
                             freezes[dir].firstBeat = thisBeat;
                             arrow = new FreezeArrow(dir, 1, color);
                             freezes[dir].arrow = arrow;
-                            console.log(arrow, 'freeze found in column', dir);
                         }
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
                         obj[indexToDir[index]].push(arrow);

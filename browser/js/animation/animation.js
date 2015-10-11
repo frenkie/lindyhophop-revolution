@@ -48,34 +48,15 @@ app.config(function($stateProvider) {
                         bpms: $scope.currentSong.bpms,
                         stops: $scope.currentSong.stops
                     });
-<<<<<<< HEAD
                     var faders = {
                         left: $(`.left-arrow-col .fader`),
                         right: $(`.right-arrow-col .fader`),
                         up: $(`.up-arrow-col .fader`),
                         down: $(`.down-arrow-col .fader`)
                     };
+                    var activeArrows;
                     arrowWorker.onmessage = function (e) {
-                        if (e.data.hit) {
-                            var domArrow = arrows[e.data.dir][e.data.index].el[0];
-                            console.dir(domArrow);
-                            var arrow = domArrow.children[0];
-                            if (e.data.freeze) {
-                                var freeze = domArrow.children[1];
-                                freeze.style.top = '7.5vh';
-                                console.log('adding freeze-eater class');
-                                faders[e.data.dir][0].className += " freeze-eater";
-                            }
-                            arrow.hidden = true;
-                        } else if (e.data.freezeUp) {
-                            console.log('removing freeze-eater class');
-                            faders[e.data.dir][0].className = "fader";
-=======
-
-                    console.log(tone);
-                    var activeArrows
-                    arrowWorker.onmessage = function (e) {
-                        arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
+                        // arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
                         if($('.activeArrow').length === 0) {
                             setTimeout(function() {
@@ -86,20 +67,32 @@ app.config(function($stateProvider) {
                                 $state.go('chooseSong');
                             }, 3000);
                         }
-
-                        if(e.data.hit) {
-                            arrows[e.data.dir][e.data.index].el.remove();
-                            console.log('difff is ', e.data.diff);
+                        if (e.data.hit) {
+                            var domArrow = arrows[e.data.dir][e.data.index].el[0];
+                            console.dir(domArrow);
+                            var arrow = domArrow.children[0];
+                            if (e.data.freeze) {
+                                var freeze = domArrow.children[1];
+                                freeze.style.top = '7.5vh';
+                                // adding freeze eater class to fader (covers up freezes)
+                                faders[e.data.dir][0].className += " freeze-eater";
+                            }
+                            arrow.hidden = true;
                             $scope.score = ScoreFactory.addScore(e.data.diff);
                             $scope.combo = ScoreFactory.addCombo(e.data.diff);
->>>>>>> fader
+                        } else if (e.data.freezeUp) {
+                            // removing freeze eater class (this gets sent from worker on a '3' or when freeze is over)
+                            faders[e.data.dir][0].className = "fader";
+                            // removing arrow with freeze from dom so it doesn't show up again
+                            var domArrow = arrows[e.data.dir][e.data.index].el[0];
+                            domArrow.innerHTML = "";
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
                             ScoreFactory.addScore(e.data.diff);
                         };
-                        //console.log($scope.score);
                         $scope.$digest();
+
                     };
                     var placeArrows = {
                         left: $(`.left-arrow-col .arrowPlace`),
@@ -134,6 +127,7 @@ app.config(function($stateProvider) {
                             if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
 
                             var timeStamp = (Date.now() - startTime) / 1000;
+                            // sends a note to worker to handle the keypress
                             arrowWorker.postMessage({type: 'keyDown', timeStamp, dir});
                         }
                         document.body.addEventListener('keydown', stopSong);

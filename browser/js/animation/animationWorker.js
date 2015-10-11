@@ -59,10 +59,22 @@ var getBPMTime = function(thisBeat, bpms) {
 }
 
 var inFreeze = {
-    left: false,
-    down: false,
-    up: false,
-    right: false
+    left: {
+        freeze: false,
+        fromArrow: null,
+    },
+    down: {
+        freeze: false,
+        fromArrow: null,
+    },
+    up: {
+        freeze: false,
+        fromArrow: null,
+    },
+    right: {
+        freeze: false,
+        fromArrow: null,
+    }
 }
 
 var checkArrow = function(arrowTime) {
@@ -76,9 +88,10 @@ var checkArrow = function(arrowTime) {
     if (arrowTime.freezeUp) {
         postMessage({
             freezeUp: true,
-            dir: arrowTime.dir
+            dir: arrowTime.dir,
+            index: arrowTime.index
         });
-        inFreeze[arrowTime.dir] = false;
+        inFreeze[arrowTime.dir].freeze = false;
     }
 }
 
@@ -104,28 +117,36 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
                         time: timeStamp,
                         attempted: false,
                         hit: false,
+                        // this 'freeze' property is used to turn on the freeze eater (fader opaque) on a successful keypress
+                        // at the top of a freeze arrow
                         freeze: maybeArrow === "2" ? true : false,
                     };
+                    // this stores a reference to the arrow with the additional freeze div, used at number 3 to signal freeze div removal
                     var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
                     arrowTime.index = arrowIndex;
+                    if (maybeArrow === "2") inFreeze[indexToDir[index]].fromArrow = arrowIndex;
                     thisTimeout = function() {
                         setTimeout(function() {
                             checkArrow(arrowTime);
                         }, (timeStamp + TIMING_WINDOW - songOffset) * 1000)
                     };
+                    timeouts.push(thisTimeout);
                 } else if (maybeArrow === "3") {
                     arrowTime = {
                         dir: indexToDir[index],
                         time: timeStamp,
-                        freezeUp: true
+                        freezeUp: true,
+                        // signal to checkArrow to specify which arrow to remove freeze from
+                        index: inFreeze[indexToDir[index]].fromArrow
                     };
                     thisTimeout = function() {
                         setTimeout(function() {
                             checkArrow(arrowTime);
                         }, (timeStamp - songOffset) * 1000)
                     };
+                    timeouts.push(thisTimeout);
                 }
-                timeouts.push(thisTimeout);
+
             });
         });
     });
