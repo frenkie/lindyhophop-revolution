@@ -67,9 +67,39 @@
   z-index: 10;
 }
 
+
+.chute {
+  position: absolute;
+  top: -5%;
+  height: 12.5%;
+  width: 100%;
+  background: rgba(30, 30, 30, 1);
+  z-index: 4;
+}
+
+
+.under-chute {
+  position: absolute;
+  top: 7.5%;
+  height: 15.5%;
+  width: 100%;
+  background: linear-gradient(0deg, rgba(30, 30, 30, 0), rgba(30, 30, 30, 1));
+  z-index: 4;
+}
+
+.chute-right {
+  width: 147%;
+}
+
+.chute-left {
+  width: 147%;
+  left: -47%;
+}
+
 #player-1-arrowLane {
+  position: relative;
   height: 100%;
-  background-color: rgba(30, 30, 30, 1);
+  background-color: rgba(30, 30, 30, 0.7);
   z-index: 1;
   &:first-child {
     padding-left: 75px;
