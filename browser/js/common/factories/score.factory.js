@@ -48,8 +48,8 @@ app.factory('ScoreFactory', function() {
 
     var POINTS = {
         Flawless: 10,
-        Marvelous: 8,
-        Great: 6
+        Marvelous: 7,
+        Great: 5
     }
 
     // var accuracyCountGuy = {
@@ -196,17 +196,18 @@ app.factory('ScoreFactory', function() {
     }
 
     function finalScore1() {
-        var temp = player1Guy.score * 1000000 / (player1Guy.totalArrowGuy * POINTS.Flawless);
+        var temp = (player1Guy.score + player1Guy.maxCombo * 5) * 1000000 / (player1Guy.totalArrowGuy * POINTS.Flawless);
         player1Guy.realScore = (Math.floor(temp  + 1000000)/2);
         return player1Guy.realScore;
     }
 
     function finalScore2() {
-        var temp = player2Guy.score * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
+        var temp = (player2Guy.score + player1Guy.maxCombo * 5) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
         player2Guy.realScore = (Math.floor(temp  + 1000000)/2);
         return player2Guy.realScore;
     }
 
+    //Cannot just do totalArrowGuy - Miss because miss overcounts
     function getPercent1() {
         return parseFloat((player1Guy.accuracyCount.Flawless + player1Guy.accuracyCount.Marvelous + player1Guy.accuracyCount.Great)/player1Guy.totalArrowGuy);
     }
