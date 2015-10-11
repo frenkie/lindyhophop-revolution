@@ -60,6 +60,7 @@
 
 		p {
 			margin-top: -15px;
+			font-family: petit;
 		}
 	}
 
@@ -111,8 +112,13 @@
 	// 		max-height: 9vh;
 	// 	}
 	// }
+	@font-face {
+    	font-family: 'petit';
+    	src: url('/img/font/petit.otf');
+	}
 	
 	.choose-level {
+		font-family: petit;
 		font-size: 30px;
 		color: #b2b2b2;
 		position: relative;

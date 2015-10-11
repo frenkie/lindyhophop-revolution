@@ -10,7 +10,7 @@ app.config(function($stateProvider) {
             }
         },
 
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout) {
             $scope.ready = false;
             $scope.currentSong = song;
             $scope.choice = {};
@@ -27,7 +27,7 @@ app.config(function($stateProvider) {
                     //when prepping song, score factory will get the total number of arrows in the stepchart
                     //for score calculation purposes
                     ScoreFactory.setTotalArrows(1);
-                    
+
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
                     var keyCodeToDir = {
@@ -77,15 +77,25 @@ app.config(function($stateProvider) {
                             $scope.score = ScoreFactory.addScore(e.data.diff, 1);
                             $scope.combo = ScoreFactory.addCombo(e.data.diff, 1);
                             //as long as there is a combo to show, make it so
-                            $scope.combo > 0 ? $scope.showCombo = true : $scope.showCombo = false;
+                            $scope.combo > 1 ? $scope.showCombo = true : $scope.showCombo = false;
                             //as long as there is a measure of accuracy to show, make it so
                             $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
+                            $scope.accuracyCol = ScoreFactory.getAccuracyColors($scope.accuracy);
+                            //only show accuracy feedback for 1 sec
+                            $timeout(function() {
+                                $scope.accuracy = null;
+                            }, 2000);
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             //reset combo, don't show it and show 'Boo' on miss
                             $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
                             $scope.showCombo = false;
                             $scope.accuracy = "Boo";
+                            $scope.accuracyCol = '#ED3DED';
+                            //only show accuracy feedback for 1 sec
+                            $timeout(function() {
+                                $scope.accuracy = null;
+                            }, 2000);
                         };
                         //console.log($scope.score);
                         $scope.$digest();

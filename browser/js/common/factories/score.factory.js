@@ -46,6 +46,12 @@ app.factory('ScoreFactory', function() {
         Great: 5
     };
 
+    var ACCURACYCOLORS = {
+        Flawless: '#40C7DF',
+        Marvelous: '#E8E374',
+        Great: '#8EED44'
+    };
+
     function getPlayer(playerNum) {
         return playerNum === 2 ? player2Guy : player1Guy;
     }
@@ -192,6 +198,10 @@ app.factory('ScoreFactory', function() {
         }
     }
 
+    function getAccuracyColors (acc) {
+        return ACCURACYCOLORS[acc];
+    }
+
     return {
         addScore: addScore,
         addCombo: addCombo,
@@ -203,6 +213,7 @@ app.factory('ScoreFactory', function() {
         getPlayer: getPlayer,
         getPercent: getPercent,
         getAccuracy: getAccuracy,
-        setStepChart: setStepChart
+        setStepChart: setStepChart,
+        getAccuracyColors: getAccuracyColors
     };
 });
