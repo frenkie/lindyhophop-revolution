@@ -14,7 +14,8 @@ app.factory('ScoreFactory', function() {
             Marvelous: 0,
             Great: 0
         },
-        realScore: 0
+        realScore: 0,
+        stepChart: null
     };
 
     var player2Guy = {
@@ -29,7 +30,8 @@ app.factory('ScoreFactory', function() {
             Marvelous: 0,
             Great: 0
         },
-        realScore: 0
+        realScore: 0,
+        stepChart: null
     };
 
     var TIMINGWINDOWS = {
@@ -59,9 +61,7 @@ app.factory('ScoreFactory', function() {
             } else if (diff <= TIMINGWINDOWS.Great) {
                 player2Guy.score += POINTS.Great;
                 player2Guy.accuracyCount.Great++;
-            } else {
-                player2Guy.accuracyCount.Miss++;
-            }
+            } 
             return player2Guy.score;
         } else {
             if (diff <= TIMINGWINDOWS.Flawless) {
@@ -73,9 +73,7 @@ app.factory('ScoreFactory', function() {
             } else if (diff <= TIMINGWINDOWS.Great) {
                 player1Guy.score += POINTS.Great;
                 player1Guy.accuracyCount.Great++;
-            } else {
-                player1Guy.accuracyCount.Miss++;
-            }
+            } 
             return player1Guy.score;
         }
     }
@@ -110,7 +108,8 @@ app.factory('ScoreFactory', function() {
                     Marvelous: 0,
                     Great: 0
                 },
-                realScore: 0
+                realScore: 0,
+                stepChart: null
             };
         } else {
             player1Guy = {
@@ -125,7 +124,8 @@ app.factory('ScoreFactory', function() {
                     Marvelous: 0,
                     Great: 0
                 },
-                realScore: 0
+                realScore: 0,
+                stepChart: null
             };
         }
     }
@@ -135,20 +135,38 @@ app.factory('ScoreFactory', function() {
         else player1Guy.combo = 0;
     }
 
-    function setTotalArrows(stepChart) {
-        console.log('stepChart:', stepChart);
-        player1Guy.totalArrowGuy = player2Guy.totalArrowGuy = stepChart.chart.reduce(function(a, measure) {
-            return a + measure.reduce(function(b, line) {
-                return b + line.reduce(function(c, arrow) {
-                    var value = (arrow === '1' || arrow === '2') ? 1 : 0;
-                    return c + value;
+    function setStepChart(stepChart, playerNum) {
+        if (playerNum === 2) {
+            player2Guy.stepChart = stepChart;
+        } else {
+            player1Guy.stepChart = stepChart;
+        }
+    }
+
+    function setTotalArrows(playerNum) {
+        if (playerNum === 2) {
+            player2Guy.totalArrowGuy = player2Guy.stepChart.chart.reduce(function(a, measure) {
+                return a + measure.reduce(function(b, line) {
+                    return b + line.reduce(function(c, arrow) {
+                        var value = (arrow === '1' || arrow === '2') ? 1 : 0;
+                        return c + value;
+                    }, 0);
                 }, 0);
             }, 0);
-        }, 0);
+        } else {
+            player1Guy.totalArrowGuy = player1Guy.stepChart.chart.reduce(function(a, measure) {
+                return a + measure.reduce(function(b, line) {
+                    return b + line.reduce(function(c, arrow) {
+                        var value = (arrow === '1' || arrow === '2') ? 1 : 0;
+                        return c + value;
+                    }, 0);
+                }, 0);
+            }, 0);
+        }
     }
 
     function finalScore(playerNum) {
-        var temp;
+        var temp = 0;
         if (playerNum === 2) {
             (player2Guy.score + player2Guy.maxCombo > player2Guy.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player2Guy.score + player2Guy.maxCombo) * 1000000 / (player2Guy.totalArrowGuy * POINTS.Flawless);
             player2Guy.realScore = (Math.floor(temp  + 1000000)/2);
@@ -160,7 +178,6 @@ app.factory('ScoreFactory', function() {
         }
     }
 
-    //Cannot just do totalArrowGuy - Miss because miss is overcounting
     function getPercent(playerNum) {
         if (playerNum === 2) return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
         else return parseFloat((player1Guy.accuracyCount.Flawless + player1Guy.accuracyCount.Marvelous + player1Guy.accuracyCount.Great)/player1Guy.totalArrowGuy);
@@ -185,6 +202,7 @@ app.factory('ScoreFactory', function() {
         totalArrowGuy: totalArrowGuy,
         getPlayer: getPlayer,
         getPercent: getPercent,
-        getAccuracy: getAccuracy
+        getAccuracy: getAccuracy,
+        setStepChart: setStepChart
     };
 });

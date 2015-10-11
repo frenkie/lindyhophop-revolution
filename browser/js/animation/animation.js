@@ -22,9 +22,11 @@ app.config(function($stateProvider) {
 
 
             function prepSong(stepChart) {
+                    //to set the stepChart on the player object
+                    ScoreFactory.setStepChart(stepChart, 1);
                     //when prepping song, score factory will get the total number of arrows in the stepchart
                     //for score calculation purposes
-                    ScoreFactory.setTotalArrows(stepChart);
+                    ScoreFactory.setTotalArrows(1);
                     
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
