@@ -12,6 +12,7 @@ app.config(function($stateProvider) {
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state) {
             $scope.ready = false;
+            $scope.showCombo = false;
             $scope.currentSong = song;
             $scope.choice = {};
 
@@ -68,11 +69,14 @@ app.config(function($stateProvider) {
                             arrows[e.data.dir][e.data.index].el.remove();
                             $scope.score = ScoreFactory.addScore1(e.data.diff);
                             $scope.combo = ScoreFactory.addCombo1(e.data.diff);
-                            console.log(ScoreFactory.getPlayer1());
+                            $scope.combo > 0 ? $scope.showCombo = true : $sope.showCombo = false;
+                            $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             $scope.combo = ScoreFactory.resetCombo1(e.data.accuracy);
                             ScoreFactory.addScore1(e.data.diff);
+                            $scope.showCombo = false;
+                            $scope.accuracy = "Boo";
                         };
                         //console.log($scope.score);
                         $scope.$digest();

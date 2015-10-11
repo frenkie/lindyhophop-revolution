@@ -6,7 +6,7 @@ app.config(function($stateProvider) {
         controller: 'ResultsCtrl',
         resolve: {
             player1: function(ScoreFactory) {
-                return ScoreFactory.getPlayer1();
+                return ScoreFactory.getPlayer();
             },
             percent1: function(ScoreFactory) {
                 return ScoreFactory.getPercent1();

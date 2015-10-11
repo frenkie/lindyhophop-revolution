@@ -1,10 +1,7 @@
 app.factory('ScoreFactory', function() {
 
-    // var score = 0;
-    // var combo = 0;
-    // var maxCombo = 0;
-
     var totalArrowGuy;
+
     var player1Guy = {
         score: 0,
         combo: 0,
@@ -19,7 +16,7 @@ app.factory('ScoreFactory', function() {
             Miss: 0
         },
         realScore: 0
-    }
+    };
 
     var player2Guy = {
         score: 0,
@@ -35,60 +32,22 @@ app.factory('ScoreFactory', function() {
             Miss: 0
         },
         realScore: 0
-    }
-
-    // var mult = 0.005;
-    // var scaleFactor = 1;
+    };
 
     var TIMINGWINDOWS = {
         Flawless: 0.03,
         Marvelous: 0.08,
         Great: 0.15
-    }
+    };
 
     var POINTS = {
         Flawless: 10,
         Marvelous: 7,
         Great: 5
-    }
+    };
 
-    // var accuracyCountGuy = {
-    //  Flawless: 0,
-    //  Marvelous: 0,
-    //  Great: 0,
-    //  Miss: 0
-    // }
-
-    // function getScore1() {
-    //     return player1Guy.score;
-    // }
-
-    // function getScore2() {
-    //     return player2Guy.score;
-    // }
-
-    // function getCombo1() {
-    //     return player1Guy.combo;
-    // }
-
-    // function getCombo2() {
-    //     return player2Guy.combo;
-    // }
-
-    // function getMaxCombo1() {
-    //     return player1Guy.maxCombo;
-    // }
-
-    // function getMaxCombo2() {
-    //     return player2Guy.maxCombo;
-    // }
-
-    function getPlayer1() {
-        return player1Guy;
-    }
-
-    function getPlayer2() {
-        return player2Guy;
+    function getPlayer(playerNum) {
+        return playerNum === 2 ? player2Guy : player1Guy;
     }
 
     function addScore1(diff) {
@@ -218,6 +177,15 @@ app.factory('ScoreFactory', function() {
         return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
     }
 
+    function getAccuracy (diff) {
+        for( var prop in TIMINGWINDOWS ) {
+            if( TIMINGWINDOWS.hasOwnProperty( prop ) ) {
+                 if( TIMINGWINDOWS[prop] >= diff )
+                     return prop;
+            }
+        }
+    }
+
     return {
         addScore1: addScore1,
         addCombo1: addCombo1,
@@ -227,13 +195,13 @@ app.factory('ScoreFactory', function() {
         finalScore2: finalScore2,
         setTotalArrows: setTotalArrows,
         totalArrowGuy: totalArrowGuy,
-        getPlayer1: getPlayer1,
-        getPlayer2: getPlayer2,
+        getPlayer: getPlayer,
         addScore2: addScore2,
         addCombo2: addCombo2,
         resetPlayer2: resetPlayer2,
         resetCombo2: resetCombo2,
         getPercent1: getPercent1,
-        getPercent2: getPercent2
+        getPercent2: getPercent2,
+        getAccuracy: getAccuracy
     };
 });
