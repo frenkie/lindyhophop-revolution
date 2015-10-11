@@ -15,7 +15,8 @@ app.config(function($stateProvider) {
             $scope.currentSong = song;
             $scope.choice = {};
 
-            const TIMING_WINDOW = 0.10;
+            const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
+            const MISS_WINDOW = ScoreFactory.TIMINGWINDOWS.Miss;
 
 
 
@@ -64,14 +65,18 @@ app.config(function($stateProvider) {
                             }, 3000);
                         }
 
+                        console.log('diff with sign is ', e.data.diffWithSign);
+
                         if(e.data.hit) {
                             arrows[e.data.dir][e.data.index].el.remove();
-                            console.log('difff is ', e.data.diff);
+                            //console.log('difff is ', e.data.diff);
                             $scope.score = ScoreFactory.addScore(e.data.diff);
                             $scope.combo = ScoreFactory.addCombo(e.data.diff);
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
-                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
+                            if (e.data.diff > TIMING_WINDOW && e.data.diff <= MISS_WINDOW) {
+                                $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
+                            }
                             ScoreFactory.addScore(e.data.diff);
                         };
                         //console.log($scope.score);

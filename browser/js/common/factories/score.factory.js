@@ -10,13 +10,14 @@ app.factory('ScoreFactory', function() {
     var mult = 0.005;
     var scaleFactor = 1;
 
-    var TIMINGWINDOWS = {
+    const TIMINGWINDOWS = {
         Flawless: 0.03,
-        Marvelous: 0.08,
-        Great: 0.15
+        Marvelous: 0.06,
+        Great: 0.10,
+        Miss: 0.25
     }
 
-    var POINTS = {
+    const POINTS = {
         Flawless: 10,
         Marvelous: 8,
         Great: 6
@@ -51,7 +52,7 @@ app.factory('ScoreFactory', function() {
         } else if (diff <= TIMINGWINDOWS.Great) {
             score += POINTS.Great;
             accuracyCountGuy.Great++;
-        } else {
+        } else if (diff <= TIMINGWINDOWS.Miss) {
             accuracyCountGuy.Miss++;
         }
         return score;
@@ -110,6 +111,7 @@ app.factory('ScoreFactory', function() {
         resetCombo: resetCombo,
         finalScore: finalScore,
         setTotalArrows: setTotalArrows,
-        accuracyCountGuy: accuracyCountGuy
+        accuracyCountGuy: accuracyCountGuy,
+        TIMINGWINDOWS: TIMINGWINDOWS
     };
 });

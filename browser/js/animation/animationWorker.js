@@ -103,20 +103,24 @@ var respondToKey = function(time, dir) {
     var thisChart = chart[dir];
     if (thisChart.pointer === thisChart.list.length) return;
     var nextOne = thisChart.list[thisChart.pointer];
-    while (nextOne.time < time - TIMING_WINDOW) {
+
+    if (time > nextOne.time + TIMING_WINDOW )
+
+    while (nextOne.time < time - TIMING_WINDOW) {   // timingwindow | press(time) | arrow(nextOne)
         thisChart.pointer++;
         nextOne = thisChart.list[thisChart.pointer];
     }
-    var diff = Math.abs(nextOne.time - time);
+    var diffWithSign = nextOne.time - time;
+    var diff = Math.abs(diffWithSign);
     if (diff < TIMING_WINDOW) {
         nextOne.hit = true;
         postMessage({
-            dir, index: thisChart.pointer, hit: true, diff: diff
+            dir, index: thisChart.pointer, hit: true, diff: diff, diffWithSign: diffWithSign
         })
     }
     else {
         postMessage({
-            dir, index: thisChart.pointer, hit: false, diff: diff
+            dir, index: thisChart.pointer, hit: false, diff: diff, diffWithSign: diffWithSign
         })
     }
 }
