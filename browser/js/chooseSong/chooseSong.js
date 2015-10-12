@@ -65,14 +65,20 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         CarouselFactory.chooseLevel(e);
         if (e.keyCode === 38 || e.keyCode === 40) {
             ToneFactory.play('blop');
-            viewSongInfo();          
+            viewSongInfo();      
         }
-        if (e.keyCode === 27) {
+        else if (e.keyCode === 27) {
             window.removeEventListener("keydown", chooseLevel, false);
             if ($scope.songPreview) {
                 $scope.songPreview.previewStop();
                 $scope.songPreview = null;
             }
+        }
+        else if (e.keyCode === 13) {
+            if ($scope.songPreview) {
+                $scope.songPreview.previewStop();
+                $scope.songPreview = null;
+            }    
         }
     }
 
@@ -93,7 +99,8 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     $scope.getDifficulties = function(song) {
         $('.choose-level').css("visibility", "visible");
         $timeout(function() {
-            $('#level0').addClass("selected");   
+            $('#level0').addClass("selected");
+            viewSongInfo();   
         });
         
         $scope.choice.song = song;
