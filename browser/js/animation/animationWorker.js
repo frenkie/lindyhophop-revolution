@@ -80,6 +80,8 @@ var inFreeze = {
 }
 
 var checkArrow = function(arrowTime) {
+    // !arrowTime.hit = arrow is missed
+    // !arrowTime.freezeUp = there actually is an arrow
     if (!arrowTime.hit && !arrowTime.freezeUp) {
         postMessage({
             hit: false,
@@ -87,7 +89,9 @@ var checkArrow = function(arrowTime) {
             dir: arrowTime.dir
         })
     }
+    // at the end of a freeze (regardless of good or bad)
     else if (arrowTime.freezeUp) {
+        console.log('END FREEZE!!!!!');
         postMessage({
             freezeUp: true,
             dir: arrowTime.dir,
