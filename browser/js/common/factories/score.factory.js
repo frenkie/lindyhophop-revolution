@@ -2,48 +2,52 @@ app.factory('ScoreFactory', function() {
 
     var totalArrowGuy;
 
-    var player1Guy = {
-        score: 0,
-        combo: 0,
-        maxCombo: 0,
-        totalArrowGuy: 0,
-        mult: 0.005,
-        scaleFactor: 1,
-        accuracyCount: {
+    function playerGuy (stepChart) {
+        this.score = 0;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.totalArrowGuy = 0;
+        // this.mult = 0.005;
+        // this.scaleFactor = 1;
+        this.accuracyCount = {
             Flawless: 0,
             Marvelous: 0,
             Great: 0
-        },
-        realScore: 0,
-        stepChart: null
-    };
+        };
+        this.realScore = 0;
+        this.stepChart = stepChart;
+    }
 
-    var player2Guy = {
-        score: 0,
-        combo: 0,
-        maxCombo: 0,
-        totalArrowGuy: 0,
-        mult: 0.005,
-        scaleFactor: 1,
-        accuracyCount: {
-            Flawless: 0,
-            Marvelous: 0,
-            Great: 0
-        },
-        realScore: 0,
-        stepChart: null
-    };
+    var player1Guy = new playerGuy();
+
+    var player2Guy;
+
+    var allPlayerGuys = [player1Guy];
 
     const TIMINGWINDOWS = {
         Flawless: 0.03,
-        Marvelous: 0.08,
-        Great: 0.15
+        Marvelous: 0.07,
+        Great: 0.10
     };
 
     const POINTS = {
         Flawless: 10,
         Marvelous: 7,
         Great: 5
+    };
+
+    const RESETVALUES = {
+        score: 0,
+        combo: 0,
+        maxCombo: 0,
+        totalArrowGuy: 0,
+        accuracyCount: {
+            Flawless: 0,
+            Marvelous: 0,
+            Great: 0
+        },
+        realScore: 0,
+        stepChart: null
     };
 
     var ACCURACYCOLORS = {
@@ -56,32 +60,25 @@ app.factory('ScoreFactory', function() {
         return playerNum === 2 ? player2Guy : player1Guy;
     }
 
+    function addPlayer() {
+        player2Guy = new playerGuy();
+        allPlayerGuys.push(player2Guy);
+    }
+
     function addScore(diff, playerNum) {
-        if (playerNum === 2) {
-            if (diff <= TIMINGWINDOWS.Flawless) {
-                player2Guy.score += POINTS.Flawless;
-                player2Guy.accuracyCount.Flawless++;
-            } else if (diff <= TIMINGWINDOWS.Marvelous) {
-                player2Guy.score += POINTS.Marvelous;
-                player2Guy.accuracyCount.Marvelous++;
-            } else if (diff <= TIMINGWINDOWS.Great) {
-                player2Guy.score += POINTS.Great;
-                player2Guy.accuracyCount.Great++;
-            }
-            return player2Guy.score;
-        } else {
-            if (diff <= TIMINGWINDOWS.Flawless) {
-                player1Guy.score += POINTS.Flawless;
-                player1Guy.accuracyCount.Flawless++;
-            } else if (diff <= TIMINGWINDOWS.Marvelous) {
-                player1Guy.score += POINTS.Marvelous;
-                player1Guy.accuracyCount.Marvelous++;
-            } else if (diff <= TIMINGWINDOWS.Great) {
-                player1Guy.score += POINTS.Great;
-                player1Guy.accuracyCount.Great++;
-            }
-            return player1Guy.score;
+        var player = allPlayerGuys[playerNum-1] || player1Guy;
+
+        if (diff <= TIMINGWINDOWS.Flawless) {
+            player.score += POINTS.Flawless;
+            player.accuracyCount.Flawless++;
+        } else if (diff <= TIMINGWINDOWS.Marvelous) {
+            player.score += POINTS.Marvelous;
+            player.accuracyCount.Marvelous++;
+        } else if (diff <= TIMINGWINDOWS.Great) {
+            player.score += POINTS.Great;
+            player.accuracyCount.Great++;
         }
+        return player.score;
     }
 
     function addCombo(diff, playerNum) {
@@ -100,40 +97,12 @@ app.factory('ScoreFactory', function() {
         }
     }
 
-    function resetPlayer(playerNum) {
-        if (playerNum === 2) {
-            player2Guy = {
-                score: 0,
-                combo: 0,
-                maxCombo: 0,
-                totalArrowGuy: 0,
-                mult: 0.005,
-                scaleFactor: 1,
-                accuracyCount: {
-                    Flawless: 0,
-                    Marvelous: 0,
-                    Great: 0
-                },
-                realScore: 0,
-                stepChart: null
-            };
-        } else {
-            player1Guy = {
-                score: 0,
-                combo: 0,
-                maxCombo: 0,
-                totalArrowGuy: 0,
-                mult: 0.005,
-                scaleFactor: 1,
-                accuracyCount: {
-                    Flawless: 0,
-                    Marvelous: 0,
-                    Great: 0
-                },
-                realScore: 0,
-                stepChart: null
-            };
-        }
+    function resetPlayers() {     
+        allPlayerGuys.forEach(function (guy) {
+            for( var key in guy) {
+                guy[key] = RESETVALUES[key];
+            }
+        });
     }
 
     function resetCombo(playerNum) {
@@ -206,7 +175,7 @@ app.factory('ScoreFactory', function() {
     return {
         addScore: addScore,
         addCombo: addCombo,
-        resetPlayer: resetPlayer,
+        resetPlayers: resetPlayers,
         resetCombo: resetCombo,
         finalScore: finalScore,
         setTotalArrows: setTotalArrows,
