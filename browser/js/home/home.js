@@ -8,10 +8,16 @@ app.config(function ($stateProvider) {
 
 app.controller('HomeController', function($rootScope, $scope, $state, AuthService, AUTH_EVENTS, ToneFactory) {
   $scope.user = null;
+  var menu = [1, 2, 3, 4, 5];
 
   var setUser = function () {
       AuthService.getLoggedInUser().then(function (user) {
           $scope.user = user;
+          if(user) {
+            menu = [1, 2, 5];
+          } else {
+            menu = [1, 2, 3, 4];
+          }
       });
   };
 
@@ -24,37 +30,53 @@ app.controller('HomeController', function($rootScope, $scope, $state, AuthServic
   $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
   $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
 
+  if(!ToneFactory.sandstormAudio) {
+    ToneFactory.sandstorm();
+  } else {
+    ToneFactory.sandstormAudio.play();
+  }
+
   function play(fx) {
     ToneFactory.play(fx);
   };
 
-  window.addEventListener('keydown', onArrowKey);
-
-  var menuLength = $('.homeMenu').children().length;
+  var $document = $(document);
+  $document.on('keydown', onArrowKey);
 
   function onArrowKey(event) {
   	var active = $('.activeHome') || $('#option1');
- 	var activeNumber = parseInt(active[0].id.slice(-1));
+   	var activeNumber = parseInt(active[0].id.slice(-1));
 
+  	if(event.which === 39) {
+  		//right arrow
+  		play('blop');
+  		activeNumber = activeNumber === menu[menu.length - 1]? 1 : menu[menu.indexOf(activeNumber) + 1];
+  		active.removeClass("activeHome");
+  		$('#option' + activeNumber).addClass("activeHome");
+  	} else if(event.which === 37) {
+  		//left arrow
+  		play('blop');
+  		activeNumber = activeNumber === 1? menu[menu.length - 1] : menu[menu.indexOf(activeNumber) - 1];
+  		active.removeClass("activeHome");
+  		$('#option' + activeNumber).addClass("activeHome");
+  	} else if(event.keyCode === 13) {
+      play('start');
+  		var uiState = active[0].outerHTML.split('"');
+  		$document.off('keydown', onArrowKey);
+      if(uiState[5] === "user") {
+        logout();
+        $state.reload();
+      } else {
+        ToneFactory.sandstormAudio.pause();
+        $state.go(uiState[5]);
+      }
+  	};
+  };
 
-	if(event.which === 39) { 
-		//right arrow
-		play('blop');
-		activeNumber = activeNumber === menuLength? 1 : activeNumber + 1;
-		active.removeClass("activeHome");
-		$('#option' + activeNumber).addClass("activeHome");
-	} else if(event.which === 37) { 
-		//left arrow
-		play('blop');
-		activeNumber = activeNumber === 1? menuLength : activeNumber - 1;
-		active.removeClass("activeHome");
-		$('#option' + activeNumber).addClass("activeHome");
-	} else if(event.keyCode === 13) {
-    play('start');
-		var uiState = active[0].outerHTML.split('"');
-		window.removeEventListener('keydown', onArrowKey);
-		$state.go(uiState[5]);
-	};
+  function logout() {
+      AuthService.logout().then(function () {
+        setUser();
+      });
   };
 
 });

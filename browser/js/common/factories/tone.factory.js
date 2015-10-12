@@ -36,6 +36,11 @@ app.factory('ToneFactory', function () {
       var audio = new Audio(`/audio/soundEffects/${fx}.mp3`);
       audio.play();
     };
+    
+    ToneFactory.sandstorm = function () {
+      ToneFactory.sandstormAudio = new Audio(`/audio/Sandstorm.mp3`);
+      ToneFactory.sandstormAudio.play();
+    };
 
     ToneFactory.prototype.previewStart = function() {
         var self = this;
