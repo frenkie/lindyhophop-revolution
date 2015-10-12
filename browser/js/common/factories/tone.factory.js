@@ -6,7 +6,7 @@ app.factory('ToneFactory', function ($q) {
         this.config = config;
         this.path = path;
         this.bpm = bpm;
-        this.syncOffset = config ? config.ARROW_SPEED/bpm + parseFloat(offset) : offset;
+        this.syncOffset = config ? config.ARROW_TIME + parseFloat(offset) : offset;
         this.player = new Tone.Player(this.path).toMaster();
         this.transport = Tone.Transport;
         this.transport.bpm.value = this.bpm;
@@ -30,6 +30,7 @@ app.factory('ToneFactory', function ($q) {
 
     ToneFactory.prototype.stop = function () {
         this.player.stop();
+        this.player.dispose();
     }
 
     ToneFactory.play = function (fx) {
@@ -40,24 +41,27 @@ app.factory('ToneFactory', function ($q) {
     ToneFactory.prototype.previewStart = function() {
         var self = this;
         Tone.Buffer.onload = function() {
+            console.log('in previewstart starting NRNRNRKNKNE')
             self.preview.start();
         }
     }
     ToneFactory.prototype.previewStop = function() {
         this.preview.stop();
+        this.preview.dispose();
     }
 
-    ToneFactory.prototype.tonePromise = $q(function(resolve, reject) {
-        var bufferLoaded = false;
-        console.log('in promise');
-        Tone.Buffer.onload = function () {
-            bufferLoaded = true;
-            console.log('tone resolved and buffer loaded');
-            resolve();
-        };
-                
-    });
-    
+    ToneFactory.prototype.tonePromise = function () {
+        return $q(function(resolve, reject) {
+            var bufferLoaded = false;
+            console.log('in promise');
+            Tone.Buffer.onload = function () {
+                bufferLoaded = true;
+                console.log('tone resolved and buffer loaded');
+                resolve();
+            };
+        });
+    }
+
 
     return ToneFactory;
 })

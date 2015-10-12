@@ -100,7 +100,9 @@ app.factory('ArrowFactory', function () {
     };
 
 
-    Arrow.makeArrows = function (stepChart, bpm, config) {
+    Arrow.makeArrows = function (stepChart, bpm, config, currentSong) {
+
+        Arrow.makeTimeline();
 
         var obj = {
             right: [],
@@ -153,6 +155,9 @@ app.factory('ArrowFactory', function () {
                 });
             });
         });
+
+        Arrow.addStops(currentSong.stops, config.ARROW_TIME, config.BEAT_TIME);
+        Arrow.addBpmChanges(currentSong.bpms, config.ARROW_TIME, config.BEAT_TIME, currentSong.stops);
 
         return obj;
     };
