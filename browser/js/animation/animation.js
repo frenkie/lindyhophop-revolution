@@ -17,7 +17,8 @@ app.config(function($stateProvider) {
             //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
             $scope.showCombo = false;
 
-            const TIMING_WINDOW = 0.10;
+            const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
+            const MISS_WINDOW = ScoreFactory.TIMINGWINDOWS.Miss;
 
 
 
@@ -162,7 +163,7 @@ app.config(function($stateProvider) {
 
                     var addListener = function () {
 
-                        var stopSong = function (e) {
+                        var handleKeyPress = function (e) {
                             if(e.keyCode === 48) {
                                 //should probably remove this if altogether
                             };
@@ -177,8 +178,8 @@ app.config(function($stateProvider) {
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
+                                document.body.removeEventListener('keydown', handleKeyPress);
 
-                                document.body.removeEventListener('keydown', stopSong);
                                 $state.go('chooseSong');
                             }
 
@@ -188,7 +189,7 @@ app.config(function($stateProvider) {
                             // sends a note to worker to handle the keypress
                             arrowWorker.postMessage({type: 'keyDown', timeStamp, dir});
                         }
-                        document.body.addEventListener('keydown', stopSong);
+                        document.body.addEventListener('keydown', handleKeyPress);
 
                         document.body.addEventListener('keyup', function(e) {
                             var dir = keyCodeToDir[e.keyCode];

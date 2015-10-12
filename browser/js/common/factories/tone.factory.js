@@ -1,16 +1,25 @@
 /* global Tone */
 
 app.factory('ToneFactory', function () {
-    var ToneFactory = function (path, bpm, offset, config) {
+    var ToneFactory = function (path, bpm, offset, config, startTime, length) {
 
         this.config = config;
         this.path = path;
         this.bpm = bpm;
-        this.syncOffset = config.ARROW_SPEED/bpm + parseFloat(offset);
+        this.syncOffset = config ? config.ARROW_SPEED/bpm + parseFloat(offset) : offset;
         this.player = new Tone.Player(this.path).toMaster();
         this.transport = Tone.Transport;
         this.transport.bpm.value = this.bpm;
         this.buffer = Tone.Buffer;
+        this.startTime = startTime;
+        this.length = length;
+
+        this.preview = new Tone.Player({
+            url: this.path,
+            loop: true,
+            loopStart: this.startTime || 0,
+            loopEnd: (this.startTime || 0) + (length || 12)
+        }).toMaster();
 
     }
 
@@ -28,6 +37,15 @@ app.factory('ToneFactory', function () {
       audio.play();
     };
 
+    ToneFactory.prototype.previewStart = function() {
+        var self = this;
+        Tone.Buffer.onload = function() {
+            self.preview.start();
+        }
+    }
+    ToneFactory.prototype.previewStop = function() {
+        this.preview.stop();
+    }
 
     return ToneFactory;
 })

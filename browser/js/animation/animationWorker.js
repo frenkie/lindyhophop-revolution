@@ -153,7 +153,7 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
         });
     });
 
-    console.log('chart is ready', chart);
+    // if song is too complicated, may bug when starting song before this is done
 };
 
 // checks on keyup whether we were in a freeze at that dir or not
@@ -170,11 +170,15 @@ var respondToKey = function(time, dir) {
     var thisChart = chart[dir];
     if (thisChart.pointer === thisChart.list.length) return;
     var nextOne = thisChart.list[thisChart.pointer];
-    while (nextOne.time < time - TIMING_WINDOW) {
+
+    if (time > nextOne.time + TIMING_WINDOW )
+
+    while (nextOne.time < time - TIMING_WINDOW) {   // timingwindow | press(time) | arrow(nextOne)
         thisChart.pointer++;
         nextOne = thisChart.list[thisChart.pointer];
     }
-    var diff = Math.abs(nextOne.time - time);
+    var diffWithSign = nextOne.time - time;
+    var diff = Math.abs(diffWithSign);
     if (diff < TIMING_WINDOW) {
         nextOne.hit = true;
         postMessage({
@@ -184,6 +188,7 @@ var respondToKey = function(time, dir) {
             freeze: nextOne.freeze,
             diff: diff
         });
+
         if (nextOne.freeze) inFreeze[dir].freeze = true;
     }
 }

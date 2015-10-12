@@ -34,13 +34,13 @@ app.factory('ScoreFactory', function() {
         stepChart: null
     };
 
-    var TIMINGWINDOWS = {
+    const TIMINGWINDOWS = {
         Flawless: 0.03,
         Marvelous: 0.08,
         Great: 0.15
     };
 
-    var POINTS = {
+    const POINTS = {
         Flawless: 10,
         Marvelous: 7,
         Great: 5
@@ -67,7 +67,7 @@ app.factory('ScoreFactory', function() {
             } else if (diff <= TIMINGWINDOWS.Great) {
                 player2Guy.score += POINTS.Great;
                 player2Guy.accuracyCount.Great++;
-            } 
+            }
             return player2Guy.score;
         } else {
             if (diff <= TIMINGWINDOWS.Flawless) {
@@ -79,7 +79,7 @@ app.factory('ScoreFactory', function() {
             } else if (diff <= TIMINGWINDOWS.Great) {
                 player1Guy.score += POINTS.Great;
                 player1Guy.accuracyCount.Great++;
-            } 
+            }
             return player1Guy.score;
         }
     }
@@ -140,6 +140,7 @@ app.factory('ScoreFactory', function() {
         if (playerNum === 2) player2Guy.combo = 0;
         else player1Guy.combo = 0;
     }
+
 
     function setStepChart(stepChart, playerNum) {
         if (playerNum === 2) {
@@ -209,6 +210,7 @@ app.factory('ScoreFactory', function() {
         resetCombo: resetCombo,
         finalScore: finalScore,
         setTotalArrows: setTotalArrows,
+        TIMINGWINDOWS: TIMINGWINDOWS,
         totalArrowGuy: totalArrowGuy,
         getPlayer: getPlayer,
         getPercent: getPercent,
