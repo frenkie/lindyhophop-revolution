@@ -52,7 +52,8 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         }, 2000);
     }
 
-    TheWorker.prototype.handleMessages = function ($scope, arrows) {
+    TheWorker.prototype.handleMessages = function ($scope, arrows, tone) {
+        var self = this;
         this.worker.onmessage = function (e) {
             // arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
@@ -76,6 +77,13 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                 // you broke the freeze you silly
                 console.log('you broke the freeze you silly')
                 faders[e.data.dir][0].className = "fader";
+            }else if (e.data.endSong) {
+                setTimeout(() => {
+                    $state.go('results');
+                    tone.stop();
+                    self.worker.terminate();
+                    ArrowFactory.killTimeline();
+                }, 3000);
             } else {
                 // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                 //reset combo, don't show it and show 'Boo' on miss

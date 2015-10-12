@@ -78,7 +78,7 @@ app.config(function($stateProvider) {
                 arrowWorker = new WorkerFactory('/js/animation/animationWorker.js');
                 arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
 
-                arrowWorker.handleMessages($scope, arrows)
+                arrowWorker.handleMessages($scope, arrows, tone)
 
             };
 
