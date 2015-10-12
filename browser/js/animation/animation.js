@@ -10,17 +10,24 @@ app.config(function($stateProvider) {
             }
         },
 
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout) {
             $scope.ready = false;
             $scope.currentSong = song;
             $scope.choice = {};
+            //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
+            $scope.showCombo = false;
 
             const TIMING_WINDOW = 0.10;
 
 
 
             function prepSong(stepChart) {
-                    ScoreFactory.setTotalArrows(stepChart);
+                    //to set the stepChart on the player object
+                    ScoreFactory.setStepChart(stepChart, 1);
+                    //when prepping song, score factory will get the total number of arrows in the stepchart
+                    //for score calculation purposes
+                    ScoreFactory.setTotalArrows(1);
+
                     var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
                     var keyCodeToDir = {
@@ -56,17 +63,47 @@ app.config(function($stateProvider) {
                     };
                     var activeArrows;
                     arrowWorker.onmessage = function (e) {
-                        // arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
+// <<<<<<< HEAD
+//                         arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-                        // if($('.activeArrow').length === 0) {
-                        //     setTimeout(function() {
-                        //         console.log('exited out here :(')
-                        //         tone.stop();
-                        //         arrowWorker.terminate();
-                        //         ArrowFactory.killTimeline();
-                        //         $state.go('chooseSong');
-                        //     }, 3000);
-                        // }
+//                         if($('.activeArrow').length === 0) {
+//                             setTimeout(function() {
+//                                 console.log('exited out here :(')
+//                                 tone.stop();
+//                                 arrowWorker.terminate();
+//                                 ArrowFactory.killTimeline();
+//                                 $state.go('results');
+//                             }, 3000);
+//                         }
+
+//                         if(e.data.hit) {
+//                             arrows[e.data.dir][e.data.index].el.remove();
+//                             //calculate the score, combo of the successful hit to display
+//                             $scope.score = ScoreFactory.addScore(e.data.diff, 1);
+//                             $scope.combo = ScoreFactory.addCombo(e.data.diff, 1);
+//                             //as long as there is a combo to show, make it so
+//                             $scope.combo > 1 ? $scope.showCombo = true : $scope.showCombo = false;
+//                             //as long as there is a measure of accuracy to show, make it so
+//                             $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
+//                             $scope.accuracyCol = ScoreFactory.getAccuracyColors($scope.accuracy);
+//                             //only show accuracy feedback for 1 sec
+//                             $timeout(function() {
+//                                 $scope.accuracy = null;
+//                             }, 2000);
+// =======
+
+                        // can use a timeout on worker to find end of song
+                        arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
+
+                        if($('.activeArrow').length === 0) {
+                            setTimeout(function() {
+                                console.log('exited out here :(')
+                                tone.stop();
+                                arrowWorker.terminate();
+                                ArrowFactory.killTimeline();
+                                $state.go('results');
+                            }, 3000);
+                        }
                         if (e.data.hit) {
                             var domArrow = arrows[e.data.dir][e.data.index].el[0];
                             console.dir(domArrow);
@@ -78,8 +115,18 @@ app.config(function($stateProvider) {
                                 faders[e.data.dir][0].className += " freeze-eater";
                             }
                             arrow.hidden = true;
-                            $scope.score = ScoreFactory.addScore(e.data.diff);
-                            $scope.combo = ScoreFactory.addCombo(e.data.diff);
+                            //calculate the score, combo of the successful hit to display
+                            $scope.score = ScoreFactory.addScore(e.data.diff, 1);
+                            $scope.combo = ScoreFactory.addCombo(e.data.diff, 1);
+                            //as long as there is a combo to show, make it so
+                            $scope.combo > 1 ? $scope.showCombo = true : $scope.showCombo = false;
+                            //as long as there is a measure of accuracy to show, make it so
+                            $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
+                            $scope.accuracyCol = ScoreFactory.getAccuracyColors($scope.accuracy);
+                            //only show accuracy feedback for 1 sec
+                            $timeout(function() {
+                                $scope.accuracy = null;
+                            }, 2000);
                         } else if (e.data.freezeUp) {
                             // removing freeze eater class (this gets sent from worker on a '3' or when freeze is over)
                             faders[e.data.dir][0].className = "fader";
@@ -92,8 +139,15 @@ app.config(function($stateProvider) {
                             faders[e.data.dir][0].className = "fader";
                         } else {
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
-                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy);
-                            ScoreFactory.addScore(e.data.diff);
+                            //reset combo, don't show it and show 'Boo' on miss
+                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
+                            $scope.showCombo = false;
+                            $scope.accuracy = "Boo";
+                            $scope.accuracyCol = '#ED3DED';
+                            //only show accuracy feedback for 1 sec
+                            $timeout(function() {
+                                $scope.accuracy = null;
+                            }, 2000);
                         };
                         $scope.$digest();
 
@@ -110,8 +164,7 @@ app.config(function($stateProvider) {
 
                         var stopSong = function (e) {
                             if(e.keyCode === 48) {
-                                console.log(ScoreFactory.finalScore());
-                                console.log(ScoreFactory.accuracyCountGuy);
+                                //should probably remove this if altogether
                             };
                             var dir = keyCodeToDir[e.keyCode];
 
@@ -124,6 +177,7 @@ app.config(function($stateProvider) {
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
+
                                 document.body.removeEventListener('keydown', stopSong);
                                 $state.go('chooseSong');
                             }

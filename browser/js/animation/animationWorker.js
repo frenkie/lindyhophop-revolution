@@ -34,6 +34,8 @@ var chart = {
 
 var timeouts = [];
 
+// add last timeout
+
 var TIMING_WINDOW;
 
 
