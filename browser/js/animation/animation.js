@@ -164,8 +164,12 @@ app.config(function($stateProvider) {
                     var addListener = function () {
 
                         var handleKeyPress = function (e) {
+                            //hit the 0 key during song to go to results (for testing purposes)
                             if(e.keyCode === 48) {
-                                //should probably remove this if altogether
+                                tone.stop();
+                                arrowWorker.terminate();
+                                ArrowFactory.killTimeline();
+                                $state.go('results');
                             };
                             var dir = keyCodeToDir[e.keyCode];
 
@@ -179,7 +183,7 @@ app.config(function($stateProvider) {
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
                                 document.body.removeEventListener('keydown', handleKeyPress);
-
+                                ScoreFactory.resetPlayers();
                                 $state.go('chooseSong');
                             }
 

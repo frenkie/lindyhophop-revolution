@@ -23,7 +23,6 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
     $scope.player1 = player;
     $scope.percent = percent;
     $scope.score = parseInt(score);
-    ScoreFactory.resetPlayer(1);
 
     function play(fx) {
       ToneFactory.play(fx);
@@ -35,7 +34,14 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
         if (event.keyCode === 27) {
             play('back');
             window.removeEventListener('keydown', leaveResults);
+            ScoreFactory.resetPlayers();
             $state.go('mainMenu');
-        };
+        }
+        else if (event.keyCode === 13) {
+            play('start');
+            window.removeEventListener('keydown', leaveResults);
+            ScoreFactory.resetPlayers();
+            $state.go('chooseSong');
+        }
     }
 });
