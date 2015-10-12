@@ -94,6 +94,7 @@ app.config(function($stateProvider) {
 // =======
 
                         // can use a timeout on worker to find end of song
+
                         arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
                         if($('.activeArrow').length === 0) {
@@ -102,6 +103,9 @@ app.config(function($stateProvider) {
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
+
+                                ScoreFactory.resetPlayer(1);
+                                
                                 $state.go('results');
                             }, 3000);
                         }
@@ -139,6 +143,8 @@ app.config(function($stateProvider) {
                             console.log('you broke the freeze you silly')
                             faders[e.data.dir][0].className = "fader";
                         } else {
+                            console.log(`e.data:`);
+                        console.log(e.data);
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             //reset combo, don't show it and show 'Boo' on miss
                             $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
@@ -179,6 +185,8 @@ app.config(function($stateProvider) {
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
                                 document.body.removeEventListener('keydown', handleKeyPress);
+
+                                ScoreFactory.resetPlayer(1);
 
                                 $state.go('chooseSong');
                             }

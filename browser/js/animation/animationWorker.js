@@ -80,14 +80,14 @@ var inFreeze = {
 }
 
 var checkArrow = function(arrowTime) {
-    if (!arrowTime.hit) {
+    if (!arrowTime.hit && !arrowTime.freezeUp) {
         postMessage({
             hit: false,
             index: arrowTime.index,
             dir: arrowTime.dir
         })
     }
-    if (arrowTime.freezeUp) {
+    else if (arrowTime.freezeUp) {
         postMessage({
             freezeUp: true,
             dir: arrowTime.dir,
@@ -144,7 +144,7 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
                     thisTimeout = function() {
                         setTimeout(function() {
                             checkArrow(arrowTime);
-                        }, (timeStamp - songOffset) * 1000)
+                        }, (timeStamp - TIMING_WINDOW - songOffset) * 1000)
                     };
                     timeouts.push(thisTimeout);
                 }
