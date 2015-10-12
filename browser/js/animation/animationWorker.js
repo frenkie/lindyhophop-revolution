@@ -6,6 +6,13 @@ var indexToDir = {
     '3': 'right'
 };
 
+var keysPressed = {
+    up: false,
+    right: false,
+    down: false,
+    left: false
+}
+
 var chart = {
     right: {
         list: [],
@@ -27,17 +34,10 @@ var chart = {
 
 var timeouts = [];
 
+// add last timeout
+
 var TIMING_WINDOW;
 
-var checkArrow = function(arrowTime) {
-    if (!arrowTime.hit) {
-        postMessage({
-            hit: false,
-            index: arrowTime.index,
-            dir: arrowTime.dir
-        })
-    }
-}
 
 var getStopTime = function(thisBeat, stops) {
     return stops.reduce(function(time, stop) {
@@ -60,6 +60,42 @@ var getBPMTime = function(thisBeat, bpms) {
     return addedTime;
 }
 
+var inFreeze = {
+    left: {
+        freeze: false,
+        fromArrow: null,
+    },
+    down: {
+        freeze: false,
+        fromArrow: null,
+    },
+    up: {
+        freeze: false,
+        fromArrow: null,
+    },
+    right: {
+        freeze: false,
+        fromArrow: null,
+    }
+}
+
+var checkArrow = function(arrowTime) {
+    if (!arrowTime.hit) {
+        postMessage({
+            hit: false,
+            index: arrowTime.index,
+            dir: arrowTime.dir
+        })
+    }
+    if (arrowTime.freezeUp) {
+        postMessage({
+            freezeUp: true,
+            dir: arrowTime.dir,
+            index: arrowTime.index
+        });
+        inFreeze[arrowTime.dir].freeze = false;
+    }
+}
 
 var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, stops) {
     TIMING_WINDOW = timing;
@@ -75,29 +111,60 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
             var extraBPMTime = getBPMTime(thisBeat, bpms);
             timeStamp += stopTime + extraBPMTime;
             line.forEach(function(maybeArrow, index) {
+                var arrowTime,
+                    thisTimeout;
                 if (maybeArrow === "1" || maybeArrow === "2") {
-                    //thisIndex is the index of the arrow just pushed
-                    var arrowTime = {
+                    arrowTime = {
                         dir: indexToDir[index],
                         time: timeStamp,
                         attempted: false,
-                        hit: false
+                        hit: false,
+                        // this 'freeze' property is used to turn on the freeze eater (fader opaque) on a successful keypress
+                        // at the top of a freeze arrow
+                        freeze: maybeArrow === "2" ? true : false,
                     };
                     var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
                     arrowTime.index = arrowIndex;
-                    var thisTimeout = function() {
+                    // this stores a reference to the arrow with the additional freeze div, used at number 3 to signal freeze div removal
+                    if (maybeArrow === "2") inFreeze[indexToDir[index]].fromArrow = arrowIndex;
+                    thisTimeout = function() {
                         setTimeout(function() {
                             checkArrow(arrowTime);
                         }, (timeStamp + TIMING_WINDOW - songOffset) * 1000)
                     };
                     timeouts.push(thisTimeout);
+                } else if (maybeArrow === "3") {
+                    arrowTime = {
+                        dir: indexToDir[index],
+                        time: timeStamp,
+                        freezeUp: true,
+                        // signal to checkArrow to specify which arrow to remove freeze from
+                        index: inFreeze[indexToDir[index]].fromArrow
+                    };
+                    thisTimeout = function() {
+                        setTimeout(function() {
+                            checkArrow(arrowTime);
+                        }, (timeStamp - songOffset) * 1000)
+                    };
+                    timeouts.push(thisTimeout);
                 }
+
             });
         });
     });
 
     console.log('chart is ready', chart);
 };
+
+// checks on keyup whether we were in a freeze at that dir or not
+var checkIfFreeze = function (dir) {
+    if (inFreeze[dir].freeze) {
+        postMessage({
+            dir,
+            brokeFreeze: true
+        })
+    }
+}
 
 var respondToKey = function(time, dir) {
     var thisChart = chart[dir];
@@ -111,25 +178,28 @@ var respondToKey = function(time, dir) {
     if (diff < TIMING_WINDOW) {
         nextOne.hit = true;
         postMessage({
-            dir, index: thisChart.pointer, hit: true, diff: diff
-        })
-    }
-    else {
-        postMessage({
-            dir, index: thisChart.pointer, hit: false, diff: diff
-        })
+            dir,
+            index: thisChart.pointer,
+            hit: true,
+            freeze: nextOne.freeze,
+            diff: diff
+        });
+        if (nextOne.freeze) inFreeze[dir].freeze = true;
     }
 }
 
 self.onmessage = function(e) {
     if (e.data.type === 'preChart') {
         preChart(e.data.chart, e.data.bpm, e.data.arrowOffset, e.data.songOffset, e.data.timing, e.data.bpms, e.data.stops);
-    } else if (e.data.type === 'keyPress') {
+    } else if (e.data.type === 'keyDown') {
         respondToKey(e.data.timeStamp, e.data.dir);
+        keysPressed[e.data.dir] = true;
     } else if (e.data.type === 'startTime') {
         startTime = e.data.startTime;
         timeouts.forEach(function(func) {
             func();
         })
+    } else if (e.data.type === 'keyUp') {
+        checkIfFreeze(e.data.dir);
     }
 };
