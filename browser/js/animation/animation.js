@@ -92,7 +92,7 @@ app.config(function($stateProvider) {
 
                     var addListener = function () {
 
-                        var stopSong = function (e) {
+                        var handleKeyPress = function (e) {
                             if(e.keyCode === 48) {
                                 console.log(ScoreFactory.finalScore());
                                 console.log(ScoreFactory.accuracyCountGuy);
@@ -108,7 +108,7 @@ app.config(function($stateProvider) {
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
-                                document.body.removeEventListener('keydown', stopSong);
+                                document.body.removeEventListener('keydown', handleKeyPress);
                                 $state.go('chooseSong');
                             }
 
@@ -117,7 +117,7 @@ app.config(function($stateProvider) {
                             var timeStamp = (Date.now() - startTime) / 1000;
                             arrowWorker.postMessage({type: 'keyPress', timeStamp, dir});
                         }
-                        document.body.addEventListener('keydown', stopSong);
+                        document.body.addEventListener('keydown', handleKeyPress);
 
                         document.body.addEventListener('keyup', function(e) {
                             var dir = keyCodeToDir[e.keyCode];
