@@ -10,7 +10,7 @@ app.config(function($stateProvider) {
             }
         },
 
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, $q) {
             $scope.ready = false;
             $scope.currentSong = song;
             $scope.choice = {};
@@ -40,11 +40,20 @@ app.config(function($stateProvider) {
             $scope.config.BEAT_TIME = $scope.config.MEASURE_TIME/4;
             $scope.config.BEAT_VH = 100/((ArrowFactory.speed * 4)/$scope.mainBPM) * $scope.config.BEAT_TIME;
 
+            var arrowWorker;
+            var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
             //This is only so the user can read the loading screen and have heightened anticipation!
             setTimeout(function () {
                 SongFactory.getChartById(chartId)
-                .then(prepSong);
+                .then(function(chartId) {
+                    console.log('have chartId, running prepsong');
+                    prepSong(chartId);
+                    tone.tonePromise.then(function() {
+                        runInit();
+                        console.log('running init');
+                    });
+                });
             }, 2000);
 
             var keyCodeToDir = {
@@ -62,6 +71,8 @@ app.config(function($stateProvider) {
             };
 
 
+            
+
 
 
 
@@ -72,7 +83,6 @@ app.config(function($stateProvider) {
                 //for score calculation purposes
                 ScoreFactory.setTotalArrows(1);
 
-                var tone = new ToneFactory("/audio/"+$scope.currentSong.music, $scope.mainBPM, $scope.currentSong.offset, $scope.config);
 
 
 
@@ -88,7 +98,7 @@ app.config(function($stateProvider) {
                 ArrowFactory.addBpmChanges($scope.currentSong.bpms, $scope.config.ARROW_TIME, $scope.config.BEAT_TIME, $scope.currentSong.stops);
 
                 // gives arrowWorker first chart
-                var arrowWorker = new Worker('/js/animation/animationWorker.js');
+                arrowWorker = new Worker('/js/animation/animationWorker.js');
                 arrowWorker.postMessage({
                     type: 'preChart',
                     chart: stepChart.chart,
@@ -103,41 +113,48 @@ app.config(function($stateProvider) {
 
 
                 var activeArrows;
-                arrowWorker.onmessage = function (e) {
-                    arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-                    if($('.activeArrow').length === 0) {
-                        setTimeout(function() {
-                            console.log('exited out here :(')
-                            tone.stop();
-                            arrowWorker.terminate();
-                            ArrowFactory.killTimeline();
-                            $state.go('results');
-                        }, 3000);
+                var handleHit = function(e) {
+                    var domArrow = arrows[e.data.dir][e.data.index].el[0];
+                    //console.dir(domArrow);
+                    var arrow = domArrow.children[0];
+                    if (e.data.freeze) {
+                        var freeze = domArrow.children[1];
+                        freeze.style.top = '7.5vh';
+                        // adding freeze eater class to fader (covers up freezes)
+                        faders[e.data.dir][0].className += " freeze-eater";
                     }
+                    arrow.hidden = true;
+                    //calculate the score, combo of the successful hit to display
+                    $scope.score = ScoreFactory.addScore(e.data.diff, 1);
+                    $scope.combo = ScoreFactory.addCombo(e.data.diff, 1);
+                    //as long as there is a combo to show, make it so
+                    $scope.combo > 1 ? $scope.showCombo = true : $scope.showCombo = false;
+                    //as long as there is a measure of accuracy to show, make it so
+                    $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
+                    $scope.accuracyCol = ScoreFactory.getAccuracyColors($scope.accuracy);
+                    //only show accuracy feedback for 1 sec
+                    $timeout(function() {
+                        $scope.accuracy = null;
+                    }, 2000);
+
+
+                }
+
+
+                arrowWorker.onmessage = function (e) {
+                    // arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
+
+                    // if($('.activeArrow').length === 0) {
+                    //     setTimeout(function() {
+                    //         tone.stop();
+                    //         arrowWorker.terminate();
+                    //         ArrowFactory.killTimeline();
+                    //         $state.go('results');
+                    //     }, 3000);
+                    // }
                     if (e.data.hit) {
-                        var domArrow = arrows[e.data.dir][e.data.index].el[0];
-                        console.dir(domArrow);
-                        var arrow = domArrow.children[0];
-                        if (e.data.freeze) {
-                            var freeze = domArrow.children[1];
-                            freeze.style.top = '7.5vh';
-                            // adding freeze eater class to fader (covers up freezes)
-                            faders[e.data.dir][0].className += " freeze-eater";
-                        }
-                        arrow.hidden = true;
-                        //calculate the score, combo of the successful hit to display
-                        $scope.score = ScoreFactory.addScore(e.data.diff, 1);
-                        $scope.combo = ScoreFactory.addCombo(e.data.diff, 1);
-                        //as long as there is a combo to show, make it so
-                        $scope.combo > 1 ? $scope.showCombo = true : $scope.showCombo = false;
-                        //as long as there is a measure of accuracy to show, make it so
-                        $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
-                        $scope.accuracyCol = ScoreFactory.getAccuracyColors($scope.accuracy);
-                        //only show accuracy feedback for 1 sec
-                        $timeout(function() {
-                            $scope.accuracy = null;
-                        }, 2000);
+                        handleHit(e);
                     } else if (e.data.freezeUp) {
                         // removing freeze eater class (this gets sent from worker on a '3' or when freeze is over)
                         faders[e.data.dir][0].className = "fader";
@@ -163,92 +180,100 @@ app.config(function($stateProvider) {
                     $scope.$digest();
 
                 };
-                var placeArrows = {
-                    left: $(`.left-arrow-col .arrowPlace`),
-                    right: $(`.right-arrow-col .arrowPlace`),
-                    up: $(`.up-arrow-col .arrowPlace`),
-                    down: $(`.down-arrow-col .arrowPlace`)
-                };
-                var allPlaceArrows = $(`.arrowPlace`);
-
-                var addListener = function () {
-
-                    var handleKeyPress = function (e) {
-                        if(e.keyCode === 48) {
-                            //should probably remove this if altogether
-                        };
-                        var dir = keyCodeToDir[e.keyCode];
-
-                        if (dir) e.preventDefault();
-                        else return;
-
-                        if (dir === 'escape') {
-                            ToneFactory.play('back');
-                            /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
-                            tone.stop();
-                            arrowWorker.terminate();
-                            ArrowFactory.killTimeline();
-                            document.body.removeEventListener('keydown', handleKeyPress);
-
-                            $state.go('chooseSong');
-                        }
-
-                        if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
-
-                        var timeStamp = (Date.now() - startTime) / 1000;
-                        // sends a note to worker to handle the keypress
-                        arrowWorker.postMessage({type: 'keyDown', timeStamp, dir});
-                    }
-                    document.body.addEventListener('keydown', handleKeyPress);
-
-                    document.body.addEventListener('keyup', function(e) {
-                        var dir = keyCodeToDir[e.keyCode];
-                        if (!dir) return;
-                        // arrow pressed indicator
-                        allPlaceArrows.removeClass('arrowPlacePressed');
-                        arrowWorker.postMessage({type: 'keyUp', dir});
-
-                    })
-                }
-
-                var runInit = function () {
-                    ArrowFactory.resumeTimeline();
-                    tone.start();
-                    startTime = Date.now() - $scope.currentSong.offset*1000;
-                    arrowWorker.postMessage({
-                      type: 'startTime',
-                      startTime
-                    });
-                    addListener();
 
 
-                    var videoOffset = ($scope.config.ARROW_SPEED/$scope.mainBPM + Number($scope.currentSong.offset))*1000;
-
-                    if ($scope.currentSong.title === 'Caramelldansen') {
-                        $scope.videoSrc = '/video/Caramelldansen.mp4';
-                        videoOffset += 1000;
-                    }
-                    else if ($scope.currentSong.title === 'Sandstorm') {
-                        $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
-                    }
-                    else {
-                        $scope.imageSrc = `/img/background/${$scope.currentSong.title}-bg.png`;
-                    }
-                    setTimeout(function() {
-                        var video = document.getElementById('bg-video');
-                        video.play();
-                    }, videoOffset);
-
-                    $scope.ready = true;
-                    $scope.$digest();
-
-
-                }
-
-                Tone.Buffer.onload = function () {
-                    runInit();
-                };
             };
+
+            var placeArrows = {
+                left: $(`.left-arrow-col .arrowPlace`),
+                right: $(`.right-arrow-col .arrowPlace`),
+                up: $(`.up-arrow-col .arrowPlace`),
+                down: $(`.down-arrow-col .arrowPlace`)
+            };
+            var allPlaceArrows = $(`.arrowPlace`);
+
+            var handleKeyPress = function (e) {
+                if(e.keyCode === 48) {
+                    //should probably remove this if altogether
+                };
+                var dir = keyCodeToDir[e.keyCode];
+
+                if (dir) e.preventDefault();
+                else return;
+
+                if (dir === 'escape') {
+                    ToneFactory.play('back');
+                    /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
+                    tone.stop();
+                    arrowWorker.terminate();
+                    ArrowFactory.killTimeline();
+                    document.body.removeEventListener('keydown', handleKeyPress);
+
+                    $state.go('chooseSong');
+                }
+
+                if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
+
+                var timeStamp = (Date.now() - startTime) / 1000;
+                // sends a note to worker to handle the keypress
+                arrowWorker.postMessage({type: 'keyDown', timeStamp, dir});
+            }
+            var addListener = function () {
+
+                document.body.addEventListener('keydown', handleKeyPress);
+
+                document.body.addEventListener('keyup', function(e) {
+                    var dir = keyCodeToDir[e.keyCode];
+                    if (!dir) return;
+                    // arrow pressed indicator
+                    allPlaceArrows.removeClass('arrowPlacePressed');
+                    arrowWorker.postMessage({type: 'keyUp', dir});
+
+                })
+            }
+
+            function runInit () {
+                ArrowFactory.resumeTimeline();
+                tone.start();
+                console.log('tone is starting, in init');
+                startTime = Date.now() - $scope.currentSong.offset*1000;
+                arrowWorker.postMessage({
+                  type: 'startTime',
+                  startTime
+                });
+                addListener();
+
+
+                var videoOffset = ($scope.config.ARROW_SPEED/$scope.mainBPM + Number($scope.currentSong.offset))*1000;
+
+                if ($scope.currentSong.title === 'Caramelldansen') {
+                    $scope.videoSrc = '/video/Caramelldansen.mp4';
+                    videoOffset += 1000;
+                }
+                else if ($scope.currentSong.title === 'Sandstorm') {
+                    $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
+                }
+                else {
+                    $scope.imageSrc = `/img/background/${$scope.currentSong.title}-bg.png`;
+                }
+                setTimeout(function() {
+                    var video = document.getElementById('bg-video');
+                    video.play();
+                }, videoOffset);
+
+                $scope.ready = true;
+                // $scope.$digest();
+
+
+            }
+
+               
+
+                // tonePromise.then(function() {
+                //     console.log('promisy thingy working!');
+                //     runInit();
+                // })
+            
 
 
 

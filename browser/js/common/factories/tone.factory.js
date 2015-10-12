@@ -1,6 +1,6 @@
 /* global Tone */
 
-app.factory('ToneFactory', function () {
+app.factory('ToneFactory', function ($q) {
     var ToneFactory = function (path, bpm, offset, config, startTime, length) {
 
         this.config = config;
@@ -46,6 +46,18 @@ app.factory('ToneFactory', function () {
     ToneFactory.prototype.previewStop = function() {
         this.preview.stop();
     }
+
+    ToneFactory.prototype.tonePromise = $q(function(resolve, reject) {
+        var bufferLoaded = false;
+        console.log('in promise');
+        Tone.Buffer.onload = function () {
+            bufferLoaded = true;
+            console.log('tone resolved and buffer loaded');
+            resolve();
+        };
+                
+    });
+    
 
     return ToneFactory;
 })
