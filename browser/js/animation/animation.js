@@ -58,15 +58,15 @@ app.config(function($stateProvider) {
                     arrowWorker.onmessage = function (e) {
                         // arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-                        if($('.activeArrow').length === 0) {
-                            setTimeout(function() {
-                                console.log('exited out here :(')
-                                tone.stop();
-                                arrowWorker.terminate();
-                                ArrowFactory.killTimeline();
-                                $state.go('chooseSong');
-                            }, 3000);
-                        }
+                        // if($('.activeArrow').length === 0) {
+                        //     setTimeout(function() {
+                        //         console.log('exited out here :(')
+                        //         tone.stop();
+                        //         arrowWorker.terminate();
+                        //         ArrowFactory.killTimeline();
+                        //         $state.go('chooseSong');
+                        //     }, 3000);
+                        // }
                         if (e.data.hit) {
                             var domArrow = arrows[e.data.dir][e.data.index].el[0];
                             console.dir(domArrow);
@@ -139,6 +139,7 @@ app.config(function($stateProvider) {
                         document.body.addEventListener('keyup', function(e) {
                             var dir = keyCodeToDir[e.keyCode];
                             if (!dir) return;
+                            // arrow pressed indicator
                             allPlaceArrows.removeClass('arrowPlacePressed');
                             arrowWorker.postMessage({type: 'keyUp', dir});
 

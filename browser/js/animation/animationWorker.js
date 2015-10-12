@@ -121,9 +121,9 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
                         // at the top of a freeze arrow
                         freeze: maybeArrow === "2" ? true : false,
                     };
-                    // this stores a reference to the arrow with the additional freeze div, used at number 3 to signal freeze div removal
                     var arrowIndex = chart[indexToDir[index]].list.push(arrowTime) - 1;
                     arrowTime.index = arrowIndex;
+                    // this stores a reference to the arrow with the additional freeze div, used at number 3 to signal freeze div removal
                     if (maybeArrow === "2") inFreeze[indexToDir[index]].fromArrow = arrowIndex;
                     thisTimeout = function() {
                         setTimeout(function() {
