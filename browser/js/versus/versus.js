@@ -2,7 +2,7 @@
 
 app.config(function($stateProvider) {
     $stateProvider.state('versus', {
-        url: '/versus/:songId/:chosenLevel',
+        url: '/versus/:songId/?chosenLevel&chosenLevelP2',
         templateUrl: 'js/versus/versus.html',
         resolve: {
             song: function(SongFactory, $stateParams) {
@@ -11,6 +11,8 @@ app.config(function($stateProvider) {
         },
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+            console.log('$stateParams:');
+            console.log($stateParams);
             $scope.ready = false;
             var currentSong = song;
             //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
