@@ -18,22 +18,25 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory, $stateParams) {
 
-	console.log('players', $stateParams.players);
+app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory, ScoreFactory, $stateParams) {
 
     $scope.songs = songs;
 
 	$scope.choice = {};
 
     $scope.songPreview;
+
+    //add a new player for testing purposes
+    // ScoreFactory.addPlayer();
+
     // $scope.speedMod = ArrowFactory.speedModifier;
     // ArrowFactory.setSpeed($scope.speedMod);
     console.log(`All songs: (Count: ${songs.length})`);
     console.log(songs.map(s => s.title).sort().join(', '));
 
     function viewSongInfo() {
-        var $selected = $('.selected');
+        var $selected = $('.selected1');
         console.log(`$selected:`)
         console.log($selected);
         if ($selected) $scope.selectedDifficulty = $selected[0].textContent.trim();
@@ -68,7 +71,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     function chooseLevel(e) {
         if ($scope.choice.levels < 2) return;
         CarouselFactory.chooseLevel(e);
-        if (e.keyCode === 38 || e.keyCode === 40) {
+        if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 87 || e.keyCode === 83 ) {
             ToneFactory.play('blop');
             viewSongInfo();      
         }
@@ -103,8 +106,14 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     $scope.getDifficulties = function(song) {
         $('.choose-level').css("visibility", "visible");
+        //change below once we know have many players
+        ScoreFactory.allPlayerGuys.forEach(function (guy, index) {
+            $(`.selectedArrow${index+1}`).css("visibility", "visible");
+        });
         $timeout(function() {
-            $('#level0').addClass("selected");
+            ScoreFactory.allPlayerGuys.forEach(function (guy, index) {
+                $('#level0').addClass(`selected${index+1}`).children(`.player${index+1}Arrow`).addClass(`selectedArrow${index+1}`);
+            })
             viewSongInfo();   
         });
         
