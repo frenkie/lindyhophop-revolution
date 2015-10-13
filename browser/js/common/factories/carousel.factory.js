@@ -153,7 +153,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
                 transform: 'translateY(40px)'
             });
             TweenMax.to($(`.choose-level`), 1, {
-                transform: 'translateY(-'+Math.pow(heightGuy,3)/3000+'vh)'
+                transform: 'translateY(-'+Math.pow(heightGuy,3)/3300+'vh)'
             });
 
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
