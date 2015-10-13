@@ -23,9 +23,9 @@ app.config(function($stateProvider) {
             var difficulty = $stateParams.chosenLevel;
             var chartId = currentSong.Charts[difficulty].stepChart;
             var mainBPM = currentSong.bpms[0].bpm;
-
             //idea for cleanup of config/currentsong ES6 syntax thingie
             // var {Charts, bpms} = currentSong;
+
 
             var config = {
                 TIMING_WINDOW: TIMING_WINDOW,
@@ -51,15 +51,6 @@ app.config(function($stateProvider) {
                     console.log('running init');
                 });
             }, 2000);
-
-            var keyCodeToDir = {
-                '37': 'left',
-                '40': 'down',
-                '38': 'up',
-                '39': 'right',
-                '27': 'escape'
-            };
-
 
 
             function prepSong(stepChart) {

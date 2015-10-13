@@ -55,16 +55,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
     TheWorker.prototype.handleMessages = function ($scope, arrows, tone) {
         var self = this;
         this.worker.onmessage = function (e) {
-            // arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
-            // if($('.activeArrow').length === 0) {
-            //     setTimeout(function() {
-            //         tone.stop();
-            //         arrowWorker.terminate();
-            //         ArrowFactory.killTimeline();
-            //         $state.go('results');
-            //     }, 3000);
-            // }
             if (e.data.hit) {
                 handleHit(arrows, $scope, e);
             } else if (e.data.freezeUp) {
@@ -74,8 +65,14 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                 var domArrow = arrows[e.data.dir][e.data.index].el[0];
                 domArrow.innerHTML = "";
             } else if (e.data.brokeFreeze) {
-                // you broke the freeze you silly
-                console.log('you broke the freeze you silly')
+                $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
+                $scope.showCombo = false;
+                $scope.accuracy = "Bad";
+                $scope.accuracyCol = '#FF0000';
+                //only show accuracy feedback for 1 sec
+                $timeout(function() {
+                    $scope.accuracy = null;
+                }, 2000);
                 faders[e.data.dir][0].className = "fader";
             }else if (e.data.endSong) {
                 setTimeout(() => {
@@ -118,7 +115,10 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
 
     TheWorker.prototype.handleKeyPress = function (e, tone, startTime) {
         if(e.keyCode === 48) {
-            //should probably remove this if altogether
+            tone.stop();
+            this.worker.terminate();
+            ArrowFactory.killTimeline();
+            $state.go('results');
         };
         var dir = keyCodeToDir[e.keyCode];
 
@@ -132,7 +132,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
             this.worker.terminate();
             ArrowFactory.killTimeline();
             $(document).off('keydown.keyPressHandler');
-
+            ScoreFactory.resetPlayers();
             $state.go('chooseSong');
         }
 
