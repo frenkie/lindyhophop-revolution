@@ -79,7 +79,12 @@ var inFreeze = {
     }
 }
 
-var checkArrow = function(arrowTime) {
+var checkArrow = function(arrowTime, last) {
+    if(last) {
+        postMessage({
+            endSong: true
+        });
+    }
     // !arrowTime.hit = arrow is missed
     // !arrowTime.freezeUp = there actually is an arrow
     if (!arrowTime.hit && !arrowTime.freezeUp) {
@@ -87,7 +92,7 @@ var checkArrow = function(arrowTime) {
             hit: false,
             index: arrowTime.index,
             dir: arrowTime.dir
-        })
+        });
     }
     // at the end of a freeze (regardless of good or bad)
     else if (arrowTime.freezeUp) {
@@ -131,9 +136,9 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
                     arrowTime.index = arrowIndex;
                     // this stores a reference to the arrow with the additional freeze div, used at number 3 to signal freeze div removal
                     if (maybeArrow === "2") inFreeze[indexToDir[index]].fromArrow = arrowIndex;
-                    thisTimeout = function() {
+                    thisTimeout = function(last) {
                         setTimeout(function() {
-                            checkArrow(arrowTime);
+                            checkArrow(arrowTime, last);
                         }, (timeStamp + TIMING_WINDOW - songOffset) * 1000)
                     };
                     timeouts.push(thisTimeout);
@@ -145,9 +150,9 @@ var preChart = function(stepChart, bpm, arrowOffset, songOffset, timing, bpms, s
                         // signal to checkArrow to specify which arrow to remove freeze from
                         index: inFreeze[indexToDir[index]].fromArrow
                     };
-                    thisTimeout = function() {
+                    thisTimeout = function(last) {
                         setTimeout(function() {
-                            checkArrow(arrowTime);
+                            checkArrow(arrowTime, last);
                         }, (timeStamp - TIMING_WINDOW - songOffset) * 1000)
                     };
                     timeouts.push(thisTimeout);
@@ -205,8 +210,13 @@ self.onmessage = function(e) {
         keysPressed[e.data.dir] = true;
     } else if (e.data.type === 'startTime') {
         startTime = e.data.startTime;
+        //tagging the last timeout so we can end the song
+        timeouts[timeouts.length-1].last = true;
         timeouts.forEach(function(func) {
-            func();
+            if(func.last) {
+                func(true)
+            }
+            else func();
         })
     } else if (e.data.type === 'keyUp') {
         checkIfFreeze(e.data.dir);
