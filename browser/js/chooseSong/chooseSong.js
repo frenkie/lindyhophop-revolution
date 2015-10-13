@@ -130,7 +130,9 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     $scope.loadSong = function(level) {
         ToneFactory.play('start');
         window.removeEventListener("keydown", chooseLevel, false);
-        $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: level});
+        if($stateParams.players===2) $state.go('versus', {songId: $scope.choice.song._id, chosenLevel: level});
+        else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: level});
+        
     };
 
 
