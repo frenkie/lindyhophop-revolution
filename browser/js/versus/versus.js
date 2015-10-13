@@ -34,7 +34,7 @@ app.config(function($stateProvider) {
             };
             config.BEAT_VH = 100/((ArrowFactory.speed * 4)/mainBPM) * config.BEAT_TIME;
 
-            var arrowWorker, tone;
+            var arrowWorker1, arrowWorker2, tone;
 
 
             //This is only so the user can read the loading screen and have heightened anticipation!
@@ -51,20 +51,35 @@ app.config(function($stateProvider) {
                 tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
                 //to set the stepChart on the player object
                 ScoreFactory.setStepChart(stepChart, 1);
+                ScoreFactory.setStepChart(stepChart, 2);
+
+
                 //when prepping song, score factory will get the total number of arrows in the stepchart
                 //for score calculation purposes
                 ScoreFactory.setTotalArrows(1);
+                ScoreFactory.setTotalArrows(2);
+
+
 
                 // functions defined in arrow
 
                 // sets up arrow for animating
-                var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong);
+                var arrows1 = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 1);
+                var arrows2 = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 2);
+
 
                 // gives arrowWorker first chart
-                arrowWorker = new WorkerFactory('/js/animation/animationWorker.js');
-                arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
+                arrowWorker1 = new WorkerFactory('/js/animation/animationWorker.js');
+                arrowWorker2 = new WorkerFactory('/js/animation/animationWorker.js');
 
-                arrowWorker.handleMessages($scope, arrows, tone);
+                arrowWorker1.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
+                arrowWorker2.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
+
+
+                arrowWorker1.handleMessages($scope, arrows1, tone);
+                arrowWorker2.handleMessages($scope, arrows2, tone);
+
+
                 Tone.Buffer.onload = runInit;
 
             };
@@ -73,11 +88,18 @@ app.config(function($stateProvider) {
                 ArrowFactory.resumeTimeline();
                 tone.start();
                 var startTime = Date.now() - currentSong.offset*1000;
-                arrowWorker.worker.postMessage({
+                arrowWorker1.worker.postMessage({
                   type: 'startTime',
                   startTime
                 });
-                arrowWorker.addListener(tone, startTime);
+                arrowWorker2.worker.postMessage({
+                  type: 'startTime',
+                  startTime
+                });
+                arrowWorker1.addListener(tone, startTime);
+                arrowWorker2.addListener(tone, startTime);
+
+
 
                 // videofactory please Jay, put into models
                 var videoOffset = (config.ARROW_TIME + Number(currentSong.offset))*1000;
