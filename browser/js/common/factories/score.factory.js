@@ -5,8 +5,6 @@ app.factory('ScoreFactory', function() {
         this.combo = 0;
         this.maxCombo = 0;
         this.totalArrowGuy = 0;
-        // this.mult = 0.005;
-        // this.scaleFactor = 1;
         this.accuracyCount = {
             Flawless: 0,
             Marvelous: 0,
