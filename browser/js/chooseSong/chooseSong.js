@@ -79,10 +79,10 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             }
         }
         else if (e.keyCode === 13) {
-            if ($scope.songPreview) {
+            // if ($scope.songPreview) {
                 $scope.songPreview.previewStop();
                 $scope.songPreview = null;
-            }    
+            // }    
         }
     }
 

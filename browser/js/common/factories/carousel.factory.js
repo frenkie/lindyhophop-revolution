@@ -208,7 +208,6 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             $('.selected1').trigger('click');
 
         } else if (event.keyCode === 27) { //escape
-
             $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1");
             // $('.selectedArrow1').css("visibility", "hidden")
             TweenMax.set($(`#item${target}`), {
@@ -223,7 +222,7 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
         }
 
-        if(ScoreFactory.getAllPlayers.length > 1) {
+        if(ScoreFactory.allPlayerGuys.length > 1) {
             if (event.keyCode === 87) { //key W
                 console.log('hit W key');
                 if ($('.selected2').prev().length) {
