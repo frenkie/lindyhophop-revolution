@@ -94,7 +94,8 @@ app.config(function($stateProvider) {
 // =======
 
                         // can use a timeout on worker to find end of song
-                        arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
+
+                        if (arrows[e.data.dir][e.data.index]) arrows[e.data.dir][e.data.index].el.removeClass('activeArrow');
 
                         if($('.activeArrow').length === 0) {
                             setTimeout(function() {
@@ -102,6 +103,9 @@ app.config(function($stateProvider) {
                                 tone.stop();
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
+
+                                //ScoreFactory.resetPlayers();
+                                
                                 $state.go('results');
                             }, 3000);
                         }
@@ -133,12 +137,23 @@ app.config(function($stateProvider) {
                             faders[e.data.dir][0].className = "fader";
                             // removing arrow with freeze from dom so it doesn't show up again
                             var domArrow = arrows[e.data.dir][e.data.index].el[0];
+                            //console.log('you completed the freeze yay');
                             domArrow.innerHTML = "";
                         } else if (e.data.brokeFreeze) {
                             // you broke the freeze you silly
                             console.log('you broke the freeze you silly')
                             faders[e.data.dir][0].className = "fader";
+                            $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
+                            $scope.showCombo = false;
+                            $scope.accuracy = "Bad";
+                            $scope.accuracyCol = '#FF0000';
+                            //only show accuracy feedback for 1 sec
+                            $timeout(function() {
+                                $scope.accuracy = null;
+                            }, 2000);
                         } else {
+                            console.log(`e.data:`);
+                        console.log(e.data);
                             // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                             //reset combo, don't show it and show 'Boo' on miss
                             $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
@@ -164,8 +179,12 @@ app.config(function($stateProvider) {
                     var addListener = function () {
 
                         var handleKeyPress = function (e) {
+                            //hit the 0 key during song to go to results (for testing purposes)
                             if(e.keyCode === 48) {
-                                //should probably remove this if altogether
+                                tone.stop();
+                                arrowWorker.terminate();
+                                ArrowFactory.killTimeline();
+                                $state.go('results');
                             };
                             var dir = keyCodeToDir[e.keyCode];
 
@@ -179,7 +198,7 @@ app.config(function($stateProvider) {
                                 arrowWorker.terminate();
                                 ArrowFactory.killTimeline();
                                 document.body.removeEventListener('keydown', handleKeyPress);
-
+                                ScoreFactory.resetPlayers();
                                 $state.go('chooseSong');
                             }
 
