@@ -10,14 +10,19 @@ app.config(function ($stateProvider) {
                 return SongFactory.getSongs();
             }
         },
+        params: {
+            players: 1
+        },
         controller: 'ChooseSongCtrl'
     });
 
 });
 
-app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory) {
+app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory, $stateParams) {
 
-	$scope.songs = songs;
+	console.log('players', $stateParams.players);
+
+    $scope.songs = songs;
 
 	$scope.choice = {};
 

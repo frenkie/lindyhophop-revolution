@@ -38,8 +38,15 @@ app.controller('MainMenuCtrl', function($scope, $state, ToneFactory) {
         } else if (event.keyCode === 13) {
             play('start');
             var uiState = active[0].outerHTML.split('"');
+            console.log(uiState);
+            
+            var arr2 = /(\w+)(?:\(\{\w+\:\s)?(\d)?/.exec(uiState[5]);
+            console.log('arr2:',arr2);
+            var state = arr2[1], playerNum = arr2[2] ? parseInt(arr2[2], 10) : 1;
+
             $document.off('keydown', onArrowKey);
-            $state.go(uiState[menuLength]);
+
+            $state.go(state, {players: playerNum});
         } else if (event.keyCode === 27) {
             play('back');
             $document.off('keydown', onArrowKey);
