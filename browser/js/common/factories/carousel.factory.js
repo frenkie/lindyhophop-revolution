@@ -27,14 +27,10 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
         times: [],
         span: 20
     };
+
     var counter = Object.create(fps_counter);
 
-    function getRandomInt($n) {
-        return Math.floor((Math.random() * $n) + 1);
-    }
-
     function init() {
-        //var w = $(window);
         container = $('#contentContainer');
         carousel = $('#carouselContainer');
         item = $('.carouselItem');
@@ -52,7 +48,6 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
         });
 
         // create carousel item props
-
         for (var i = 0; i < itemLength; i++) {
             var $item = item.eq(i);
             var $block = $item.find('.carouselItemInner');
@@ -91,10 +86,9 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
         }
     }
 
-    function animateIn( $item, $block )
-        {
-            var $nrX = 360 * getRandomInt(2);
-            var $nrY = 360 * getRandomInt(2);
+    function animateIn( $item, $block ) {
+        var $nrX = 360 * getRandomInt(2);
+        var $nrY = 360 * getRandomInt(2);
 
         var $nx = -2000 + getRandomInt(4000);
         var $ny = -2000 + getRandomInt(4000);
@@ -106,8 +100,12 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             TweenMax.set( $item, { autoAlpha:1, delay:$d } );
             TweenMax.set( $block, { z:$nz, rotationY:$nrY, rotationX:$nrX, x:$nx, y:$ny, autoAlpha:0} );
             TweenMax.to( $block, $s, { delay:$d, rotationY:0, rotationX:0, z:0,  ease:Expo.easeInOut} );
-            TweenMax.to( $block, $s-.5, { delay:$d, x:0, y:0, autoAlpha:1, ease:Expo.easeInOut} );
-        }
+            TweenMax.to( $block, $s-0.5, { delay:$d, x:0, y:0, autoAlpha:1, ease:Expo.easeInOut} );
+    }
+
+    function getRandomInt(num) {
+        return Math.floor((Math.random() * num) + 1);
+    }
 
     function carouselMove(event) {
         var songs = carousel.children().length;
@@ -183,26 +181,25 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
     }
 
 
-
     function chooseLevel(event) {
 
         if (event.keyCode === 38) { //key up
             if ($('.selected1').prev().length) {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
                 $('.selected1').removeClass("selected1").prev().addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
             else {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
                 $('.selected1').removeClass("selected1").siblings(':last').addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
 
         } else if (event.keyCode === 40) { //key down
             if ($('.selected1').next().length) {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
                 $('.selected1').removeClass("selected1").next().addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
             else {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
                 $('.selected1').removeClass("selected1").siblings(':first').addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
 
@@ -222,11 +219,8 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             });
             init();
             window.addEventListener("keydown", carouselMove, false);
-            //below code screws up target finding (remembers multiple targets)
-            // $(document).on('keydown.move', carouselMove);
             $('.selected1').removeClass("selected1");  
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
-
         }
 
         if(ScoreFactory.getAllPlayers.length > 1) {
@@ -266,7 +260,6 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
         var songs = carousel.children().length;
         var delta = 360 / songs;
 
-
         for (var i = 0; i < songs; i++) {
             if (degrees >= 0) {
                 if (degrees < i * delta + delta / 2 && degrees > i * delta - delta / 2) target = i + 1;
@@ -283,4 +276,4 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
         chooseLevel: chooseLevel,
         carouselMove: carouselMove
     };
-});
+})
