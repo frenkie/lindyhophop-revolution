@@ -27,7 +27,18 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         down: $(`.down-arrow-col .fader`)
     };
 
-    var handleHit = function(arrows, $scope, e) {
+    var handleRemoval = function ($scope, time) {
+        if (time.timing) {
+            $timeout.cancel(time.timer);
+        }
+        time.timing = true;
+        time.timer = $timeout(function() {
+            time.timing = false;
+            $scope.accuracy = null;
+        }, 1000);
+}
+
+    var handleHit = function(arrows, $scope, e, time) {
         var domArrow = arrows[e.data.dir][e.data.index].el[0];
         //console.dir(domArrow);
         var arrow = domArrow.children[0];
@@ -47,17 +58,18 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
         $scope.accuracyCol = ScoreFactory.getAccuracyColors($scope.accuracy);
         //only show accuracy feedback for 1 sec
-        $timeout(function() {
-            $scope.accuracy = null;
-        }, 2000);
+        handleRemoval($scope, time);
     }
 
     TheWorker.prototype.handleMessages = function ($scope, arrows, tone) {
         var self = this;
+        var time = {
+            timer: null,
+            timing: false
+        }
         this.worker.onmessage = function (e) {
-
             if (e.data.hit) {
-                handleHit(arrows, $scope, e);
+                handleHit(arrows, $scope, e, time);
             } else if (e.data.freezeUp) {
                 // removing freeze eater class (this gets sent from worker on a '3' or when freeze is over)
                 faders[e.data.dir][0].className = "fader";
@@ -70,9 +82,9 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                 $scope.accuracy = "Bad";
                 $scope.accuracyCol = '#FF0000';
                 //only show accuracy feedback for 1 sec
-                $timeout(function() {
-                    $scope.accuracy = null;
-                }, 2000);
+
+                handleRemoval($scope, time);
+
                 faders[e.data.dir][0].className = "fader";
             }else if (e.data.endSong) {
                 setTimeout(() => {
@@ -88,10 +100,9 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                 $scope.showCombo = false;
                 $scope.accuracy = "Boo";
                 $scope.accuracyCol = '#ED3DED';
-                //only show accuracy feedback for 1 sec
-                $timeout(function() {
-                    $scope.accuracy = null;
-                }, 2000);
+                //only show accuracy feedback for 800 msec
+
+                handleRemoval($scope, time);
             };
             $scope.$digest();
         }
