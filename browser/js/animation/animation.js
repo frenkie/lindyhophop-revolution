@@ -34,9 +34,8 @@ app.config(function($stateProvider) {
             };
             config.BEAT_VH = 100/((ArrowFactory.speed * 4)/mainBPM) * config.BEAT_TIME;
 
-            var arrowWorker;
-            var tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
-            var tonePromise = tone.tonePromise();
+            var arrowWorker, tone;
+
 
             //This is only so the user can read the loading screen and have heightened anticipation!
             setTimeout(function () {
@@ -44,16 +43,12 @@ app.config(function($stateProvider) {
                 .then(function(chartId) {
                     console.log('have chartId, running prepsong');
                     prepSong(chartId);
-                    return tonePromise;
-                })
-                .then(function() {
-                    runInit();
-                    console.log('running init');
                 });
             }, 2000);
 
 
             function prepSong(stepChart) {
+                tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
                 //to set the stepChart on the player object
                 ScoreFactory.setStepChart(stepChart, 1);
                 //when prepping song, score factory will get the total number of arrows in the stepchart
@@ -69,14 +64,14 @@ app.config(function($stateProvider) {
                 arrowWorker = new WorkerFactory('/js/animation/animationWorker.js');
                 arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
 
-                arrowWorker.handleMessages($scope, arrows, tone)
+                arrowWorker.handleMessages($scope, arrows, tone);
+                Tone.Buffer.onload = runInit;
 
             };
 
             function runInit () {
                 ArrowFactory.resumeTimeline();
                 tone.start();
-                console.log('tone is starting, in init');
                 var startTime = Date.now() - currentSong.offset*1000;
                 arrowWorker.worker.postMessage({
                   type: 'startTime',
@@ -103,6 +98,7 @@ app.config(function($stateProvider) {
                 }, videoOffset);
 
                 $scope.ready = true;
+                $scope.$digest();
             }
         }
     });

@@ -25,7 +25,6 @@ app.factory('ToneFactory', function ($q) {
 
     ToneFactory.prototype.start = function () {
         this.player.start(`+${this.syncOffset}`);
-        // this.transport.start(this.measureOffset, "0:0:0");
     }
 
     ToneFactory.prototype.stop = function () {
@@ -37,7 +36,7 @@ app.factory('ToneFactory', function ($q) {
       var audio = new Audio(`/audio/soundEffects/${fx}.mp3`);
       audio.play();
     };
-    
+
     ToneFactory.sandstorm = function () {
       ToneFactory.sandstormAudio = new Audio(`/audio/Sandstorm.mp3`);
       ToneFactory.sandstormAudio.play();
