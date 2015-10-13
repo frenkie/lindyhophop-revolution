@@ -12,18 +12,23 @@ app.config(function($stateProvider) {
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
             console.log('$stateParams:');
-            console.log($stateParams);
+            //console.log($stateParams);
             $scope.ready = false;
             var currentSong = song;
-            //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
-            $scope.showCombo = false;
+
+
+            [1,2].forEach(function(num) {
+                $scope['showCombo'+num] = false;
+                $scope['']
+            })
 
             const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
 
             currentSong.offset = parseFloat(currentSong.offset);
 
-            var difficulty = $stateParams.chosenLevel;
-            var chartId = currentSong.Charts[difficulty].stepChart;
+            var P1difficulty = $stateParams.chosenLevel, P2difficulty = $stateParams.chosenLevelP2;
+            var P1chartId = currentSong.Charts[P1difficulty].stepChart;
+            var P2chartId = currentSong.Charts[P2difficulty].stepChart;
             var mainBPM = currentSong.bpms[0].bpm;
             //idea for cleanup of config/currentsong ES6 syntax thingie
             // var {Charts, bpms} = currentSong;
@@ -41,19 +46,22 @@ app.config(function($stateProvider) {
 
             //This is only so the user can read the loading screen and have heightened anticipation!
             setTimeout(function () {
-                SongFactory.getChartById(chartId)
-                .then(function(chartId) {
-                    console.log('have chartId, running prepsong');
-                    prepSong(chartId);
+                SongFactory.getChartById(P1chartId)
+                .then(function(P1chart) {
+                    SongFactory.getChartById(P2chartId)
+                    .then(function(P2chart) {
+                        console.log('have chartIds, running prepsong with charts');
+                        prepSong(P1chart, P2chart);
+                    });
                 });
             }, 2000);
 
 
-            function prepSong(stepChart) {
+            function prepSong(P1stepChart, P2stepChart) {
                 tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
                 //to set the stepChart on the player object
-                ScoreFactory.setStepChart(stepChart, 1);
-                ScoreFactory.setStepChart(stepChart, 2);
+                ScoreFactory.setStepChart(P1stepChart, 1);
+                ScoreFactory.setStepChart(P2stepChart, 2);
 
 
                 //when prepping song, score factory will get the total number of arrows in the stepchart
@@ -66,16 +74,16 @@ app.config(function($stateProvider) {
                 // functions defined in arrow
 
                 // sets up arrow for animating
-                var arrows1 = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 1);
-                var arrows2 = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 2);
+                var arrows1 = ArrowFactory.makeArrows(P1stepChart.chart, mainBPM, config, currentSong, 1);
+                var arrows2 = ArrowFactory.makeArrows(P2stepChart.chart, mainBPM, config, currentSong, 2);
 
 
                 // gives arrowWorker first chart
-                arrowWorker1 = new WorkerFactory('/js/animation/animationWorker.js');
-                arrowWorker2 = new WorkerFactory('/js/animation/animationWorker.js');
+                arrowWorker1 = new WorkerFactory('/js/animation/animationWorker.js', 1);
+                arrowWorker2 = new WorkerFactory('/js/animation/animationWorker.js', 2);
 
-                arrowWorker1.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
-                arrowWorker2.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
+                arrowWorker1.prepStepChart(currentSong, config, mainBPM, P1stepChart.chart);
+                arrowWorker2.prepStepChart(currentSong, config, mainBPM, P2stepChart.chart);
 
 
                 arrowWorker1.handleMessages($scope, arrows1, tone);

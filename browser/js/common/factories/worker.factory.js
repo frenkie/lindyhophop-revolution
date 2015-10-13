@@ -1,7 +1,8 @@
 app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, ArrowFactory, $state) {
 
-    var TheWorker = function (route) {
-        this.worker = new Worker(route)
+    var TheWorker = function (route, player) {
+        this.worker = new Worker(route);
+        this.player = player;
     }
 
     TheWorker.prototype.prepStepChart = function (currentSong, config, bpm, stepChart) {
@@ -26,18 +27,18 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         down: $(`.down-arrow-col .fader`)
     };
 
-    var handleRemoval = function ($scope, time) {
+    TheWorker.prototype.handleRemoval = function ($scope, time) {
         if (time.timing) {
             $timeout.cancel(time.timer);
         }
         time.timing = true;
         time.timer = $timeout(function() {
             time.timing = false;
-            $scope.accuracy = null;
+            $scope['accuracy'+this.player] = null;
         }, 1000);
 }
 
-    var handleHit = function(arrows, $scope, e, time) {
+    TheWorker.prototype.handleHit = function(arrows, $scope, e, time) {
         var domArrow = arrows[e.data.dir][e.data.index].el[0];
         //console.dir(domArrow);
         var arrow = domArrow.children[0];
@@ -49,13 +50,13 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         }
         arrow.hidden = true;
         //calculate the score, combo of the successful hit to display
-        $scope.score = ScoreFactory.addScore(e.data.diff, 1);
-        $scope.combo = ScoreFactory.addCombo(e.data.diff, 1);
+        $scope['score'+this.player] = ScoreFactory.addScore(e.data.diff, this.player);
+        $scope['combo'+this.player] = ScoreFactory.addCombo(e.data.diff, this.player);
         //as long as there is a combo to show, make it so
-        $scope.combo > 1 ? $scope.showCombo = true : $scope.showCombo = false;
+        $scope['combo'+this.player] > 1 ? $scope['showCombo'+this.player] = true : $scope['showCombo'+this.player] = false;
         //as long as there is a measure of accuracy to show, make it so
-        $scope.accuracy = ScoreFactory.getAccuracy(e.data.diff);
-        $scope.accuracyCol = ScoreFactory.getAccuracyColors($scope.accuracy);
+        $scope['accuracy'+this.player] = ScoreFactory.getAccuracy(e.data.diff);
+        $scope['accuracyCol'+this.player] = ScoreFactory.getAccuracyColors($scope['accuracy'+this.player]);
         //only show accuracy feedback for 1 sec
         handleRemoval($scope, time);
     }
@@ -68,7 +69,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         }
         this.worker.onmessage = function (e) {
             if (e.data.hit) {
-                handleHit(arrows, $scope, e, time);
+                self.handleHit(arrows, $scope, e, time);
             } else if (e.data.freezeUp) {
                 // removing freeze eater class (this gets sent from worker on a '3' or when freeze is over)
                 faders[e.data.dir][0].className = "fader";
@@ -76,13 +77,13 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                 var domArrow = arrows[e.data.dir][e.data.index].el[0];
                 domArrow.innerHTML = "";
             } else if (e.data.brokeFreeze) {
-                $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
-                $scope.showCombo = false;
-                $scope.accuracy = "Bad";
-                $scope.accuracyCol = '#FF0000';
+                $scope['combo'+self.player] = ScoreFactory.resetCombo(e.data.accuracy, self.player);
+                $scope['showCombo'+self.player] = false;
+                $scope['accuracy'+self.player] = "Bad";
+                $scope['accuracyCol'+self.player] = '#FF0000';
                 //only show accuracy feedback for 1 sec
 
-                handleRemoval($scope, time);
+                self.handleRemoval($scope, time);
 
                 faders[e.data.dir][0].className = "fader";
             }else if (e.data.endSong) {
@@ -95,13 +96,13 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
             } else {
                 // arrows[e.data.dir][e.data.index].el.css("opacity", 0.1);
                 //reset combo, don't show it and show 'Boo' on miss
-                $scope.combo = ScoreFactory.resetCombo(e.data.accuracy, 1);
-                $scope.showCombo = false;
-                $scope.accuracy = "Boo";
-                $scope.accuracyCol = '#ED3DED';
+                $scope['combo'+self.player] = ScoreFactory.resetCombo(e.data.accuracy, self.player);
+                $scope['showCombo'+self.player] = false;
+                $scope['accuracy'+self.player] = "Boo";
+                $scope['accuracyCol'+self.player] = '#ED3DED';
                 //only show accuracy feedback for 800 msec
 
-                handleRemoval($scope, time);
+                self.handleRemoval($scope, time);
             };
             $scope.$digest();
         }
@@ -111,7 +112,11 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         '40': 'down',
         '38': 'up',
         '39': 'right',
-        '27': 'escape'
+        '27': 'escape',
+        '65': 'left', //a
+        '87': 'up', //w
+        '83': 'down', //s
+        '68': 'right' //d
     };
 
     var placeArrows = {
@@ -146,7 +151,12 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
             $state.go('chooseSong');
         }
 
+        if((this.player===1 && e.keyCode >= 65) || (this.player===2 && e.keyCode < 65)) return;
+        //This is temp logic, waiting for key binding state. will pass in keybinding object for player
+
+
         if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
+        //figure out for 2 player
 
         var timeStamp = (Date.now() - startTime) / 1000;
         // sends a note to worker to handle the keypress
