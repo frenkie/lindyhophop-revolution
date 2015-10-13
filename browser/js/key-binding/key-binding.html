@@ -1,5 +1,21 @@
 <div id="key-binding">
-  <header>
-    <h1>Set Your Keys</h1>
-  </header>
+  <div class="container">
+    <header>
+      <h1>Set Your Keys</h1>
+    </header>
+
+    <h2>Press this key:</h2>
+    <div>
+      <h2>{{currKey}}</h2>
+    </div>
+    <div
+      ng-repeat="(key, value) in keys">
+      <h3>{{key}}: {{value.name}}</h3>
+    </div>
+    <button class='btn btn-danger' ng-click="restart()">Restart</button>
+    <pre>{{keys | json}} {{pointer | json}}</pre>
+  </div>
+
+
+
 </div>
