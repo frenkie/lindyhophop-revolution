@@ -111,11 +111,13 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
         var songs = carousel.children().length;
 
         if (event.keyCode === 39) {
+            ToneFactory.play('blop');
             // rightX < 10 ? rightX += 2 : rightX;
             // leftX > 0 ? leftX = rightX = 0 : leftX = 0;
             // mouseX = -(window.innerWidth * .5) * .0004 * rightX;
             mouseX = -360/songs;
         } else if (event.keyCode === 37) {
+            ToneFactory.play('blop');
             // leftX < 10 ? leftX += 2 : leftX;
             // rightX > 0 ? leftX = rightX = 0 : rightX = 0;
             // mouseX = (window.innerWidth * .5) * .0004 * leftX;
@@ -134,7 +136,7 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             $state.go('mainMenu');
 
         } else if (event.keyCode === 13) {
-
+            ToneFactory.play('start');
             findTarget();
 
             var $nrX = 360 * getRandomInt(2);
@@ -208,7 +210,7 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             $('.selected1').trigger('click');
 
         } else if (event.keyCode === 27) { //escape
-            $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1");
+            $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1").removeClass("selectedArrow2");
             // $('.selectedArrow1').css("visibility", "hidden")
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
@@ -219,6 +221,7 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             init();
             window.addEventListener("keydown", carouselMove, false);
             $('.selected1').removeClass("selected1");  
+            $('.selected2').removeClass("selected2");
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
         }
 
