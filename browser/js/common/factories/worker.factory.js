@@ -1,7 +1,8 @@
 app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, ArrowFactory, $state) {
 
-    var TheWorker = function (route) {
-        this.worker = new Worker(route)
+    var TheWorker = function (route, player) {
+        this.worker = new Worker(route);
+        this.player = player;
     }
 
     TheWorker.prototype.prepStepChart = function (currentSong, config, bpm, stepChart) {

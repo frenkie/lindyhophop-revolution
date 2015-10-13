@@ -58,10 +58,10 @@ app.config(function($stateProvider) {
                 // functions defined in arrow
 
                 // sets up arrow for animating
-                var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong);
+                var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 1);
 
                 // gives arrowWorker first chart
-                arrowWorker = new WorkerFactory('/js/animation/animationWorker.js');
+                arrowWorker = new WorkerFactory('/js/animation/animationWorker.js', 1);
                 arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart)
 
                 arrowWorker.handleMessages($scope, arrows, tone);

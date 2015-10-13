@@ -54,7 +54,6 @@ app.config(function($stateProvider) {
 
 
             function prepSong(P1stepChart, P2stepChart) {
-                console.log('in prep song');
                 tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, config);
                 //to set the stepChart on the player object
                 ScoreFactory.setStepChart(P1stepChart, 1);
@@ -76,11 +75,11 @@ app.config(function($stateProvider) {
 
 
                 // gives arrowWorker first chart
-                arrowWorker1 = new WorkerFactory('/js/animation/animationWorker.js');
-                arrowWorker2 = new WorkerFactory('/js/animation/animationWorker.js');
+                arrowWorker1 = new WorkerFactory('/js/animation/animationWorker.js', 1);
+                arrowWorker2 = new WorkerFactory('/js/animation/animationWorker.js', 2);
 
-                arrowWorker1.prepStepChart(currentSong, config, mainBPM, P1stepChart.chart)
-                arrowWorker2.prepStepChart(currentSong, config, mainBPM, P2stepChart.chart)
+                arrowWorker1.prepStepChart(currentSong, config, mainBPM, P1stepChart.chart);
+                arrowWorker2.prepStepChart(currentSong, config, mainBPM, P2stepChart.chart);
 
 
                 arrowWorker1.handleMessages($scope, arrows1, tone);
@@ -92,7 +91,6 @@ app.config(function($stateProvider) {
             };
 
             function runInit () {
-                console.log('in init');
                 ArrowFactory.resumeTimeline();
                 tone.start();
                 var startTime = Date.now() - currentSong.offset*1000;
