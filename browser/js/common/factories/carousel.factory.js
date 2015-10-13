@@ -1,11 +1,11 @@
-app.factory('CarouselFactory', function($state, ToneFactory) {
+app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
     // set and cache variables
     var looperRunning, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
     var addX = 0;
-    var leftX = 0,
-        rightX = 0,
-        target;
+    // var leftX = 0,
+        // rightX = 0,
+    var target;
 
     // fps counter created by: https://gist.github.com/sharkbrainguy/1156092,
     // no need to create my own :)
@@ -46,7 +46,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
         // set container 3d props
         TweenMax.set(container, {
             perspective: 600
-        })
+        });
         TweenMax.set(carousel, {
             z: -radius
         });
@@ -100,26 +100,28 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
         var $ny = -2000 + getRandomInt(4000);
         var $nz = -4000 + getRandomInt(4000);
 
-        var $s = 1.5 + (getRandomInt(10) * .1);
-        var $d = 1 - (getRandomInt(8) * .1);
+        var $s = 1.5 + (getRandomInt(10) * 0.1);
+        var $d = 1 - (getRandomInt(8) * 0.1);
 
-            TweenMax.set( $item, { autoAlpha:1, delay:$d } )
-            TweenMax.set( $block, { z:$nz, rotationY:$nrY, rotationX:$nrX, x:$nx, y:$ny, autoAlpha:0} )
-            TweenMax.to( $block, $s, { delay:$d, rotationY:0, rotationX:0, z:0,  ease:Expo.easeInOut} )
-            TweenMax.to( $block, $s-.5, { delay:$d, x:0, y:0, autoAlpha:1, ease:Expo.easeInOut} )
+            TweenMax.set( $item, { autoAlpha:1, delay:$d } );
+            TweenMax.set( $block, { z:$nz, rotationY:$nrY, rotationX:$nrX, x:$nx, y:$ny, autoAlpha:0} );
+            TweenMax.to( $block, $s, { delay:$d, rotationY:0, rotationX:0, z:0,  ease:Expo.easeInOut} );
+            TweenMax.to( $block, $s-.5, { delay:$d, x:0, y:0, autoAlpha:1, ease:Expo.easeInOut} );
         }
 
     function carouselMove(event) {
+        var songs = carousel.children().length;
 
         if (event.keyCode === 39) {
-            rightX < 10 ? rightX += 2 : rightX;
-            leftX > 0 ? leftX = rightX = 0 : leftX = 0;
-            mouseX = -(window.innerWidth * .5) * .0004 * rightX;
-
+            // rightX < 10 ? rightX += 2 : rightX;
+            // leftX > 0 ? leftX = rightX = 0 : leftX = 0;
+            // mouseX = -(window.innerWidth * .5) * .0004 * rightX;
+            mouseX = -360/songs;
         } else if (event.keyCode === 37) {
-            leftX < 10 ? leftX += 2 : leftX;
-            rightX > 0 ? leftX = rightX = 0 : rightX = 0;
-            mouseX = (window.innerWidth * .5) * .0004 * leftX;
+            // leftX < 10 ? leftX += 2 : leftX;
+            // rightX > 0 ? leftX = rightX = 0 : rightX = 0;
+            // mouseX = (window.innerWidth * .5) * .0004 * leftX;
+            mouseX = 360/songs;
         } else if (event.keyCode === 27) {
             ToneFactory.play('back');
             TweenMax.set($(`#item${target}`), {
@@ -128,8 +130,8 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
 
             addX = 0;
             mouseX = 0;
-            rightX = 0;
-            leftX = 0;
+            // rightX = 0;
+            // leftX = 0;
             window.removeEventListener('keydown', carouselMove);
             $state.go('mainMenu');
 
@@ -140,9 +142,9 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             var $nrX = 360 * getRandomInt(2);
             var $nrY = 360 * getRandomInt(2);
 
-            var $nx = -2000 + getRandomInt(4000)
-            var $ny = -2000 + getRandomInt(4000)
-            var $nz = -4000 + getRandomInt(4000)
+            var $nx = -2000 + getRandomInt(4000);
+            var $ny = -2000 + getRandomInt(4000);
+            var $nz = -4000 + getRandomInt(4000);
 
             var heightGuy = window.outerHeight*0.03;
             TweenMax.to($(`#item${target}`), 1, {
@@ -159,8 +161,8 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
             addX = 0;
             mouseX = 0;
-            rightX = 0;
-            leftX = 0;
+            // rightX = 0;
+            // leftX = 0;
 
             $(`#item${target}`).trigger('click');
             
@@ -171,12 +173,13 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
     // loops and sets the carousel 3d properties
     function looper() {
         addX += mouseX;
+        mouseX = 0;
         TweenMax.to(carousel, 1, {
             rotationY: addX,
             rotationX: 0,
             ease: Quint.easeOut
-        })
-        fps.text('Framerate: ' + counter.tick() + '/60 FPS')
+        });
+        fps.text('Framerate: ' + counter.tick() + '/60 FPS');
     }
 
 
@@ -184,28 +187,33 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
     function chooseLevel(event) {
 
         if (event.keyCode === 38) { //key up
-            if ($('.selected').prev().length) {
-                $('.selected').removeClass("selected").prev().addClass("selected");
+            if ($('.selected1').prev().length) {
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1').removeClass("selected1").prev().addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
             else {
-                $('.selected').removeClass("selected").siblings(':last').addClass("selected");
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1').removeClass("selected1").siblings(':last').addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
 
         } else if (event.keyCode === 40) { //key down
-            if ($('.selected').next().length) {
-                $('.selected').removeClass("selected").next().addClass("selected");
+            if ($('.selected1').next().length) {
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1').removeClass("selected1").next().addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
             else {
-                $('.selected').removeClass("selected").siblings(':first').addClass("selected");
+                $('.selected1>.player1Arrow').removeClass('selectedArrow1')
+                $('.selected1').removeClass("selected1").siblings(':first').addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
             }
 
         } else if (event.keyCode === 13) { //enter
 
-            $('.selected').trigger('click');
+            $('.selected1').trigger('click');
 
         } else if (event.keyCode === 27) { //escape
 
-            $('.choose-level').css("visibility", "hidden");
+            $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1");
+            // $('.selectedArrow1').css("visibility", "hidden")
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
             });
@@ -216,9 +224,39 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             window.addEventListener("keydown", carouselMove, false);
             //below code screws up target finding (remembers multiple targets)
             // $(document).on('keydown.move', carouselMove);
-            $('.selected').removeClass("selected");  
+            $('.selected1').removeClass("selected1");  
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
 
+        }
+
+        if(ScoreFactory.getAllPlayers.length > 1) {
+            if (event.keyCode === 87) { //key W
+                console.log('hit W key');
+                if ($('.selected2').prev().length) {
+                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
+                    $('.selected2').removeClass("selected2").prev().addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
+                }
+                else {
+                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
+                    $('.selected2').removeClass("selected2").siblings(':last').addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
+                }
+
+            } else if (event.keyCode === 83) { //key S
+                console.log('hit S key');
+                if ($('.selected2').next().length) {
+                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
+                    $('.selected2').removeClass("selected2").next().addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
+                }
+                else {
+                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
+                    $('.selected2').removeClass("selected2").siblings(':first').addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
+                }
+
+            } else if (event.keyCode === 13) { //enter
+
+                $('.selected2').trigger('click');
+
+            }
         }
 
     }
@@ -237,6 +275,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             }
         }
         target !== 1 ? target = songs + 2 - target : target;
+        addX = target;
     }
 
     return {
@@ -244,4 +283,4 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
         chooseLevel: chooseLevel,
         carouselMove: carouselMove
     };
-})
+});

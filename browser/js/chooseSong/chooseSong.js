@@ -15,20 +15,24 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory) {
+app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory, ScoreFactory) {
 
 	$scope.songs = songs;
 
 	$scope.choice = {};
 
     $scope.songPreview;
+
+    //add a new player for testing purposes
+    // ScoreFactory.addPlayer();
+
     // $scope.speedMod = ArrowFactory.speedModifier;
     // ArrowFactory.setSpeed($scope.speedMod);
     console.log(`All songs: (Count: ${songs.length})`);
     console.log(songs.map(s => s.title).sort().join(', '));
 
     function viewSongInfo() {
-        var $selected = $('.selected');
+        var $selected = $('.selected1');
         console.log(`$selected:`)
         console.log($selected);
         if ($selected) $scope.selectedDifficulty = $selected[0].textContent.trim();
@@ -98,9 +102,14 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     $scope.getDifficulties = function(song) {
         $('.choose-level').css("visibility", "visible");
-        // var x = document.getElementsByClassName('choose-level');
+        //change below once we know have many players
+        ScoreFactory.allPlayerGuys.forEach(function (guy, index) {
+            $(`.selectedArrow${index+1}`).css("visibility", "visible");
+        });
         $timeout(function() {
-            $('#level0').addClass("selected");
+            ScoreFactory.allPlayerGuys.forEach(function (guy, index) {
+                $('#level0').addClass(`selected${index+1}`).children(`.player${index+1}Arrow`).addClass(`selectedArrow${index+1}`);
+            })
             viewSongInfo();   
         });
         

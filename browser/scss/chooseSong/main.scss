@@ -122,19 +122,27 @@
 		font-size: 30px;
 		color: #b2b2b2;
 		position: absolute;
-		// top: 2h;
-		// top: -10%;
-		// transform-origin: 50% 50% 0px;
-  //   	transform: matrix(1, 0, 0, 1, 0, 40);
 		left: 80%;
-		width: 15%;
+		width: 20%;
 		div {
 			max-height: 6vh;
 		}
-	}
-
-	.clearfix {
-		top: -6.5vh;
+		.player1Arrow {
+			height: 3vh;
+			visibility: hidden;
+			display: inline-block;
+		}
+		.player2Arrow {
+			height: 3vh;
+			visibility: hidden;
+			display: inline-block;
+		}
+		.selectedArrow1 {
+			visibility: visible;
+		}
+		.selectedArrow2 {
+			visibility: visible;
+		}
 	}
 
 
@@ -150,10 +158,18 @@
 		}
 	}
 
-	.selected {
+	.selected1 {
 		font-size: 32px;
 		font-weight: bold;
-		color: white;
+		// color: #E9A92E;
+		color: #3E98DF;
+	}
+
+	.selected2 {
+		font-size: 32px;
+		font-weight: bold;
+		color: #E9A92E;
+		// color: #3E98DF;
 	}
 
 	.activeSong {
