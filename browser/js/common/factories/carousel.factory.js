@@ -144,13 +144,16 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             var $ny = -2000 + getRandomInt(4000)
             var $nz = -4000 + getRandomInt(4000)
 
-
+            var heightGuy = window.outerHeight*0.03;
             TweenMax.to($(`#item${target}`), 1, {
-                transform: 'scale(4) translateY(-23vh)' //was -140px, 160 is pretty good
+                transform: 'scale(4) translateY(-'+heightGuy+'vh)'
             });
             $(`#item${target} > .carouselItemInner`).addClass('activeSong');
             TweenMax.to($('.carouselContainer'), 1, {
                 transform: 'translateY(40px)'
+            });
+            TweenMax.to($(`.choose-level`), 1, {
+                transform: 'translateY(-'+Math.pow(heightGuy,3)/3000+'vh)'
             });
 
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
@@ -160,6 +163,7 @@ app.factory('CarouselFactory', function($state, ToneFactory) {
             leftX = 0;
 
             $(`#item${target}`).trigger('click');
+            
         }
 
     }

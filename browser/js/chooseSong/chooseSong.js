@@ -98,6 +98,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     $scope.getDifficulties = function(song) {
         $('.choose-level').css("visibility", "visible");
+        // var x = document.getElementsByClassName('choose-level');
         $timeout(function() {
             $('#level0').addClass("selected");
             viewSongInfo();   

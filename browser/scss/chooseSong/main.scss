@@ -121,8 +121,11 @@
 		font-family: petit;
 		font-size: 30px;
 		color: #b2b2b2;
-		position: relative;
-		top: -6.5vh;
+		position: absolute;
+		// top: 2h;
+		// top: -10%;
+		// transform-origin: 50% 50% 0px;
+  //   	transform: matrix(1, 0, 0, 1, 0, 40);
 		left: 80%;
 		width: 15%;
 		div {
@@ -130,13 +133,17 @@
 		}
 	}
 
+	.clearfix {
+		top: -6.5vh;
+	}
+
 
 	#chart-info {
-		font-size: 32px;
+		font-size: 10vh;
 		color: #b2b2b2;
 		position: absolute;
 		top: 14%;
-		left: 5%;
+		left: 15%;
 		width: 15%;
 		div {
 			max-height: 9vh;
