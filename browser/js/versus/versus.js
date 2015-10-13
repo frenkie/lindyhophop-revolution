@@ -15,8 +15,12 @@ app.config(function($stateProvider) {
             //console.log($stateParams);
             $scope.ready = false;
             var currentSong = song;
-            //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
-            $scope.showCombo = false;
+
+
+            [1,2].forEach(function(num) {
+                $scope['showCombo'+num] = false;
+                $scope['']
+            })
 
             const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
 
