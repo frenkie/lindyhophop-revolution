@@ -15,10 +15,9 @@ app.config(function($stateProvider) {
             var currentSong = song;
 
 
-            [1,2].forEach(function(num) {
-                $scope['showCombo'+num] = false;
-                $scope['']
-            })
+            // [1,2].forEach(function(num) {
+            //     $scope['showCombo'+num] = false;
+            // })
 
             const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
 
