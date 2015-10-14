@@ -5,8 +5,6 @@ app.factory('ScoreFactory', function() {
         this.combo = 0;
         this.maxCombo = 0;
         this.totalArrowGuy = 0;
-        // this.mult = 0.005;
-        // this.scaleFactor = 1;
         this.accuracyCount = {
             Flawless: 0,
             Marvelous: 0,
@@ -65,6 +63,8 @@ app.factory('ScoreFactory', function() {
     }
 
     function addScore(diff, playerNum) {
+
+
         var player = allPlayerGuys[playerNum-1] || player1Guy;
 
         if (diff <= TIMINGWINDOWS.Flawless) {
@@ -82,12 +82,18 @@ app.factory('ScoreFactory', function() {
 
 
     function addCombo(diff, playerNum) {
+        console.log('adding score to player:', playerNum);
+
         var player = allPlayerGuys[playerNum-1] || player1Guy;
+
+        console.log(player);
 
         if (diff <= TIMINGWINDOWS.Great) {
             player.combo++;
             if (player.combo > player.maxCombo) player.maxCombo = player.combo;
         }
+        console.log('what is player combo:', player.combo);
+
         return player.combo;
         // if (playerNum === 2) {
         //     if (diff <= TIMINGWINDOWS.Great) {
@@ -112,9 +118,9 @@ app.factory('ScoreFactory', function() {
         });
     }
 
-    function resetCombo(playerNum) {
-        if (playerNum === 2) player2Guy.combo = 0;
-        else player1Guy.combo = 0;
+    function resetCombo(acc, playerNum) {
+        if (playerNum === 1) player1Guy.combo = 0;
+        else if (playerNum === 2) player2Guy.combo = 0;
     }
 
 

@@ -1,7 +1,7 @@
 app.config(function ($stateProvider) {
-    $stateProvider.state('key-binding', {
-        url: '/key-binding',
-        templateUrl: 'js/key-binding/key-binding.html',
+    $stateProvider.state('keybinding', {
+        url: '/keybinding',
+        templateUrl: 'js/keybinding/keybinding.html',
         controller: 'keyBindingCtrl'
     });
 });
