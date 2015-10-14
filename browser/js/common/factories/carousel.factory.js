@@ -157,6 +157,9 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             TweenMax.to($(`.choose-level`), 1, {
                 transform: 'translateY(-'+Math.pow(heightGuy,3)/3300+'vh)'
             });
+            TweenMax.to($(`#groovey`), 1, {
+                transform: 'translateY(-'+Math.pow(heightGuy,3)/4000+'vh)'
+            });
 
             //HACKY HACK to move chosen song to front view by moving carousel to degree 0
             addX = 0;
@@ -211,6 +214,7 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
 
         } else if (event.keyCode === 27) { //escape
             $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1").removeClass("selectedArrow2");
+            $('.radar-chart').css("visibility", "hidden");
             // $('.selectedArrow1').css("visibility", "hidden")
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
@@ -224,7 +228,7 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             $('.selected2').removeClass("selected2");
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
         }
-
+        //if there is a 2nd player, listen to another play's key presses
         if(ScoreFactory.allPlayerGuys.length > 1) {
             if (event.keyCode === 87) { //key W
                 console.log('hit W key');

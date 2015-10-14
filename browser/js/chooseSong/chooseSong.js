@@ -62,6 +62,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             $scope.songPreview.previewStart();           
         }
 
+        displayGrooveRadar($scope.selectedChart);
     }
 
     function chooseLevel(e) {
@@ -86,11 +87,8 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         }
     }
 
-
     $scope.selectedDifficulty;
     $scope.selectedChart;
-
-
 
     $(document).ready(
         $timeout ( function () {
@@ -102,6 +100,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     $scope.getDifficulties = function(song) {
         $('.choose-level').css("visibility", "visible");
+        $('#groovey').css("visibility", "visible");
         //change below once we know have many players
         ScoreFactory.allPlayerGuys.forEach(function (guy, index) {
             $(`.selectedArrow${index+1}`).css("visibility", "visible");
@@ -131,6 +130,24 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         window.addEventListener("keydown", chooseLevel, false);
     };
 
+    function displayGrooveRadar (chart) {
+        console.log('groovey ', chart);
+        var data = [[
+            {axis: "Air", value: chart.grooveRadar['air']},
+            {axis: "Chaos", value: chart.grooveRadar['chaos']},
+            {axis: "Freeze", value: chart.grooveRadar['freeze']},
+            {axis: "Stream", value: chart.grooveRadar['stream']},
+            {axis: "Voltage", value: chart.grooveRadar['voltage']}
+        ]];
+        RadarChart.defaultConfig.radius = 1;
+        RadarChart.defaultConfig.w = 300;
+        RadarChart.defaultConfig.h = 200;
+        RadarChart.defaultConfig.containerClass = 'radar-chart';
+        RadarChart.defaultConfig.axisLine = true;
+        console.log(RadarChart);
+
+        RadarChart.draw("#groovey", data);
+    }
 
     $scope.loadSong = function(level) {
         ToneFactory.play('start');
