@@ -66,8 +66,6 @@ app.config(function($stateProvider) {
                 arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart);
 
                 arrowWorker.handleMessages($scope, arrows, tone);
-                console.log(`$scope.score1: ${$scope.score1}`);
-                console.log(`$scope.combo1: ${$scope.combo1}`);
 
 
 
