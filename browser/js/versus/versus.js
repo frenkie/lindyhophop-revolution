@@ -11,8 +11,6 @@ app.config(function($stateProvider) {
         },
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
-            console.log('$stateParams:');
-            //console.log($stateParams);
             $scope.ready = false;
             var currentSong = song;
 

@@ -28,17 +28,19 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
     };
 
     TheWorker.prototype.handleRemoval = function ($scope, time) {
+        var self = this;
         if (time.timing) {
             $timeout.cancel(time.timer);
         }
         time.timing = true;
         time.timer = $timeout(function() {
             time.timing = false;
-            $scope['accuracy'+this.player] = null;
+            $scope['accuracy'+self.player] = null;
         }, 1000);
 }
 
     TheWorker.prototype.handleHit = function(arrows, $scope, e, time) {
+        var self = this;
         var domArrow = arrows[e.data.dir][e.data.index].el[0];
         //console.dir(domArrow);
         var arrow = domArrow.children[0];
@@ -50,15 +52,21 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         }
         arrow.hidden = true;
         //calculate the score, combo of the successful hit to display
-        $scope['score'+this.player] = ScoreFactory.addScore(e.data.diff, this.player);
-        $scope['combo'+this.player] = ScoreFactory.addCombo(e.data.diff, this.player);
+        $scope['score'+self.player] = ScoreFactory.addScore(e.data.diff, self.player);
+        console.log('Player '+self.player+'score: ',$scope['score'+self.player]);
+        $scope['combo'+self.player] = ScoreFactory.addCombo(e.data.diff, self.player);
+        console.log($scope.combo1);
+        console.log('Player '+self.player+'combo: ',$scope['combo'+self.player]);
         //as long as there is a combo to show, make it so
-        $scope['combo'+this.player] > 1 ? $scope['showCombo'+this.player] = true : $scope['showCombo'+this.player] = false;
+        $scope['combo'+self.player] > 1 ? $scope['showCombo'+self.player] = true : $scope['showCombo'+self.player] = false;
         //as long as there is a measure of accuracy to show, make it so
-        $scope['accuracy'+this.player] = ScoreFactory.getAccuracy(e.data.diff);
-        $scope['accuracyCol'+this.player] = ScoreFactory.getAccuracyColors($scope['accuracy'+this.player]);
+        $scope['accuracy'+self.player] = ScoreFactory.getAccuracy(e.data.diff);
+        $scope['accuracyCol'+self.player] = ScoreFactory.getAccuracyColors($scope['accuracy'+self.player]);
         //only show accuracy feedback for 1 sec
-        handleRemoval($scope, time);
+
+        this.handleRemoval($scope, time);
+
+
     }
 
     TheWorker.prototype.handleMessages = function ($scope, arrows, tone) {

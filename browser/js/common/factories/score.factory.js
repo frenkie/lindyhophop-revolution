@@ -63,6 +63,8 @@ app.factory('ScoreFactory', function() {
     }
 
     function addScore(diff, playerNum) {
+
+
         var player = allPlayerGuys[playerNum-1] || player1Guy;
 
         if (diff <= TIMINGWINDOWS.Flawless) {
@@ -80,12 +82,18 @@ app.factory('ScoreFactory', function() {
 
 
     function addCombo(diff, playerNum) {
+        console.log('adding score to player:', playerNum);
+
         var player = allPlayerGuys[playerNum-1] || player1Guy;
+
+        console.log(player);
 
         if (diff <= TIMINGWINDOWS.Great) {
             player.combo++;
             if (player.combo > player.maxCombo) player.maxCombo = player.combo;
         }
+        console.log('what is player combo:', player.combo);
+
         return player.combo;
         // if (playerNum === 2) {
         //     if (diff <= TIMINGWINDOWS.Great) {

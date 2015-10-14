@@ -11,10 +11,11 @@ app.config(function($stateProvider) {
         },
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+
             $scope.ready = false;
             var currentSong = song;
             //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
-            $scope.showCombo = false;
+            $scope.showCombo1 = false;
 
             const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
 
@@ -65,6 +66,11 @@ app.config(function($stateProvider) {
                 arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart);
 
                 arrowWorker.handleMessages($scope, arrows, tone);
+                console.log(`$scope.score1: ${$scope.score1}`);
+                console.log(`$scope.combo1: ${$scope.combo1}`);
+
+
+
                 Tone.Buffer.onload = runInit;
 
             };
