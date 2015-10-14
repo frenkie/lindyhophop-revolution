@@ -118,9 +118,9 @@ app.factory('ScoreFactory', function() {
         });
     }
 
-    function resetCombo(playerNum) {
-        if (playerNum === 2) player2Guy.combo = 0;
-        else player1Guy.combo = 0;
+    function resetCombo(acc, playerNum) {
+        if (playerNum === 1) player1Guy.combo = 0;
+        else if (playerNum === 2) player2Guy.combo = 0;
     }
 
 

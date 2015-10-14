@@ -55,7 +55,6 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         $scope['score'+self.player] = ScoreFactory.addScore(e.data.diff, self.player);
         console.log('Player '+self.player+'score: ',$scope['score'+self.player]);
         $scope['combo'+self.player] = ScoreFactory.addCombo(e.data.diff, self.player);
-        console.log($scope.combo1);
         console.log('Player '+self.player+'combo: ',$scope['combo'+self.player]);
         //as long as there is a combo to show, make it so
         $scope['combo'+self.player] > 1 ? $scope['showCombo'+self.player] = true : $scope['showCombo'+self.player] = false;
