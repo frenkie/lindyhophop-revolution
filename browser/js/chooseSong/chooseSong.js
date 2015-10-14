@@ -138,12 +138,17 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             {axis: "Freeze", value: chart.grooveRadar['freeze']},
             {axis: "Stream", value: chart.grooveRadar['stream']},
             {axis: "Voltage", value: chart.grooveRadar['voltage']}
+        ], [
+            {axis: "Air", value: 1}
         ]];
         RadarChart.defaultConfig.radius = 1;
         RadarChart.defaultConfig.w = 300;
         RadarChart.defaultConfig.h = 200;
         RadarChart.defaultConfig.containerClass = 'radar-chart';
         RadarChart.defaultConfig.axisLine = true;
+        RadarChart.defaultConfig.levels = 1;
+        RadarChart.defaultConfig.radius = 1;
+
         console.log(RadarChart);
 
         RadarChart.draw("#groovey", data);
