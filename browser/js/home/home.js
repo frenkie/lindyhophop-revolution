@@ -6,7 +6,7 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('HomeController', function($rootScope, $scope, $state, AuthService, AUTH_EVENTS, ToneFactory) {
+app.controller('HomeController', function ($rootScope, $scope, $state, AuthService, AUTH_EVENTS, ToneFactory, keyConfigFactory) {
   $scope.user = null;
   var menu = [1, 2, 3, 4, 5];
 
@@ -42,27 +42,31 @@ app.controller('HomeController', function($rootScope, $scope, $state, AuthServic
 
   var $document = $(document);
   $document.on('keydown', onArrowKey);
+  $document.on('gamepadbuttondown', onArrowKey);
 
   function onArrowKey(event) {
+    var button = keyConfigFactory.getButton(event);
+
   	var active = $('.activeHome') || $('#option1');
    	var activeNumber = parseInt(active[0].id.slice(-1));
 
-  	if(event.which === 39) {
+  	if (button.name === 'right') {
   		//right arrow
   		play('blop');
   		activeNumber = activeNumber === menu[menu.length - 1]? 1 : menu[menu.indexOf(activeNumber) + 1];
   		active.removeClass("activeHome");
   		$('#option' + activeNumber).addClass("activeHome");
-  	} else if(event.which === 37) {
+  	} else if (button.name === 'left') {
   		//left arrow
   		play('blop');
   		activeNumber = activeNumber === 1? menu[menu.length - 1] : menu[menu.indexOf(activeNumber) - 1];
   		active.removeClass("activeHome");
   		$('#option' + activeNumber).addClass("activeHome");
-  	} else if(event.keyCode === 13) {
+  	} else if (button.name === 'enter') {
       play('start');
   		var uiState = active[0].outerHTML.split('"');
-  		$document.off('keydown', onArrowKey);
+      $document.off('keydown', onArrowKey);
+  		$document.off('gamepadbuttondown', onArrowKey);
       if(uiState[5] === "user") {
         logout();
         $state.reload();

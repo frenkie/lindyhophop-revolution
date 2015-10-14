@@ -1,4 +1,4 @@
-app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, ArrowFactory, $state) {
+app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, ArrowFactory, $state, keyConfigFactory) {
 
     var TheWorker = function (route) {
         this.worker = new Worker(route)
@@ -124,33 +124,48 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
     var allPlaceArrows = $(`.arrowPlace`);
 
     TheWorker.prototype.handleKeyPress = function (e, tone, startTime) {
-        if(e.keyCode === 48) {
+        var button = keyConfigFactory.getButton(e); // {player: 1, name: 'up'}, where 1 is player 2 and up is the direction
+        if (button) e.preventDefault();
+        else return;
+        // var player = button.player; // for players!
+        if(button.name === 'escape') {
             tone.stop();
             this.worker.terminate();
             ArrowFactory.killTimeline();
             $state.go('results');
         };
-        var dir = keyCodeToDir[e.keyCode];
+        // var dir = keyCodeToDir[e.keyCode];
 
-        if (dir) e.preventDefault();
-        else return;
+        // this checks to make sure the key you pressed wasn't logged as undefined
 
-        if (dir === 'escape') {
+
+        if (button.name === 'escape') {
             ToneFactory.play('back');
             /** kill music (ToneFactory), animation timeline, and worker; go back to select screen */
             tone.stop();
             this.worker.terminate();
             ArrowFactory.killTimeline();
-            $(document).off('keydown.keyPressHandler');
+            this.removeListeners();
             ScoreFactory.resetPlayers();
             $state.go('chooseSong');
         }
 
-        if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
+        if (placeArrows[button.name]) placeArrows[button.name].addClass('arrowPlacePressed');
 
         var timeStamp = (Date.now() - startTime) / 1000;
         // sends a note to worker to handle the keypress
-        this.worker.postMessage({type: 'keyDown', timeStamp, dir});
+        this.worker.postMessage({type: 'keyDown', timeStamp, dir: button.name});
+    }
+
+    TheWorker.prototype.handleKeyUp = function (e) {
+
+        var button = keyConfigFactory.getButton(e); // {player: 1, name: 'up'}, where 1 is player 2 and up is the direction
+        if (button) e.preventDefault();
+        else return;
+        // arrow pressed indicator
+        allPlaceArrows.removeClass('arrowPlacePressed');
+        this.worker.postMessage({type: 'keyUp', dir: button.name});
+
     }
 
     TheWorker.prototype.addListener = function (tone, startTime) {
@@ -158,15 +173,25 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         $(document).on('keydown.keyPressHandler', (e) => {
             this.handleKeyPress(e, tone, startTime);
         });
+        $(document).on('gamepadbuttondown.keyPressHandler', (e) => {
+            this.handleKeyPress(e, tone, startTime);
+        });
+        $(document).on('keyup.keyPressHandler', (e) => {
+            this.handleKeyUp(e);
+        });
+        $(document).on('gamepadbuttonup.keyPressHandler', (e) => {
+            this.handleKeyUp(e);
+        });
 
-        document.body.addEventListener('keyup', (e) => {
-            var dir = keyCodeToDir[e.keyCode];
-            if (!dir) return;
-            // arrow pressed indicator
-            allPlaceArrows.removeClass('arrowPlacePressed');
-            this.worker.postMessage({type: 'keyUp', dir});
+    }
 
-        })
+    TheWorker.prototype.removeListeners = function () {
+
+        $(document).off('keydown.keyPressHandler');
+        $(document).off('gamepadbuttondown.keyPressHandler');
+        $(document).off('keyup.keyPressHandler');
+        $(document).off('gamepadbuttonup.keyPressHandler');
+
     }
 
 

@@ -1,19 +1,41 @@
 <div id="key-binding">
+  <div>
+    <h1>Set Your Keys</h1>
+  </div>
   <div class="container">
-    <header>
-      <h1>Set Your Keys</h1>
-    </header>
+    <div class="panel panel-default">
 
-    <h2>Press this key:</h2>
-    <div>
-      <h2>{{currKey}}</h2>
+      <div class="panel-heading">
+        <h2>Press this key (FIRST!):</h2>
+        <h2>{{currKey}}</h2>
+      </div>
+
+
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Your assigned key</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(key, value) in keys">
+              <td>{{key}}</td>
+              <td>{{value.name}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <label for="player">Which player is this for?</label>
+        <input id="player" class="form-control" type="text" ng-model="player"/>
+
+        <button class='btn btn-danger' ng-click="restart()">Restart</button>
+        <button class='btn btn-success' ng-click="save(keys)">Save</button>
+        <button class='btn btn-success' ng-click="resetToDefault()">Reset to Default</button>
+      </div>
+
     </div>
-    <div
-      ng-repeat="(key, value) in keys">
-      <h3>{{key}}: {{value.name}}</h3>
-    </div>
-    <button class='btn btn-danger' ng-click="restart()">Restart</button>
-    <pre>{{keys | json}} {{pointer | json}}</pre>
   </div>
 
 

@@ -1,7 +1,10 @@
-app.factory('keyConfigFactory', function () {
+app.factory('keyConfigFactory', function (localStorageService) {
+
+    var factory = {};
 
     var playerdefault = {
-        "1": {
+        "0": {
+            index: 0,
             "left": {
                 "keyCode": 37,
                 "name": "left"
@@ -31,7 +34,8 @@ app.factory('keyConfigFactory', function () {
                 "name": "esc"
             }
         },
-        "2": {
+        "1": {
+            index: 1,
             "left": {
                 "keyCode": 65,
                 "name": "left"
@@ -63,121 +67,129 @@ app.factory('keyConfigFactory', function () {
         }
     };
 
-    var gamePadDefault = {
-        gamepad: true,
-        "left": {
-            "padCode": 14,
-            "padIndex": 0,
-            "button": "left",
-            "name": "left, Gamepad 0."
-        },
-        "down": {
-            "padCode": 13,
-            "padIndex": 0,
-            "button": "down",
-            "name": "down, Gamepad 0."
-        },
-        "up": {
-            "padCode": 12,
-            "padIndex": 0,
-            "button": "up",
-            "name": "up, Gamepad 0."
-        },
-        "right": {
-            "padCode": 15,
-            "padIndex": 0,
-            "button": "right",
-            "name": "right, Gamepad 0."
-        },
-        "back": {
-            "padCode": 0,
-            "padIndex": 0,
-            "button": "B button",
-            "name": "B button, Gamepad 0."
-        },
-        "enter": {
-            "padCode": 1,
-            "padIndex": 0,
-            "button": "A button",
-            "name": "A button, Gamepad 0."
-        },
-        "escape": {
-            "padCode": 8,
-            "padIndex": 0,
-            "button": "select",
-            "name": "select, Gamepad 0."
-        }
-    }
-
-    var config = {
-        '0': angular.copy(player1default),
-        '1': angular.copy(player2default)
-    };
-
-    window.addEventListener('gamepadconnected', function (e) {
-        config.setConfig(e.gamepad.index, {
+    var gamePadDefault = function (index) {
+        return {
             gamepad: true,
+            index,
             "left": {
                 "padCode": 14,
-                "padIndex": e.gamepad.index,
+                "padIndex": index,
                 "button": "left",
-                "name": "left, Gamepad " + e.gamepad.index
+                "name": `left, Gamepad ${index}.`
             },
             "down": {
                 "padCode": 13,
-                "padIndex": e.gamepad.index,
+                "padIndex": index,
                 "button": "down",
-                "name": "down, Gamepad " + e.gamepad.index
+                "name": `down, Gamepad ${index}.`
             },
             "up": {
                 "padCode": 12,
-                "padIndex": e.gamepad.index,
+                "padIndex": index,
                 "button": "up",
-                "name": "up, Gamepad " + e.gamepad.index
+                "name": `up, Gamepad ${index}.`
             },
             "right": {
                 "padCode": 15,
-                "padIndex": e.gamepad.index,
+                "padIndex": index,
                 "button": "right",
-                "name": "right, Gamepad " + e.gamepad.index
+                "name": `right, Gamepad ${index}.`
             },
             "back": {
                 "padCode": 0,
-                "padIndex": e.gamepad.index,
+                "padIndex": index,
                 "button": "B button",
-                "name": "B button, Gamepad " + e.gamepad.index
+                "name": `B button, Gamepad ${index}.`
             },
             "enter": {
                 "padCode": 1,
-                "padIndex": e.gamepad.index,
+                "padIndex": index,
                 "button": "A button",
-                "name": "A button, Gamepad " + e.gamepad.index
+                "name": `A button, Gamepad ${index}.`
             },
             "escape": {
                 "padCode": 8,
-                "padIndex": e.gamepad.index,
+                "padIndex": index,
                 "button": "select",
-                "name": "select, Gamepad " + e.gamepad.index
+                "name": `select, Gamepad ${index}.`
             }
+        };
+    };
+
+
+
+
+    var revConf;
+
+    var config = {};
+
+    var reverseConfig = function () {
+        revConf = {};
+        _.forEach(config, player => {
+            _.forEach(player, (value, key) => {
+                var revConfKey;
+                if (key === 'index') return;
+                if (player.gamepad) {
+                    if (value.padCode) revConfKey = `${player.index}pad${value.padCode}`;
+                } else {
+                    if (value.keyCode) revConfKey = `key${value.keyCode}`;
+                }
+                revConf[revConfKey] = {player: player.index, name: key};
+            });
         });
+    };
+
+    factory.setConfig = function (playerIndex, configObj) {
+        config[playerIndex] = configObj;
+        reverseConfig();
+    };
+
+    factory.saveConfig = function () {
+        localStorageService.set('keyConfiguration', JSON.stringify(config));
+    };
+
+    factory.setDefaultConfig = function () {
+        factory.setConfig(0, playerdefault[0]);
+        factory.setConfig(1, playerdefault[1]);
+        localStorageService.remove('keyConfiguration');
+    };
+
+    var setInitialConfig = function () {
+        var prevConfig = localStorageService.get('keyConfiguration');
+        if (prevConfig) {
+            var prev = JSON.parse(prevConfig);
+            factory.setConfig(0, prev[0]);
+            factory.setConfig(1, prev[1]);
+            console.log('got previously stored keybindings!')
+        } else {
+            factory.setConfig(0, playerdefault[0]);
+            factory.setConfig(1, playerdefault[1]);
+        }
+    }
+
+    setInitialConfig();
+
+
+    window.addEventListener('gamepadconnected', function (e) {
+        factory.setConfig(e.gamepad.index, gamePadDefault(e.gamepad.index));
     });
 
     window.addEventListener('gamepaddisconnected', function (e) {
-        console.log(e.gamepad.index, angular.copy);
+        factory.setConfig(e.gamepad.index, angular.copy(playerdefault[e.gamepad.index]));
         // config.setConfig()
     });
 
-    config.setConfig = function (playerIndex, configObj) {
-        config[playerIndex] = configObj;
-        console.log('new config set!', configObj)
-    }
-
-    return config;
-
-}).run(function (keyConfigFactory) {});
-
-
-
+    factory.getButton = function (e) {
+        var key;
+        if (e.gamepad) {
+            key = `${e.gamepad.index}pad${e.button}`;
+        } else {
+            key = `key${e.which}`
+        }
+        return revConf[key];
+    };
 
 
-
+    return factory;
+})
+.run(function (keyConfigFactory) {});

@@ -10,7 +10,7 @@ app.config(function($stateProvider) {
             }
         },
 
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory, keyConfigFactory) {
             $scope.ready = false;
             var currentSong = song;
             //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos

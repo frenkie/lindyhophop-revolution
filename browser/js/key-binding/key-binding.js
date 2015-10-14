@@ -6,16 +6,7 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('keyBindingCtrl', function ($scope, keyIdentity) {
-
-    var keyCodeToDir = {
-        '37': 'left',
-        '40': 'down',
-        '38': 'up',
-        '39': 'right',
-        '27': 'escape',
-        '13': 'enter'
-    };
+app.controller('keyBindingCtrl', function ($scope, keyIdentity, keyConfigFactory) {
 
     $scope.keys = {
         left: {},
@@ -27,32 +18,31 @@ app.controller('keyBindingCtrl', function ($scope, keyIdentity) {
         escape: {}
     };
 
-    $scope.pointer = 0;
+    var pointer = 0;
 
     var keyKeys = Object.keys($scope.keys);
 
-    $scope.currKey = keyKeys[$scope.pointer];
+    $scope.currKey = keyKeys[pointer];
 
     var detectKey = function (e) {
-        if ($scope.pointer >= keyKeys.length) {
+        if (pointer >= keyKeys.length) {
             document.removeEventListener('keydown', detectKey);
             return;
         }
-        // e.preventDefault();
+        e.preventDefault();
         console.log('pressing key', e);
         $scope.keys[$scope.currKey].keyCode = e.keyCode;
         $scope.keys[$scope.currKey].name = keyIdentity(e.keyCode);
-        $scope.pointer++;
-        $scope.currKey = keyKeys[$scope.pointer];
+        pointer++;
+        $scope.currKey = keyKeys[pointer];
         $scope.$digest();
     }
 
     var detectPad = function (e) {
-        if ($scope.pointer >= keyKeys.length) {
-            document.removeEventListener('keydown', detectPad);
+        if (pointer >= keyKeys.length) {
+            window.removeEventListener('gamepadbuttondown', detectPad);
             return;
         }
-        window.e = e;
         e.preventDefault();
         console.log('pressing pad', e);
         $scope.keys[$scope.currKey].padCode = e.button;
@@ -61,23 +51,37 @@ app.controller('keyBindingCtrl', function ($scope, keyIdentity) {
             return button === e.button;
         });
         $scope.keys[$scope.currKey].name = `${$scope.keys[$scope.currKey].button}, Gamepad ${e.gamepad.index}.`
-        $scope.pointer++;
-        $scope.currKey = keyKeys[$scope.pointer];
+        pointer++;
+        $scope.currKey = keyKeys[pointer];
         $scope.$digest();
     }
+
     window.addEventListener('keydown', detectKey);
 
     window.addEventListener('gamepadbuttondown', detectPad);
 
 
     $scope.restart = function () {
-        $scope.pointer = 0;
-        $scope.currKey = keyKeys[$scope.pointer];
-        document.addEventListener('keydown', detectKey);
+        pointer = 0;
+        $scope.currKey = keyKeys[pointer];
+        window.addEventListener('keydown', detectKey);
+        window.addEventListener('gamepadbuttondown', detectPad);
     }
 
+    $scope.player = 1;
 
+    $scope.resetToDefault = function () {
+        keyConfigFactory.setDefaultConfig();
+    }
 
+    $scope.save = function () {
+        keyConfigFactory.setConfig($scope.player - 1, $scope.keys)
+        keyConfigFactory.saveConfig($scope.player - 1, $scope.keys)
+    }
+
+    $scope.back = function () {
+        $state.go()
+    }
 
 
 });
