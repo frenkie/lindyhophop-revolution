@@ -110,13 +110,15 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
     function carouselMove(event) {
         var songs = carousel.children().length;
 
-        if (event.keyCode === 39) {
+        if (event.keyCode === 39 || 
+            (event.keyCode === 68 && ScoreFactory.allPlayerGuys.length > 1)) {
             ToneFactory.play('blop');
             // rightX < 10 ? rightX += 2 : rightX;
             // leftX > 0 ? leftX = rightX = 0 : leftX = 0;
             // mouseX = -(window.innerWidth * .5) * .0004 * rightX;
             mouseX = -360/songs;
-        } else if (event.keyCode === 37) {
+        } else if (event.keyCode === 37 || 
+            (event.keyCode === 65 && ScoreFactory.allPlayerGuys.length > 1)) {
             ToneFactory.play('blop');
             // leftX < 10 ? leftX += 2 : leftX;
             // rightX > 0 ? leftX = rightX = 0 : rightX = 0;

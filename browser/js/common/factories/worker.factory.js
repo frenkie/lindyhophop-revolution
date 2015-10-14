@@ -131,12 +131,21 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         left: $(`.left-arrow-col .arrowPlace`),
         right: $(`.right-arrow-col .arrowPlace`),
         up: $(`.up-arrow-col .arrowPlace`),
-        down: $(`.down-arrow-col .arrowPlace`)
+        down: $(`.down-arrow-col .arrowPlace`),
+        leftP1: $(`.left-arrow-col .arrowPlace.arrowP1`),
+        rightP1: $(`.right-arrow-col .arrowPlace.arrowP1`),
+        upP1: $(`.up-arrow-col .arrowPlace.arrowP1`),
+        downP1: $(`.down-arrow-col .arrowPlace.arrowP1`),
+        leftP2: $(`.left-arrow-col .arrowPlace.arrowP2`),
+        rightP2: $(`.right-arrow-col .arrowPlace.arrowP2`),
+        upP2: $(`.up-arrow-col .arrowPlace.arrowP2`),
+        downP2: $(`.down-arrow-col .arrowPlace.arrowP2`)
     };
 
     var allPlaceArrows = $(`.arrowPlace`);
 
     TheWorker.prototype.handleKeyPress = function (e, tone, startTime) {
+        var num = e.keyCode;
         if(e.keyCode === 48) {
             tone.stop();
             this.worker.terminate();
@@ -163,7 +172,12 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         //This is temp logic, waiting for key binding state. will pass in keybinding object for player
 
 
-        if (placeArrows[dir]) placeArrows[dir].addClass('arrowPlacePressed');
+        if (placeArrows[dir]) {
+            if (num === 37 || num === 40 || num === 38 || num === 39)
+                placeArrows[dir+'P1'].addClass('arrowPlacePressed');
+            else if (num === 65 || num === 87 || num === 83 || num === 68)
+                placeArrows[dir+'P2'].addClass('arrowPlacePressed');
+        }
         //figure out for 2 player
 
         var timeStamp = (Date.now() - startTime) / 1000;

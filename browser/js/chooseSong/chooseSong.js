@@ -96,7 +96,8 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     function chooseLevel(e) {
         if ($scope.choice.levels < 2) return;
         CarouselFactory.chooseLevel(e);
-        if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 87 || e.keyCode === 83 ) {
+        if (e.keyCode === 38 || e.keyCode === 40 || 
+            (ScoreFactory.allPlayerGuys.length > 1 && (e.keyCode === 87 || e.keyCode === 83 ))) {
             ToneFactory.play('blop');
             viewSongInfo();      
         }
