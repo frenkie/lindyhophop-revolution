@@ -91,7 +91,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             $scope.songPreview.previewStart();
         }
 
-        displayGrooveRadar($scope.selectedChart);
+        // displayGrooveRadar($scope.selectedChart);
     }
 
     function chooseLevel(e) {
