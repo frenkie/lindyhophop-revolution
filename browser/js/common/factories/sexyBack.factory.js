@@ -131,7 +131,7 @@ app.factory('SexyBackFactory', function () {
         var measureTime = 240 / bpm;
         var timePerBeat = measureTime / mNotes;
         var startTime = chIndex * measureTime + mIndex * timePerBeat;
-        tl2.to(this.sphere.position, 5, {x:1000 * Math.random() - 500,y:1000 * Math.random() - 500}, startTime + animationLength);
+        tl2.to(this.sphere.scale, 0.02, {x: Math.random() * 3, y: Math.random() * 3}, startTime + animationLength);
     }
 
     SexyBack.addStops = function (stops, animationOffset, beatTime) {
@@ -160,7 +160,8 @@ app.factory('SexyBackFactory', function () {
     SexyBack.makeShapes = function (stepChart, bpm, config, currentSong) {
 
         SexyBack.makeTimeline();
-
+        var shape = new SexyBack();
+        console.log("SHAPE: ", shape)
         stepChart.forEach(function (measure, measureIndex) {
             var notes = measure.length;
             if(measureIndex < 3) return;
@@ -176,9 +177,9 @@ app.factory('SexyBackFactory', function () {
                     //     if (maybeShape === "1") {
                     //         shape = new SexyBack();
                     //     } else if (maybeShape === "2") {
+                    //         shape = new SexyBack();
                     //     }
                     // }
-                    var shape = new SexyBack();
                     shape.animate(bpm, measureIndex, lineIndex, notes);
                     // else if (maybeShape === "3") {
                     //     var length = config.BEAT_VH * (thisBeat - freezes[dir].firstBeat);
