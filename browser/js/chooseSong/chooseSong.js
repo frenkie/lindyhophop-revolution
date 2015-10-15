@@ -34,8 +34,15 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     var levelrgx = /(\w+)\s/;
 
-    //add a new player for testing purposes
-    if ($scope.players === 2) ScoreFactory.addPlayer();
+
+    $('.contentContainer').click( function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      });
+
+    //add a new player
+    if ($stateParams.players === 2) ScoreFactory.addPlayer();
 
     // $scope.speedMod = ArrowFactory.speedModifier;
     // ArrowFactory.setSpeed($scope.speedMod);
@@ -90,7 +97,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             $scope.songPreview.previewStart();
         }
 
-        displayGrooveRadar($scope.selectedChart1);
+        displayGrooveRadar($scope.selectedChart1, $scope.selectedChart2);
     }
 
     function chooseLevel(e) {
@@ -180,9 +187,16 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         window.addEventListener("gamepadbuttondown", chooseLevel, false);
     };
 
-    function displayGrooveRadar (chart) {
-        console.log('groovey ', chart);
+    function displayGrooveRadar (p1Chart, p2Chart) {
+        console.log('groovey ', p1Chart, p2Chart);
         var data = [{
+            axes: [
+                {axis: "Stream", value: p1Chart.grooveRadar['stream']},
+                {axis: "Voltage", value: p1Chart.grooveRadar['voltage']},
+                {axis: "Air", value: p1Chart.grooveRadar['air']},
+                {axis: "Freeze", value: p1Chart.grooveRadar['freeze']},
+                {axis: "Chaos", value: p1Chart.grooveRadar['chaos']}
+            ]}, {
             className: 'grooveGuy',
             axes: [
                 {axis: "Stream", value: 1},
@@ -190,15 +204,19 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
                 {axis: "Air", value: 1},
                 {axis: "Freeze", value: 1},
                 {axis: "Chaos", value: 1}
-            ]}, {
-            axes: [
-                {axis: "Stream", value: chart.grooveRadar['stream']},
-                {axis: "Voltage", value: chart.grooveRadar['voltage']},
-                {axis: "Air", value: chart.grooveRadar['air']},
-                {axis: "Freeze", value: chart.grooveRadar['freeze']},
-                {axis: "Chaos", value: chart.grooveRadar['chaos']}
-            ]}
+            ]} 
         ];
+        if(p2Chart) {
+            data.push({
+                axes: [
+                    {axis: "Stream", value: p2Chart.grooveRadar['stream']},
+                    {axis: "Voltage", value: p2Chart.grooveRadar['voltage']},
+                    {axis: "Air", value: p2Chart.grooveRadar['air']},
+                    {axis: "Freeze", value: p2Chart.grooveRadar['freeze']},
+                    {axis: "Chaos", value: p2Chart.grooveRadar['chaos']}
+                ]
+            });
+        }
         RadarChart.defaultConfig.radius = 1;
         RadarChart.defaultConfig.w = 300;
         RadarChart.defaultConfig.h = 200;
@@ -215,7 +233,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         window.removeEventListener("keydown", chooseLevel, false);
         window.removeEventListener("gamepadbuttondown", chooseLevel, false);
         if($stateParams.players===2) $state.go('versus', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2});
-        else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, mod: $scope.P1arrowSpeed});
+        else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, mod1: $scope.P1arrowSpeed, mod2: $scope.P2arrowSpeed});
 
     };
 

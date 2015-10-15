@@ -13,7 +13,7 @@ app.config(function($stateProvider) {
             }
         },
         params: {
-            mod: 1
+            mod1: 1
         },
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
 
@@ -38,11 +38,11 @@ app.config(function($stateProvider) {
 
             var config = {
                 TIMING_WINDOW: TIMING_WINDOW,
-                ARROW_TIME: ((ArrowFactory.SPEED_1X/$stateParams.mod) * 4 / mainBPM), //Factor for timing how fast arrow takes (this number / bpm for seconds)
+                ARROW_TIME: ((ArrowFactory.SPEED_1X/$stateParams.mod1) * 4 / mainBPM), //Factor for timing how fast arrow takes (this number / bpm for seconds)
                 BEAT_TIME: 1/(mainBPM/60/4)/4, //Number of seconds per measure
-                SPEED_MOD: $stateParams.mod
+                SPEED_MOD: $stateParams.mod1
             };
-            config.BEAT_VH = 100/(((ArrowFactory.SPEED_1X/$stateParams.mod) * 4)/mainBPM) * config.BEAT_TIME;
+            config.BEAT_VH = 100/(((ArrowFactory.SPEED_1X/$stateParams.mod1) * 4)/mainBPM) * config.BEAT_TIME;
 
             var arrowWorker, tone;
 
@@ -74,7 +74,7 @@ app.config(function($stateProvider) {
                 arrowWorker = new WorkerFactory('/js/animation/animationWorker.js', 1);
                 arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart);
 
-                arrowWorker.handleMessages($scope, arrows, tone);
+                arrowWorker.handleMessages($scope, arrows, tone, 1);
 
 
 
@@ -116,4 +116,3 @@ app.config(function($stateProvider) {
         }
     });
 });
-
