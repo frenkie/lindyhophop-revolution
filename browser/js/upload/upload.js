@@ -10,15 +10,17 @@ app.config(function($stateProvider) {
 
 app.controller('uploadCtrl', function ($scope, Upload, $state, keyConfigFactory) {
 
-    var blink = true;
+    var blink = false;
     setInterval(function() {
       if(blink){
         $('.smUpload').addClass('blink-upload');
         $('.songUpload').removeClass('blink-upload');
+        $('.bgUpload').removeClass('blink-upload');
         blink = false;
       } else {
         $('.songUpload').addClass('blink-upload');
         $('.smUpload').removeClass('blink-upload');
+        $('.bgUpload').addClass('blink-upload');
         blink = true;
       };
     },300);
