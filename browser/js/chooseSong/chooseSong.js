@@ -19,7 +19,7 @@ app.config(function ($stateProvider) {
 });
 
 
-app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory, ScoreFactory, $stateParams) {
+app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory, ScoreFactory, $stateParams, keyConfigFactory) {
 
     console.log(`players:`);
     console.log($stateParams);
@@ -97,19 +97,20 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     function chooseLevel(e) {
         if ($scope.choice.levels < 2) return;
         CarouselFactory.chooseLevel(e);
-        if (e.keyCode === 38 || e.keyCode === 40 ||
-            (ScoreFactory.allPlayerGuys.length > 1 && (e.keyCode === 87 || e.keyCode === 83 ))) {
+        var button = keyConfigFactory(e);
+        if (button.name === 'down' || button.name === 'up') {
             ToneFactory.play('blop');
             viewSongInfo();
         }
-        else if (e.keyCode === 27) {
+        else if (button.name === 'escape') {
             window.removeEventListener("keydown", chooseLevel, false);
+            window.removeEventListener("gamepadbuttondown", chooseLevel, false);
             if ($scope.songPreview) {
                 $scope.songPreview.previewStop();
                 $scope.songPreview = null;
             }
         }
-        else if (e.keyCode === 13) {
+        else if (button.name === 'enter') {
             if ($scope.songPreview) {
                 $scope.songPreview.previewStop();
                 $scope.songPreview = null;
@@ -124,6 +125,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         $timeout ( function () {
             CarouselFactory.init();
             window.addEventListener("keydown", CarouselFactory.carouselMove, false);
+            window.addEventListener("gamepadbuttondown", CarouselFactory.carouselMove, false);
             // window.addEventListener("click", CarouselFactory.freezeCarousel);
         })
     );
@@ -157,7 +159,9 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         console.log('$scope.choice:', $scope.choice);
 
         window.removeEventListener("keydown", CarouselFactory.carouselMove, false);
+        window.removeEventListener("gamepadbuttondown", CarouselFactory.carouselMove, false);
         window.addEventListener("keydown", chooseLevel, false);
+        window.addEventListener("gamepadbuttondown", chooseLevel, false);
     };
 
     function displayGrooveRadar (chart) {
@@ -185,6 +189,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     $scope.loadSong = function(chart) {
         ToneFactory.play('start');
         window.removeEventListener("keydown", chooseLevel, false);
+        window.removeEventListener("gamepadbuttondown", chooseLevel, false);
         if($stateParams.players===2) $state.go('versus', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2});
         else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1});
 

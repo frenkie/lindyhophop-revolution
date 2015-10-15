@@ -25,20 +25,15 @@ app.controller('SignupCtrl', function ($scope, AuthService, $state) {
 
     };
 
-    window.addEventListener('keydown', onArrowKey);
-        function onArrowKey(event) {
-            if(event.keyCode === 27) {
-                window.removeEventListener('keydown', onArrowKey);
-                $state.go('home');
-            };
+    function onArrowKey(event) {
+        var button = keyConfigFactory(event);
+        if (button.name === 'escape') {
+            $(document).off('keydown');
+            $(document).off('gamepadbuttondown');
+            $state.go('home');
+        };
     };
 
-    function onArrowKey(event) {
-        if(event.keyCode === 27) {
-            window.removeEventListener('keydown', onArrowKey);
-            $state.go('home');
-        }
-    }
-
-    window.addEventListener('keydown', onArrowKey);
+    $(document).on('keydown', onArrowKey);
+    $(document).on('gamepadbuttondown', onArrowKey);
 });

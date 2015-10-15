@@ -114,17 +114,6 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
             $scope.$digest();
         }
     }
-    var keyCodeToDir = {
-        '37': 'left',
-        '40': 'down',
-        '38': 'up',
-        '39': 'right',
-        '27': 'escape',
-        '65': 'left', //a
-        '87': 'up', //w
-        '83': 'down', //s
-        '68': 'right' //d
-    };
 
     var placeArrows = {
         left: $(`.left-arrow-col .arrowPlace`),

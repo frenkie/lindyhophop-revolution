@@ -127,6 +127,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             // rightX = 0;
             // leftX = 0;
             window.removeEventListener('keydown', carouselMove);
+            window.removeEventListener('gamepadbuttondown', carouselMove);
             $state.go('mainMenu');
 
         } else if (button.name === 'enter') {
@@ -218,6 +219,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             });
             init();
             window.addEventListener("keydown", carouselMove, false);
+            window.addEventListener("gamepadbuttondown", carouselMove, false);
             $('.selected1').removeClass("selected1");
             $('.selected2').removeClass("selected2");
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');

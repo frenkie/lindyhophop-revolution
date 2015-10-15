@@ -55,12 +55,16 @@ app.controller('uploadCtrl', function ($scope, Upload, $state) {
         });
     };
 
-    window.addEventListener('keydown', onArrowKey);
-        function onArrowKey(event) {
-            if(event.keyCode === 27) {
-                window.removeEventListener('keydown', onArrowKey);
-                $state.go('mainMenu');
-            };
+    function onArrowKey(event) {
+        var button = keyConfigFactory(event);
+        if (button.name === 'escape') {
+            $(document).off('keydown');
+            $(document).off('gamepadbuttondown');
+            $state.go('home');
+        };
     };
+
+    $(document).on('keydown', onArrowKey);
+    $(document).on('gamepadbuttondown', onArrowKey);
 
 });

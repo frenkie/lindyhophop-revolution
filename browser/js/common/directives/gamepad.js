@@ -26,60 +26,9 @@ app.directive('gamepad', function () {
 
             var gamepads = new Gamepads(gamepadConfig);
 
-            // gamepads.keyEvents = {
-            //     up: {
-            //         detail: {
-            //             key: 'Up Arrow',
-            //             keyCode: 38
-            //         }
-            //     },
-            //     left: {
-            //         detail: {
-            //             key: 'Left Arrow',
-            //             keyCode: 37
-            //         }
-            //     },
-            //     down: {
-            //         detail: {
-            //             key: 'Down Arrow',
-            //             keyCode: 40
-            //         }
-            //     },
-            //     right: {
-            //         detail: {
-            //             key: 'Right Arrow',
-            //             keyCode: 39
-            //         }
-            //     },
-            //     enter: {
-            //         detail: {
-            //             key: 'Enter',
-            //             keyCode: 13
-            //         }
-            //     },
-            //     back: {
-            //         detail: {
-            //             key: 'Escape',
-            //             keyCode: 27
-            //         }
-            //     },
-            //     start: {
-            //         detail: {
-            //             key: 'Number 1',
-            //             keyCode: 49
-            //         }
-            //     },
-            //     select: {
-            //         detail: {
-            //             key: 'Number 2',
-            //             keyCode: 50
-            //         }
-            //     }
-            // }
-
             gamepads.polling = false;
 
-            window.gamepads = gamepads
+            window.gamepads = gamepads;
 
             if (gamepads.gamepadsSupported) {
                 gamepads.updateStatus = function () {
