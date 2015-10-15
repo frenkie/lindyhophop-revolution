@@ -38,10 +38,11 @@ app.controller('uploadCtrl', function ($scope, Upload, $state, keyConfigFactory)
     $scope.upload = function (song, sm) {
       console.log('song', song);
       console.log('sm file', sm);
+      console.log('bg file', bg);
         Upload.upload({
             url: '/api/songs/upload/',
             method: 'POST',
-            data: {song: song, sm: sm}
+            data: {song: song, sm: sm, bg: bg}
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.song.name + 'uploaded. Response: ' + resp.data);
         }, function (resp) {

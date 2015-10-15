@@ -15,6 +15,13 @@
       </span>
       <span ng-show='sm' class='uploadFile'>{{sm.name}}</span>
     </div>
+    <div>
+      <span>Single background file</span>
+      <span ng-hide='bg' class="button" ngf-select ng-model="bg" name="song" ngf-pattern="'image/*'" accept="image/*">
+        <span class='bgUpload'>+</span>Select<span class='songUpload'>+</span>
+      </span>
+      <span ng-show='bg' class='uploadFile'>{{bg.name}}</span>
+    </div>
     <button class='btn-upload' type="submit" ng-click="submit()">submit</button>
   </form>
 </div>
