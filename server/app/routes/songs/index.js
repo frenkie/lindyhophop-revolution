@@ -77,6 +77,13 @@ router.get('/:id', function(req, res, next) {
     }).then(null, next);
 });
 
+router.get('/:id/highScores', function(req, res, next) {
+    Song.findById(req.params.id)
+    .then(function(song) {
+        res.send(song.highScores);
+    }).then(null, next);
+});
+
 router.post('/upload', multipartMiddleware, function(req, res, next) {
 
 

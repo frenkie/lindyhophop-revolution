@@ -40,6 +40,10 @@ var schema = new mongoose.Schema({
   background: {
     type: String
   },
+  highScores: {
+    type: [Number],
+    default: []
+  },
   Charts: {
     Beginner: {
       stepChart: {
