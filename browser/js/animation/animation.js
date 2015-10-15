@@ -7,10 +7,15 @@ app.config(function($stateProvider) {
         resolve: {
             song: function(SongFactory, $stateParams) {
                 return SongFactory.getSongById($stateParams.songId);
+            },
+            resolve: function(song) {
+                return song.background;
             }
         },
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+
+            $scope.imageSrc = `/img/background/${song.background}`;
 
             $scope.ready = false;
             var currentSong = song;
@@ -94,7 +99,7 @@ app.config(function($stateProvider) {
                     $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
                 }
                 else {
-                    $scope.imageSrc = `/img/background/${currentSong.title}-bg.png`;
+
                 }
                 setTimeout(function() {
                     var video = document.getElementById('bg-video');
