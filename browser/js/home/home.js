@@ -55,34 +55,6 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   window.addEventListener('gamepadbuttonup', replaceArrows);
 
 
-// .up img {
-//     // position: absolute;
-//     transition: transform 0.2s;
-//     width: 100%;
-//     // left: calc((100vw / 10));
-//   }
-//   .right img {
-//     width: 100%;
-//     transform: translateY(90px) rotate(90deg);
-//     transition: transform 0.2s;
-//     // transform: rotate(90deg);
-//     // position: absolute;
-//     // left: calc(100vw / 10);
-//   }
-//   .down img {
-//     width: 100%;
-//     transform: translateY(90px) rotate(180deg);
-//     transition: transform 0.2s;
-//     // position: absolute;
-//   }
-//   .left img {
-//     width: 100%;
-//     transform: translateY(90px) rotate(-90deg);
-//     transition: transform 0.2s;
-//     // position: absolute;
-
-//   }
-
   var arrows = {
     left: {
       el: $('.arrow-keys .left img')[0],
@@ -108,6 +80,12 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
       start: "0",
       end: "-20px"
     },
+    enter: {
+      el: $('#home .enter img')[0],
+      dir: "top",
+      start: "0",
+      end: "20px"
+    },
   };
 
   function moveArrows (e) {
@@ -115,6 +93,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     if (!button) return;
 
     var a = arrows[button.name];
+    if (!a) return;
 
     a.el.style[a.dir] = a.end;
     a.el.style['-webkit-filter'] = "grayscale(1) brightness(200%)";
@@ -124,6 +103,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     if (!button) return;
 
     var a = arrows[button.name];
+    if (!a) return;
 
     a.el.style[a.dir] = a.start;
     a.el.style['-webkit-filter'] = "";
@@ -155,7 +135,10 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   		var uiState = active[0].outerHTML.split('"');
       $document.off('keydown', onArrowKey);
       window.removeEventListener('gamepadbuttondown', onArrowKey);
-
+      $document.off('keydown', moveArrows);
+      window.removeEventListener('gamepadbuttondown', moveArrows);
+      $document.off('keydown', replaceArrows);
+      window.removeEventListener('gamepadbuttondown', replaceArrows);
       if(uiState[5] === "user") {
         logout();
         $state.reload();
