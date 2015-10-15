@@ -11,13 +11,11 @@ app.config(function($stateProvider) {
         },
 
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+            
+
+
             $scope.ready = false;
             var currentSong = song;
-
-
-            // [1,2].forEach(function(num) {
-            //     $scope['showCombo'+num] = false;
-            // })
 
             const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
 
@@ -119,7 +117,7 @@ app.config(function($stateProvider) {
                     $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
                 }
                 else {
-                    $scope.imageSrc = `/img/background/${currentSong.title}-bg.png`;
+                    $scope.imageSrc = `/img/background/${song.background}`;               
                 }
                 setTimeout(function() {
                     var video = document.getElementById('bg-video');

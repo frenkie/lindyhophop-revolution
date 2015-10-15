@@ -5,6 +5,7 @@ app.factory('ScoreFactory', function() {
         this.combo = 0;
         this.maxCombo = 0;
         this.totalArrowGuy = 0;
+        this.totalFreezesGuy = 0;
         this.accuracyCount = {
             Flawless: 0,
             Marvelous: 0,
@@ -37,6 +38,7 @@ app.factory('ScoreFactory', function() {
         combo: 0,
         maxCombo: 0,
         totalArrowGuy: 0,
+        totalFreezesGuy: 0,
         accuracyCount: {
             Flawless: 0,
             Marvelous: 0,
@@ -140,10 +142,13 @@ app.factory('ScoreFactory', function() {
            return a + measure.reduce(function(b, line) {
                return b + line.reduce(function(c, arrow) {
                    var value = (arrow === '1' || arrow === '2' || arrow === '3') ? 1 : 0;
+                   if (arrow === '3') player.totalFreezesGuy++;
                    return c + value;
                }, 0);
            }, 0);
        }, 0);
+
+        console.log(`totalFreezes ${playerNum}: ${player.totalFreezesGuy}`);
         // if (playerNum === 2) {
         //     player2Guy.totalArrowGuy = player2Guy.stepChart.chart.reduce(function(a, measure) {
         //         return a + measure.reduce(function(b, line) {
@@ -169,7 +174,7 @@ app.factory('ScoreFactory', function() {
         var player = allPlayerGuys[playerNum-1] || player1Guy;
 
         var temp = 0;
-        (player.score + player.maxCombo > player.totalArrowGuy * POINTS.Flawless ) ? temp = 1000000 : temp = (player.score + player.maxCombo) * 1000000 / (player.totalArrowGuy * POINTS.Flawless);
+        (player.score + player.maxCombo > (player.totalArrowGuy - player.totalFreezesGuy) * POINTS.Flawless ) ? temp = 1000000 : temp = (player.score + player.maxCombo) * 1000000 / ( (player.totalArrowGuy - player.totalFreezesGuy) * POINTS.Flawless);
         player.realScore = (Math.floor(temp  + 1000000)/2);
         return player.realScore;
         // if (playerNum === 2) {
@@ -185,7 +190,7 @@ app.factory('ScoreFactory', function() {
 
     function getPercent(playerNum) {
         var player = allPlayerGuys[playerNum-1] || player1Guy;
-        return parseFloat((player.accuracyCount.Flawless + player.accuracyCount.Marvelous + player.accuracyCount.Great)/player.totalArrowGuy);
+        return parseFloat((player.accuracyCount.Flawless + player.accuracyCount.Marvelous + player.accuracyCount.Great)/(player.totalArrowGuy - player.totalFreezesGuy));
 
         // if (playerNum === 2) return parseFloat((player2Guy.accuracyCount.Flawless + player2Guy.accuracyCount.Marvelous + player2Guy.accuracyCount.Great)/player2Guy.totalArrowGuy);
         // else return parseFloat((player1Guy.accuracyCount.Flawless + player1Guy.accuracyCount.Marvelous + player1Guy.accuracyCount.Great)/player1Guy.totalArrowGuy);
