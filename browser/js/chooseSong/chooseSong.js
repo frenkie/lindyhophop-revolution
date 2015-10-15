@@ -180,15 +180,19 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
                 {axis: "Air", value: 1},
                 {axis: "Freeze", value: 1},
                 {axis: "Chaos", value: 1}
-            ]}, {
-            axes: [
-                {axis: "Stream", value: p2Chart.grooveRadar['stream']},
-                {axis: "Voltage", value: p2Chart.grooveRadar['voltage']},
-                {axis: "Air", value: p2Chart.grooveRadar['air']},
-                {axis: "Freeze", value: p2Chart.grooveRadar['freeze']},
-                {axis: "Chaos", value: p2Chart.grooveRadar['chaos']}
-            ]}
+            ]} 
         ];
+        if(p2Chart) {
+            data.push({
+                axes: [
+                    {axis: "Stream", value: p2Chart.grooveRadar['stream']},
+                    {axis: "Voltage", value: p2Chart.grooveRadar['voltage']},
+                    {axis: "Air", value: p2Chart.grooveRadar['air']},
+                    {axis: "Freeze", value: p2Chart.grooveRadar['freeze']},
+                    {axis: "Chaos", value: p2Chart.grooveRadar['chaos']}
+                ]
+            });
+        }
         RadarChart.defaultConfig.radius = 1;
         RadarChart.defaultConfig.w = 300;
         RadarChart.defaultConfig.h = 200;
