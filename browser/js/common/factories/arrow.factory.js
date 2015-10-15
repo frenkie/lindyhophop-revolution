@@ -64,7 +64,6 @@ app.factory('ArrowFactory', function (SexyBackFactory) {
         //console.log('animationLength is', animationLength);
         //console.log('measureTime is ',measureTime)
         tl.to(this.el, animationLength * 10, {top: '-900vh', ease:Linear.easeNone}, startTime);
-        console.log("this is tl: ", tl)
     }
 
     Arrow.addStops = function (stops, animationOffset, beatTime) {
@@ -100,7 +99,7 @@ app.factory('ArrowFactory', function (SexyBackFactory) {
     };
 
 
-    Arrow.makeArrows = function (stepChart, bpm, config, currentSong) {
+    Arrow.makeArrows = function (stepChart, bpm, config, currentSong, player) {
 
         Arrow.makeTimeline();
 
@@ -140,10 +139,10 @@ app.factory('ArrowFactory', function (SexyBackFactory) {
                         else color = 'green';
                         var arrow;
                         if (maybeArrow === "1") {
-                            arrow = new Arrow(dir, 1, color);
+                            arrow = new Arrow(dir, player, color);
                         } else if (maybeArrow === "2") {
                             freezes[dir].firstBeat = thisBeat;
-                            arrow = new FreezeArrow(dir, 1, color);
+                            arrow = new FreezeArrow(dir, player, color);
                             freezes[dir].arrow = arrow;
                         }
                         arrow.animate(bpm, measureIndex, lineIndex, notes);
