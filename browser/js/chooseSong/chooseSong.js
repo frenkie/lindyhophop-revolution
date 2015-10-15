@@ -30,7 +30,13 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     $scope.songPreview;
 
-    //add a new player for testing purposes
+    $('.contentContainer').click( function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      });
+
+    //add a new player
     if ($stateParams.players === 2) ScoreFactory.addPlayer();
 
     // $scope.speedMod = ArrowFactory.speedModifier;
