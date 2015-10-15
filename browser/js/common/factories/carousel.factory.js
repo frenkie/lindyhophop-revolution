@@ -192,7 +192,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
                 $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).siblings(`:last`).addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
             }
 
-        } else if (event.keyCode === 40) { //key down
+        } else if (button.name === "down") { //key down
             if ($(`.selected${button.player + 1}`).next().length) {
                 $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
                 $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).next().addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
