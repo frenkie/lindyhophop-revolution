@@ -1,5 +1,10 @@
 #versus {
   .container {
-    width: 1570px;
+    width: inherit;
+    margin: 0;
+  }
+  .row {
+    width: 90%;
+    margin: auto;
   }
 }
