@@ -101,8 +101,8 @@ app.config(function($stateProvider) {
                     video.play();
                 }, videoOffset);
 
-                //$scope.ready = true;
-                //$scope.$digest();
+                $scope.ready = true;
+                $scope.$digest();
             }
         }
     });
