@@ -59,10 +59,10 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             $scope['grooveRadar'+num] = $scope['selectedChart'+num].grooveRadar;
         })
 
-        // $scope.selectedChart1 = Charts[$scope.selectedDifficulty1];
-        // $scope.selectedChart2 = Charts[$scope.selectedDifficulty2];
+        $scope.selectedChart1 = Charts[$scope.selectedDifficulty1];
+        $scope.selectedChart2 = Charts[$scope.selectedDifficulty2];
 
-        // var {level1, grooveRadar1} = $scope.selectedChart1;
+        var {level1, grooveRadar1} = $scope.selectedChart1;
         // var {level2, grooveRadar2} = $scope.selectedChart2;
 
 
@@ -72,7 +72,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         console.log(`BPM: ${displayBpm}`);
         console.log(`Preview audio: ${music}`);
         console.log(`Difficulty P1: ${$scope.selectedDifficulty1}; Feet: ${$scope.level1}`);
-        console.log(`Difficulty P2: ${$scope.selectedDifficulty2}; Feet: ${$scope.level2}`);
+        // console.log(`Difficulty P2: ${$scope.selectedDifficulty2}; Feet: ${$scope.level2}`);
 
         // console.log(Object.keys(grooveRadar).reduce((output, category) => {
         //     return output.concat(`${category}: ${grooveRadar[category]}`);
@@ -83,7 +83,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             $scope.songPreview.previewStart();
         }
 
-        // displayGrooveRadar($scope.selectedChart);
+        displayGrooveRadar($scope.selectedChart1);
     }
 
     function chooseLevel(e) {
@@ -159,15 +159,23 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     function displayGrooveRadar (chart) {
         console.log('groovey ', chart);
-        var data = [[
-            {axis: "Stream", value: chart.grooveRadar['stream']},
-            {axis: "Voltage", value: chart.grooveRadar['voltage']},
-            {axis: "Air", value: chart.grooveRadar['air']},
-            {axis: "Freeze", value: chart.grooveRadar['freeze']},
-            {axis: "Chaos", value: chart.grooveRadar['chaos']}
-        ], [
-            {axis: "Stream", value: 1}
-        ]];
+        var data = [{
+            className: 'grooveGuy',
+            axes: [
+                {axis: "Stream", value: 1},
+                {axis: "Voltage", value: 1},
+                {axis: "Air", value: 1},
+                {axis: "Freeze", value: 1},
+                {axis: "Chaos", value: 1}
+            ]}, {
+            axes: [
+                {axis: "Stream", value: chart.grooveRadar['stream']},
+                {axis: "Voltage", value: chart.grooveRadar['voltage']},
+                {axis: "Air", value: chart.grooveRadar['air']},
+                {axis: "Freeze", value: chart.grooveRadar['freeze']},
+                {axis: "Chaos", value: chart.grooveRadar['chaos']}
+            ]}
+        ];
         RadarChart.defaultConfig.radius = 1;
         RadarChart.defaultConfig.w = 300;
         RadarChart.defaultConfig.h = 200;

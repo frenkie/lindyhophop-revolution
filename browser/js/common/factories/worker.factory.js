@@ -164,6 +164,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         var button = keyConfigFactory.getButton(e); // {player: 1, name: 'up'}, where 1 is player 2 and up is the direction
         if (button) e.preventDefault();
         else return;
+        if (this.player !== button.player + 1) return;
         // arrow pressed indicator
         allPlaceArrows.removeClass('arrowPlacePressed');
         this.worker.postMessage({type: 'keyUp', dir: button.name});
