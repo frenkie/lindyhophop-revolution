@@ -46,7 +46,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         var arrow = domArrow.children[0];
         if (e.data.freeze) {
             var freeze = domArrow.children[1];
-            freeze.style.top = '7.5vh';
+            freeze.style.transform = 'translateY(7.5vh)';
             // adding freeze eater class to fader (covers up freezes)
             faders[e.data.dir][0].className += " freeze-eater";
         }
@@ -138,8 +138,6 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         if (button) e.preventDefault();
         else return;
         // this makes sure the player who pressed this button commands this worker
-        if (this.player !== button.player + 1) return;
-
 
         if (button.name === 'escape') {
             ToneFactory.play('back');
@@ -151,6 +149,10 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
             ScoreFactory.resetPlayers();
             $state.go('chooseSong');
         }
+
+        if (this.player !== button.player + 1) return;
+
+
 
         placeArrows[button.name + 'P' + (button.player + 1)].addClass('arrowPlacePressed');
 
@@ -171,15 +173,13 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
 
     }
 
+    var downHandler;
+
     TheWorker.prototype.addListener = function (tone, startTime) {
 
         var self = this;
 
-        var downHandler = function (e) {
-            self.handleKeyPress(e, tone, startTime);
-        }
-
-        var upHandler = function (e) {
+        downHandler = function (e) {
             self.handleKeyPress(e, tone, startTime);
         }
 

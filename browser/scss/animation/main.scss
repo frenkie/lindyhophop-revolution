@@ -38,14 +38,13 @@
 
 
 .freeze {
-  position: relative;
-  height: 200px;
+  margin:auto;
   z-index: 3;
-  width: 70%;
-  margin: auto;
-  top: -7.5vh;
-  background-image: url('/img/freeze.jpg');
+  width: 10vh;
+  transform: translateY(-7.5vh);
+  background-image: url('/img/arrows/freeze.png');
   background-repeat: repeat-y;
+  background-size: 100%;
 }
 
 .arrow-col {
