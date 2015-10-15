@@ -1,4 +1,4 @@
-app.factory('ScoreFactory', function() {
+app.factory('ScoreFactory', function($http) {
 
     function playerGuy (stepChart) {
         this.score = 0;
@@ -209,6 +209,13 @@ app.factory('ScoreFactory', function() {
         return ACCURACYCOLORS[acc];
     }
 
+    function getHighScores(songId) {
+        return $http.get('/api/songs/'+songId+'/highScores')
+        .then(function(res) {
+            return res.data;
+        });
+    }
+
     return {
         addScore: addScore,
         addCombo: addCombo,
@@ -223,6 +230,7 @@ app.factory('ScoreFactory', function() {
         getAccuracy: getAccuracy,
         setStepChart: setStepChart,
         getAccuracyColors: getAccuracyColors,
-        allPlayerGuys: allPlayerGuys
+        allPlayerGuys: allPlayerGuys,
+        getHighScores: getHighScores
     };
 });

@@ -4,6 +4,9 @@ app.config(function($stateProvider) {
         url: '/results',
         templateUrl: 'js/results/results.html',
         controller: 'ResultsCtrl',
+        params: {
+            songId: null
+        },
         resolve: {
             player: function(ScoreFactory) {
                 return ScoreFactory.getPlayer(1);
@@ -13,16 +16,21 @@ app.config(function($stateProvider) {
             },
             score: function(ScoreFactory) {
                 return ScoreFactory.finalScore(1);
+            },
+            highScores: function(ScoreFactory, $stateParams) {
+                return ScoreFactory.getHighScores($stateParams.songId);
             }
         }
     });
 
 });
 
-app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFactory, $state, ToneFactory, keyConfigFactory) {
+app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFactory, $state, ToneFactory, keyConfigFactory, highScores) {
+    console.log('the song id', $stateParams.songId)
     $scope.player1 = player;
     $scope.percent = percent;
     $scope.score = parseInt(score);
+    console.log('The high scores!!!!!', highScores);
 
     function play(fx) {
       ToneFactory.play(fx);

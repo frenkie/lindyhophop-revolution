@@ -69,7 +69,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
 
     }
 
-    TheWorker.prototype.handleMessages = function ($scope, arrows, tone, numPlayer) {
+    TheWorker.prototype.handleMessages = function ($scope, arrows, tone, numPlayer, songId) {
         var self = this;
         var time = {
             timer: null,
@@ -100,7 +100,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
             }else if (e.data.endSong) {
                 if(numPlayer === 1) {
                     setTimeout(() => {
-                        $state.go('results');
+                        $state.go('results', {songId: songId});
                         tone.stop();
                         self.worker.terminate();
                         ArrowFactory.killTimeline();
