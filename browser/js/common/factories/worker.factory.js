@@ -43,7 +43,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         var arrow = domArrow.children[0];
         if (e.data.freeze) {
             var freeze = domArrow.children[1];
-            freeze.style.top = '7.5vh';
+            freeze.style.transform = 'translateY(7.5vh)';
             // adding freeze eater class to fader (covers up freezes)
             faders[e.data.dir][0].className += " freeze-eater";
         }
