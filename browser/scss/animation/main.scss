@@ -119,7 +119,20 @@
 
 #player-1-arrowLane {
   position: relative;
-  height: 100%;
+  height: 100vh;
+  background-color: rgba(30, 30, 30, 0.7);
+  z-index: 1;
+  &:first-child {
+    padding-left: 75px;
+  }
+  &:last-child {
+    padding-right: 75px;
+  }
+}
+
+#player-2-arrowLane {
+  position: relative;
+  height: 100vh;
   background-color: rgba(30, 30, 30, 0.7);
   z-index: 1;
   &:first-child {

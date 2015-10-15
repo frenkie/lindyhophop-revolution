@@ -8,7 +8,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('SignupCtrl', function ($scope, AuthService, $state) {
+app.controller('SignupCtrl', function ($scope, AuthService, $state, keyConfigFactory) {
 
     $scope.signup = {};
     $scope.error = null;
@@ -25,20 +25,16 @@ app.controller('SignupCtrl', function ($scope, AuthService, $state) {
 
     };
 
-    window.addEventListener('keydown', onArrowKey);
-        function onArrowKey(event) {
-            if(event.keyCode === 27) {
-                window.removeEventListener('keydown', onArrowKey);
-                $state.go('home');
-            };
+    function onArrowKey(event) {
+        var button = keyConfigFactory(event);
+        if (!button) return;
+        if (button.name === 'escape') {
+            $(document).off('keydown');
+            window.removeEventListener('gamepadbuttondown', onArrowKey);
+            $state.go('home');
+        };
     };
 
-    function onArrowKey(event) {
-        if(event.keyCode === 27) {
-            window.removeEventListener('keydown', onArrowKey);
-            $state.go('home');
-        }
-    }
-
-    window.addEventListener('keydown', onArrowKey);
+    $(document).on('keydown', onArrowKey);
+    window.addEventListener('gamepadbuttondown', onArrowKey);
 });

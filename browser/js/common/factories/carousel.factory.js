@@ -1,4 +1,4 @@
-app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
+app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyConfigFactory) {
     // set and cache variables
     var looperRunning, container, carousel, item, radius, itemLength, rY, ticker, fps;
     var mouseX = 0;
@@ -108,22 +108,16 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
     }
 
     function carouselMove(event) {
+        var button = keyConfigFactory.getButton(event);
+        if (!button) return;
         var songs = carousel.children().length;
-        // var button = keyConfigFactory.getButton(event);
-        if (event.keyCode === 39) {
+        if (button.name === 'right') {
             ToneFactory.play('blop');
-            // rightX < 10 ? rightX += 2 : rightX;
-            // leftX > 0 ? leftX = rightX = 0 : leftX = 0;
-            // mouseX = -(window.innerWidth * .5) * .0004 * rightX;
             mouseX = -360/songs;
-        } else if (event.keyCode === 37) {
-        // } else if (button.name === "right") {
+        } else if (button.name === 'left') {
             ToneFactory.play('blop');
-            // leftX < 10 ? leftX += 2 : leftX;
-            // rightX > 0 ? leftX = rightX = 0 : rightX = 0;
-            // mouseX = (window.innerWidth * .5) * .0004 * leftX;
             mouseX = 360/songs;
-        } else if (event.keyCode === 27) {
+        } else if (button.name === 'escape') {
             ToneFactory.play('back');
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
@@ -134,9 +128,10 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             // rightX = 0;
             // leftX = 0;
             window.removeEventListener('keydown', carouselMove);
+            window.removeEventListener('gamepadbuttondown', carouselMove);
             $state.go('mainMenu');
 
-        } else if (event.keyCode === 13) {
+        } else if (button.name === 'enter') {
             ToneFactory.play('start');
             findTarget();
 
@@ -169,7 +164,7 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             // leftX = 0;
 
             $(`#item${target}`).trigger('click');
-            
+
         }
 
     }
@@ -188,32 +183,33 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
 
 
     function chooseLevel(event) {
-
-        if (event.keyCode === 38) { //key up
-            if ($('.selected1').prev().length) {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
-                $('.selected1').removeClass("selected1").prev().addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
+        var button = keyConfigFactory.getButton(event);
+        if (!button) return;
+        if (button.name === "up") { //key up
+            if ($(`.selected${button.player + 1}`).prev().length) {
+                $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
+                $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).prev().addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
             }
             else {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
-                $('.selected1').removeClass("selected1").siblings(':last').addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
+                $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
+                $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).siblings(`:last`).addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
             }
 
-        } else if (event.keyCode === 40) { //key down
-            if ($('.selected1').next().length) {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
-                $('.selected1').removeClass("selected1").next().addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
+        } else if (button.name === "down") { //key down
+            if ($(`.selected${button.player + 1}`).next().length) {
+                $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
+                $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).next().addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
             }
             else {
-                $('.selected1>.player1Arrow').removeClass('selectedArrow1');
-                $('.selected1').removeClass("selected1").siblings(':first').addClass("selected1").children('.player1Arrow').addClass("selectedArrow1");
+                $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
+                $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).siblings(`:first`).addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
             }
 
-        } else if (event.keyCode === 13) { //enter
+        } else if (button.name === "enter") { //enter
+            // should probably only be for number one : D
+            $(`.selected1`).trigger('click');
 
-            $('.selected1').trigger('click');
-
-        } else if (event.keyCode === 27) { //escape
+        } else if (button.name === "escape") { //escape
             $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1").removeClass("selectedArrow2");
             $('.radar-chart').css("visibility", "hidden");
             // $('.selectedArrow1').css("visibility", "hidden")
@@ -225,40 +221,12 @@ app.factory('CarouselFactory', function($state, ToneFactory, ScoreFactory) {
             });
             init();
             window.addEventListener("keydown", carouselMove, false);
-            $('.selected1').removeClass("selected1");  
+            window.addEventListener("gamepadbuttondown", carouselMove, false);
+            $('.selected1').removeClass("selected1");
             $('.selected2').removeClass("selected2");
-            $(`#item${target} > .carouselItemInner`).removeClass('activeSong');         
+            $(`#item${target} > .carouselItemInner`).removeClass('activeSong');
         }
-        //if there is a 2nd player, listen to another play's key presses
-        if(ScoreFactory.allPlayerGuys.length > 1) {
-            if (event.keyCode === 87) { //key W
-                console.log('hit W key');
-                if ($('.selected2').prev().length) {
-                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
-                    $('.selected2').removeClass("selected2").prev().addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
-                }
-                else {
-                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
-                    $('.selected2').removeClass("selected2").siblings(':last').addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
-                }
-
-            } else if (event.keyCode === 83) { //key S
-                console.log('hit S key');
-                if ($('.selected2').next().length) {
-                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
-                    $('.selected2').removeClass("selected2").next().addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
-                }
-                else {
-                    $('.selected2>.player2Arrow').removeClass('selectedArrow2');
-                    $('.selected2').removeClass("selected2").siblings(':first').addClass("selected2").children('.player2Arrow').addClass("selectedArrow2");
-                }
-
-            } else if (event.keyCode === 13) { //enter
-
-                $('.selected2').trigger('click');
-
-            }
-        }
+        //if there is a 2nd player, we can listen to that anyway with our way cool buttttunzzz
 
     }
 
