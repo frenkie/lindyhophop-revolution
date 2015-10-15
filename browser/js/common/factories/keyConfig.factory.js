@@ -160,7 +160,7 @@ app.factory('keyConfigFactory', function (localStorageService) {
             var prev = JSON.parse(prevConfig);
             factory.setConfig(0, prev[0]);
             factory.setConfig(1, prev[1]);
-            console.log('got previously stored keybindings!')
+            console.log('got previously stored keybindings!', config, revConf)
         } else {
             factory.setConfig(0, playerdefault[0]);
             factory.setConfig(1, playerdefault[1]);
@@ -186,6 +186,7 @@ app.factory('keyConfigFactory', function (localStorageService) {
         } else {
             key = `key${e.which}`
         }
+
         return revConf[key];
     };
 

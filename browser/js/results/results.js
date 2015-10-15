@@ -29,7 +29,8 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
     };
 
     function leaveResults(event) {
-        var button = keyConfigFactory.getButton();
+        var button = keyConfigFactory.getButton(event);
+        if (!button) return;
         if (button.name === "escape") {
             play('back');
             window.removeEventListener('keydown', leaveResults);

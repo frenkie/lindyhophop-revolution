@@ -42,10 +42,11 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
 
   var $document = $(document);
   $document.on('keydown', onArrowKey);
-  $document.on('gamepadbuttondown', onArrowKey);
+  window.addEventListener('gamepadbuttondown', onArrowKey);
 
   function onArrowKey(event) {
     var button = keyConfigFactory.getButton(event);
+    if (!button) return;
 
   	var active = $('.activeHome') || $('#option1');
    	var activeNumber = parseInt(active[0].id.slice(-1));
@@ -66,7 +67,8 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
       play('start');
   		var uiState = active[0].outerHTML.split('"');
       $document.off('keydown', onArrowKey);
-  		$document.off('gamepadbuttondown', onArrowKey);
+      window.removeEventListener('gamepadbuttondown', onArrowKey);
+
       if(uiState[5] === "user") {
         logout();
         $state.reload();

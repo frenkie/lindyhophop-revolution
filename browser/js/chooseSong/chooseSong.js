@@ -42,17 +42,9 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         var $selected1 = $('.selected1');
         var $selected2 = $('.selected2');
         if (!$selected2.length) $selected2 = null;
-        console.log(`$selected1:`)
-        console.log($selected1);
-        console.log(`$selected2:`)
-        console.log($selected2);
+
         if ($selected1) $scope.selectedDifficulty1 = $selected1[0].textContent.trim();
         if ($selected2) $scope.selectedDifficulty2 = $selected2[0].textContent.trim();
-        console.log('selectedDifficulty1:', $scope.selectedDifficulty1);
-        console.log('selectedDifficulty2:', $scope.selectedDifficulty2);
-
-        console.log('numPlayers:', _.range($stateParams.players).map(p=>p+1));
-
 
 
         console.log('selected song:', $scope.choice.song);
@@ -97,7 +89,8 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     function chooseLevel(e) {
         if ($scope.choice.levels < 2) return;
         CarouselFactory.chooseLevel(e);
-        var button = keyConfigFactory(e);
+        var button = keyConfigFactory.getButton(e);
+        if (!button) return;
         if (button.name === 'down' || button.name === 'up') {
             ToneFactory.play('blop');
             viewSongInfo();

@@ -172,27 +172,29 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
 
     TheWorker.prototype.addListener = function (tone, startTime) {
 
-        $(document).on('keydown.keyPressHandler', (e) => {
-            this.handleKeyPress(e, tone, startTime);
-        });
-        $(document).on('gamepadbuttondown.keyPressHandler', (e) => {
-            this.handleKeyPress(e, tone, startTime);
-        });
-        $(document).on('keyup.keyPressHandler', (e) => {
-            this.handleKeyUp(e);
-        });
-        $(document).on('gamepadbuttonup.keyPressHandler', (e) => {
-            this.handleKeyUp(e);
-        });
+        var self = this;
+
+        var downHandler = function (e) {
+            self.handleKeyPress(e, tone, startTime);
+        }
+
+        var upHandler = function (e) {
+            self.handleKeyPress(e, tone, startTime);
+        }
+
+        $(document).on('keydown.keyPressHandler', downHandler);
+        window.addEventListener('gamepadbuttondown', downHandler);
+        $(document).on('keyup.keyPressHandler', this.handleKeyUp.bind(this));
+        window.addEventListener('gamepadbuttonup', this.handleKeyUp.bind(this));
 
     }
 
     TheWorker.prototype.removeListeners = function () {
 
         $(document).off('keydown.keyPressHandler');
-        $(document).off('gamepadbuttondown.keyPressHandler');
+        window.removeEventListener('gamepadbuttondown', downHandler);
         $(document).off('keyup.keyPressHandler');
-        $(document).off('gamepadbuttonup.keyPressHandler');
+        window.removeEventListener('gamepadbuttonup', this.handleKeyUp.bind(this));
 
     }
 

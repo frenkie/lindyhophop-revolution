@@ -19,10 +19,11 @@ app.controller('MainMenuCtrl', function ($scope, $state, ToneFactory, keyConfigF
     var menuLength = $('.menuXParent').children().length;
     var $document = $(document);
     $document.on('keydown', onArrowKey)
-    $document.on('gamepadbuttondown', onArrowKey)
+    window.addEventListener('gamepadbuttondown', onArrowKey);
 
     function onArrowKey(event) {
         var button = keyConfigFactory.getButton(event);
+        if (!button) return;
 
         var active = $('.activeChoice');
         var activeNumber = parseInt(active[0].id.slice(-1));
@@ -47,13 +48,13 @@ app.controller('MainMenuCtrl', function ($scope, $state, ToneFactory, keyConfigF
             var state = arr2[1], playerNum = arr2[2] ? parseInt(arr2[2], 10) : 1;
 
             $document.off('keydown', onArrowKey);
-            $document.off('gamepadbuttondown', onArrowKey)
+            window.removeEventListener('gamepadbuttondown', onArrowKey);
 
             $state.go(state, {players: playerNum});
         } else if (button.name === "escape") {
             play('back');
             $document.off('keydown', onArrowKey);
-            $document.off('gamepadbuttondown', onArrowKey)
+            window.removeEventListener('gamepadbuttondown', onArrowKey);
             $state.go('home');
         };
     };

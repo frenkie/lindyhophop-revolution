@@ -109,6 +109,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
 
     function carouselMove(event) {
         var button = keyConfigFactory.getButton(event);
+        if (!button) return;
         var songs = carousel.children().length;
         if (button.name === 'right') {
             ToneFactory.play('blop');
@@ -183,6 +184,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
 
     function chooseLevel(event) {
         var button = keyConfigFactory.getButton(event);
+        if (!button) return;
         if (button.name === "up") { //key up
             if ($(`.selected${button.player + 1}`).prev().length) {
                 $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
@@ -204,8 +206,8 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             }
 
         } else if (button.name === "enter") { //enter
-
-            $(`.selected${button.player + 1}`).trigger('click');
+            // should probably only be for number one : D
+            $(`.selected1`).trigger('click');
 
         } else if (button.name === "escape") { //escape
             $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1").removeClass("selectedArrow2");

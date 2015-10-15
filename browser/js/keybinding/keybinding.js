@@ -6,7 +6,7 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('keyBindingCtrl', function ($scope, keyIdentity, keyConfigFactory) {
+app.controller('keyBindingCtrl', function ($scope, keyIdentity, keyConfigFactory, $state) {
 
     $scope.keys = {
         left: {},
@@ -75,12 +75,13 @@ app.controller('keyBindingCtrl', function ($scope, keyIdentity, keyConfigFactory
     }
 
     $scope.save = function () {
+        $scope.keys.index = $scope.player - 1;
         keyConfigFactory.setConfig($scope.player - 1, $scope.keys)
         keyConfigFactory.saveConfig($scope.player - 1, $scope.keys)
     }
 
-    $scope.back = function () {
-        $state.go()
+    $scope.goBack = function () {
+        $state.go('mainMenu');
     }
 
 

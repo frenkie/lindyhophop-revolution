@@ -27,15 +27,16 @@ app.controller('LoginCtrl', function ($scope, AuthService, $state, keyConfigFact
 
     function onArrowKey(event) {
         var button = keyConfigFactory(event);
+        if (!button) return;
         if (button.name === 'escape') {
             $(document).off('keydown');
-            $(document).off('gamepadbuttondown');
+            window.removeEventListener('gamepadbuttondown', onArrowKey);
             $state.go('home');
         };
     };
 
     $(document).on('keydown', onArrowKey);
-    $(document).on('gamepadbuttondown', onArrowKey);
+    window.addEventListener('gamepadbuttondown', onArrowKey);
 
 
 
