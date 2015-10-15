@@ -25,9 +25,9 @@ app.controller('uploadCtrl', function ($scope, Upload, $state, keyConfigFactory)
 
     // upload later on form submit or something similar
     $scope.submit = function() {
-      if ($scope.song && !$scope.song.$error && $scope.sm && !$scope.sm.$error) {
+      if ($scope.song && !$scope.song.$error && $scope.sm && !$scope.sm.$error && $scope.bg && !$scope.bg.$error) {
         console.log("now calling scope.upload")
-        $scope.upload($scope.song, $scope.sm);
+        $scope.upload($scope.song, $scope.sm, $scope.bg);
       } else {
         console.log("both files need to be in the page");
       }
@@ -35,7 +35,7 @@ app.controller('uploadCtrl', function ($scope, Upload, $state, keyConfigFactory)
 
 
     // upload on file select or drop
-    $scope.upload = function (song, sm) {
+    $scope.upload = function (song, sm, bg) {
       console.log('song', song);
       console.log('sm file', sm);
       console.log('bg file', bg);
