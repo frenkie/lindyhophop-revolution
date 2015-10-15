@@ -69,7 +69,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
 
     }
 
-    TheWorker.prototype.handleMessages = function ($scope, arrows, tone) {
+    TheWorker.prototype.handleMessages = function ($scope, arrows, tone, numPlayer) {
         var self = this;
         var time = {
             timer: null,
@@ -98,12 +98,21 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                     fader.className = "fader";
                 });
             }else if (e.data.endSong) {
-                setTimeout(() => {
-                    $state.go('results');
-                    tone.stop();
-                    self.worker.terminate();
-                    ArrowFactory.killTimeline();
-                }, 3000);
+                if(numPlayer === 1) {
+                    setTimeout(() => {
+                        $state.go('results');
+                        tone.stop();
+                        self.worker.terminate();
+                        ArrowFactory.killTimeline();
+                    }, 3000);
+                } else {
+                  setTimeout(() => {
+                      $state.go('resultsVersus');
+                      tone.stop();
+                      self.worker.terminate();
+                      ArrowFactory.killTimeline();
+                  }, 3000);
+                }
             } else {
                 //reset combo, don't show it and show 'Boo' on miss
                 $scope['combo'+self.player] = ScoreFactory.resetCombo(e.data.accuracy, self.player);
