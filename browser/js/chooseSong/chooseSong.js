@@ -23,15 +23,19 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     console.log(`players:`);
     console.log($stateParams);
+    $scope.players = $stateParams.players;
 
     $scope.songs = songs;
 
 	$scope.choice = {};
 
     $scope.songPreview;
+    $scope.P1arrowSpeed = 1, $scope.P2arrowSpeed = 1;
+
+    var levelrgx = /(\w+)\s/;
 
     //add a new player for testing purposes
-    if ($stateParams.players === 2) ScoreFactory.addPlayer();
+    if ($scope.players === 2) ScoreFactory.addPlayer();
 
     // $scope.speedMod = ArrowFactory.speedModifier;
     // ArrowFactory.setSpeed($scope.speedMod);
@@ -43,8 +47,11 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         var $selected2 = $('.selected2');
         if (!$selected2.length) $selected2 = null;
 
-        if ($selected1) $scope.selectedDifficulty1 = $selected1[0].textContent.trim();
-        if ($selected2) $scope.selectedDifficulty2 = $selected2[0].textContent.trim();
+        console.log('$selected1');
+        console.log($selected1);
+
+        if ($selected1) $scope.selectedDifficulty1 = $selected1[0].innerText.match(levelrgx)[1];
+        if ($selected2) $scope.selectedDifficulty2 = $selected2[0].innerText.match(levelrgx)[1];
 
 
         console.log('selected song:', $scope.choice.song);
@@ -88,12 +95,28 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
 
     function chooseLevel(e) {
         if ($scope.choice.levels < 2) return;
+
+        console.log('$scope.choice')
+        console.log($scope.choice);
+
         CarouselFactory.chooseLevel(e);
         var button = keyConfigFactory.getButton(e);
         if (!button) return;
         if (button.name === 'down' || button.name === 'up') {
             ToneFactory.play('blop');
             viewSongInfo();
+        }
+        else if (button.name === 'left') {
+            if ($scope.P1arrowSpeed > 1) {
+                $scope.P1arrowSpeed -= 0.5;
+                $scope.$digest();
+            }            
+        }
+        else if (button.name === 'right') {
+            if ($scope.P1arrowSpeed < 4) {              
+                $scope.P1arrowSpeed += 0.5;
+                $scope.$digest();
+            }
         }
         else if (button.name === 'escape') {
             window.removeEventListener("keydown", chooseLevel, false);
@@ -192,7 +215,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         window.removeEventListener("keydown", chooseLevel, false);
         window.removeEventListener("gamepadbuttondown", chooseLevel, false);
         if($stateParams.players===2) $state.go('versus', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2});
-        else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1});
+        else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, mod: $scope.P1arrowSpeed});
 
     };
 

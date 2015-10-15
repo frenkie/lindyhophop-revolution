@@ -102,6 +102,7 @@ app.factory('ArrowFactory', function () {
 
     Arrow.makeArrows = function (stepChart, bpm, config, currentSong, player) {
 
+        Arrow.speed /= config.SPEED_MOD;
         Arrow.makeTimeline();
 
         var obj = {

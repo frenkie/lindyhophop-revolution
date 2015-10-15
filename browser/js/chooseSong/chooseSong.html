@@ -18,11 +18,14 @@
 
 	<div class='choose-level'>
 		  <div id='level{{$index}}' class='difficulty' ng-click='loadSong(chart)' ng-repeat="chart in choice.levels">
-		  	{{chart}}
+		  	{{chart}} ({{choice.song.Charts[chart].level}})
 		  	<img class="player1Arrow" src="/img/leftA.png" />
 		  	<img class="player2Arrow" src="/img/leftA2.png" />		  		
 		  </div>
-	</div>
+		  <div>
+		  	<span id='player1Mod' ng-show="choice.song" class='difficulty'>[{{P1arrowSpeed}}x]</span>
+		  	<span id='player2Mod' ng-show="choice.song && players > 1" class='difficulty'>[{{P2arrowSpeed}}x]</span>
+		  </div>
 	
 	<div id='chart-info'>
 		<div>

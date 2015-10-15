@@ -2,7 +2,7 @@
 
 app.config(function($stateProvider) {
     $stateProvider.state('animation', {
-        url: '/animation/:songId/:chosenLevel',
+        url: '/animation/:songId/:chosenLevel/',
         templateUrl: 'js/animation/animation.html',
         resolve: {
             song: function(SongFactory, $stateParams) {
@@ -12,7 +12,9 @@ app.config(function($stateProvider) {
                 return song.background;
             }
         },
-
+        params: {
+            mod: 1
+        },
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
 
             $scope.imageSrc = `/img/background/${song.background}`;
@@ -21,6 +23,7 @@ app.config(function($stateProvider) {
             var currentSong = song;
             //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
             $scope.showCombo1 = false;
+            console.log('daMod: ',$stateParams.mod);
 
             const TIMING_WINDOW = ScoreFactory.TIMINGWINDOWS.Great;
 
@@ -35,10 +38,11 @@ app.config(function($stateProvider) {
 
             var config = {
                 TIMING_WINDOW: TIMING_WINDOW,
-                ARROW_TIME: ArrowFactory.speed * 4 / mainBPM, //Factor for timing how fast arrow takes (this number / bpm for seconds)
-                BEAT_TIME: 1/(mainBPM/60/4)/4 //Number of seconds per measure
+                ARROW_TIME: ((ArrowFactory.SPEED_1X/$stateParams.mod) * 4 / mainBPM), //Factor for timing how fast arrow takes (this number / bpm for seconds)
+                BEAT_TIME: 1/(mainBPM/60/4)/4, //Number of seconds per measure
+                SPEED_MOD: $stateParams.mod
             };
-            config.BEAT_VH = 100/((ArrowFactory.speed * 4)/mainBPM) * config.BEAT_TIME;
+            config.BEAT_VH = 100/(((ArrowFactory.SPEED_1X/$stateParams.mod) * 4)/mainBPM) * config.BEAT_TIME;
 
             var arrowWorker, tone;
 
