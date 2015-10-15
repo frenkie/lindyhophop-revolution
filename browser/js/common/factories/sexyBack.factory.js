@@ -119,10 +119,10 @@ app.factory('SexyBackFactory', function () {
         tl2.resume();
     };
 
-    SexyBack.makeTimeline = function (params) {
-        tl2 = new TimelineLite(params);
+    SexyBack.makeTimeline = function () {
+        tl2 = new TimelineLite();
         tl2.pause();
-        TweenMax.delayedCall(0, TweenMax.globalTimeScale, [1])
+        // TweenMax.delayedCall(0, TweenMax.globalTimeScale, [1])
     };
 
     SexyBack.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
@@ -163,22 +163,23 @@ app.factory('SexyBackFactory', function () {
 
         stepChart.forEach(function (measure, measureIndex) {
             var notes = measure.length;
+            if(measureIndex < 3) return;
             measure.forEach(function (line, lineIndex) {
                 line.forEach(function (maybeShape, index) {
                     var dir = indexToDir[index];
                     var thisBeat = measureIndex * 4 + (lineIndex / notes) * 4;
-                    if (maybeShape === "1" || maybeShape === "2") {
-                        var color;
-                        var note = lineIndex / notes;
-
-                        var shape;
-                        if (maybeShape === "1") {
-                            shape = new SexyBack();
-                        } else if (maybeShape === "2") {
-                            shape = new SexyBack();
-                        }
-                        shape.animate(bpm, measureIndex, lineIndex, notes);
-                    }
+                    // if (maybeShape === "1" || maybeShape === "2") {
+                    //     var color;
+                    //     var note = lineIndex / notes;
+                    //
+                    //     var shape;
+                    //     if (maybeShape === "1") {
+                    //         shape = new SexyBack();
+                    //     } else if (maybeShape === "2") {
+                    //     }
+                    // }
+                    var shape = new SexyBack();
+                    shape.animate(bpm, measureIndex, lineIndex, notes);
                     // else if (maybeShape === "3") {
                     //     var length = config.BEAT_VH * (thisBeat - freezes[dir].firstBeat);
                     //     freezes[dir].arrow.el[0].children[1].style.height = `${length}vh`;

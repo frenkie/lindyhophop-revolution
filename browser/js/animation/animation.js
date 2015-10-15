@@ -24,6 +24,7 @@ app.config(function($stateProvider) {
 
             var difficulty = $stateParams.chosenLevel;
             var chartId = currentSong.Charts[difficulty].stepChart;
+            console.log("Sandstorm: ", chartId)
             var mainBPM = currentSong.bpms[0].bpm;
             //idea for cleanup of config/currentsong ES6 syntax thingie
             // var {Charts, bpms} = currentSong;
