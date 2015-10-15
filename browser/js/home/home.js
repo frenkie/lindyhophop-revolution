@@ -135,7 +135,10 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   		var uiState = active[0].outerHTML.split('"');
       $document.off('keydown', onArrowKey);
       window.removeEventListener('gamepadbuttondown', onArrowKey);
-
+      $document.off('keydown', moveArrows);
+      window.removeEventListener('gamepadbuttondown', moveArrows);
+      $document.off('keydown', replaceArrows);
+      window.removeEventListener('gamepadbuttondown', replaceArrows);
       if(uiState[5] === "user") {
         logout();
         $state.reload();
