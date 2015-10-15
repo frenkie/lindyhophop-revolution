@@ -145,20 +145,11 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
 
     TheWorker.prototype.handleKeyPress = function (e, tone, startTime) {
         var button = keyConfigFactory.getButton(e); // {player: 1, name: 'up'}, where 1 is player 2 and up is the direction
-        if (button) e.preventDefault();
-        // else return;
-        // // var player = button.player; // for players!
-        // if(button.name === 'escape') {
-        var num = e.keyCode;
-        if(e.keyCode === 48) {
-            tone.stop();
-            this.worker.terminate();
-            ArrowFactory.killTimeline();
-            $state.go('results');
-        };
-        // var dir = keyCodeToDir[e.keyCode];
-
         // this checks to make sure the key you pressed wasn't logged as undefined
+        if (button) e.preventDefault();
+        else return;
+        // this makes sure the player who pressed this button commands this worker
+        if (this.player !== button.player + 1) return;
 
 
         if (button.name === 'escape') {
@@ -172,18 +163,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
             $state.go('chooseSong');
         }
 
-        // if (placeArrows[button.name]) placeArrows[button.name].addClass('arrowPlacePressed');
-        if (this.player !== button.player + 1) return;
-        //This is temp logic, waiting for key binding state. will pass in keybinding object for player
         placeArrows[button.name + 'P' + (button.player + 1)].addClass('arrowPlacePressed');
-
-        // if (placeArrows[dir]) {
-        //     if (num === 37 || num === 40 || num === 38 || num === 39)
-        //         placeArrows[dir+'P1'].addClass('arrowPlacePressed');
-        //     else if (num === 65 || num === 87 || num === 83 || num === 68)
-        //         placeArrows[dir+'P2'].addClass('arrowPlacePressed');
-        // }
-        //figure out for 2 player
 
         var timeStamp = (Date.now() - startTime) / 1000;
         // sends a note to worker to handle the keypress
