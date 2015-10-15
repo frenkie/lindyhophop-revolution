@@ -222,7 +222,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             $('.selected2').removeClass("selected2");
             $(`#item${target} > .carouselItemInner`).removeClass('activeSong');
         }
-        //if there is a 2nd player, we can listen to that shiz anywayz with our way cool buttttunzzz
+        //if there is a 2nd player, we can listen to that anyway with our way cool buttttunzzz
 
     }
 
