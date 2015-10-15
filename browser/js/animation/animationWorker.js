@@ -93,7 +93,6 @@ var checkArrow = function(arrowTime, last) {
             dir: arrowTime.dir
         });
     } else if (arrowTime.animate) {
-        console.log('')
         postMessage({
             freezeUp: true,
             dir: arrowTime.dir,

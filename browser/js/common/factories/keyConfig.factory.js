@@ -180,14 +180,12 @@ app.factory('keyConfigFactory', function (localStorageService) {
     });
 
     factory.getButton = function (e) {
-        console.log(e);
         var key;
         if (e.gamepad) {
             key = `${e.gamepad.index}pad${e.button}`;
         } else {
             key = `key${e.which}`
         }
-        console.log(revConf[key]);
 
         return revConf[key];
     };
