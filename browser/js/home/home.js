@@ -80,6 +80,12 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
       start: "0",
       end: "-20px"
     },
+    enter: {
+      el: $('#home .enter img')[0],
+      dir: "top",
+      start: "0",
+      end: "20px"
+    },
   };
 
   function moveArrows (e) {
@@ -87,6 +93,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     if (!button) return;
 
     var a = arrows[button.name];
+    if (!a) return;
 
     a.el.style[a.dir] = a.end;
     a.el.style['-webkit-filter'] = "grayscale(1) brightness(200%)";
@@ -96,6 +103,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     if (!button) return;
 
     var a = arrows[button.name];
+    if (!a) return;
 
     a.el.style[a.dir] = a.start;
     a.el.style['-webkit-filter'] = "";
