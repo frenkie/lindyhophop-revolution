@@ -46,7 +46,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
 
   $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
   $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
-
+  console.log(sandStormChart.toString())
   var mainBPM = song.bpms[0].bpm;
   var config = {
       ARROW_TIME: 400 / mainBPM, //Factor for timing how fast arrow takes (this number / bpm for seconds)
