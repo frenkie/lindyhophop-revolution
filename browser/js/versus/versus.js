@@ -83,8 +83,8 @@ app.config(function($stateProvider) {
                 arrowWorker2.prepStepChart(currentSong, config, mainBPM, P2stepChart.chart);
 
 
-                arrowWorker1.handleMessages($scope, arrows1, tone);
-                arrowWorker2.handleMessages($scope, arrows2, tone);
+                arrowWorker1.handleMessages($scope, arrows1, tone, 2);
+                arrowWorker2.handleMessages($scope, arrows2, tone, 2);
 
 
                 Tone.Buffer.onload = runInit;
