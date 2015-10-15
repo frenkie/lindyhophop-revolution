@@ -10,7 +10,7 @@ app.config(function($stateProvider) {
             }
         },
 
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+        controller: function($scope, ArrowFactory, ToneFactory, SexyBackFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
             $scope.ready = false;
             var currentSong = song;
             //showCombo is set true only when there is a combo to show, as we don't want to show 0 combos
@@ -59,6 +59,8 @@ app.config(function($stateProvider) {
 
                 // sets up arrow for animating
                 var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong);
+                SexyBackFactory.init();
+                SexyBackFactory.makeShapes(stepChart.chart, mainBPM, config, currentSong);
 
                 // gives arrowWorker first chart
                 arrowWorker = new WorkerFactory('/js/animation/animationWorker.js');
@@ -71,6 +73,7 @@ app.config(function($stateProvider) {
 
             function runInit () {
                 ArrowFactory.resumeTimeline();
+                SexyBackFactory.resumeTimeline();
                 tone.start();
                 var startTime = Date.now() - currentSong.offset*1000;
                 arrowWorker.worker.postMessage({

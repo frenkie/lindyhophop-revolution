@@ -8,7 +8,7 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('MainMenuCtrl', function($scope, $state, ToneFactory) {
+app.controller('MainMenuCtrl', function($scope, $state, ToneFactory, SexyBackFactory) {
     console.log("Controller is loaded");
     $('.activeChoice').removeClass("activeChoice");
     $('#option1').addClass("activeChoice");
