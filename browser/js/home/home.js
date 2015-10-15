@@ -55,34 +55,6 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   window.addEventListener('gamepadbuttonup', replaceArrows);
 
 
-// .up img {
-//     // position: absolute;
-//     transition: transform 0.2s;
-//     width: 100%;
-//     // left: calc((100vw / 10));
-//   }
-//   .right img {
-//     width: 100%;
-//     transform: translateY(90px) rotate(90deg);
-//     transition: transform 0.2s;
-//     // transform: rotate(90deg);
-//     // position: absolute;
-//     // left: calc(100vw / 10);
-//   }
-//   .down img {
-//     width: 100%;
-//     transform: translateY(90px) rotate(180deg);
-//     transition: transform 0.2s;
-//     // position: absolute;
-//   }
-//   .left img {
-//     width: 100%;
-//     transform: translateY(90px) rotate(-90deg);
-//     transition: transform 0.2s;
-//     // position: absolute;
-
-//   }
-
   var arrows = {
     left: {
       el: $('.arrow-keys .left img')[0],
