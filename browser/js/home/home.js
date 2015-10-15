@@ -43,6 +43,85 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   var $document = $(document);
   $document.on('keydown', onArrowKey);
   window.addEventListener('gamepadbuttondown', onArrowKey);
+  $document.on('keydown', moveArrows);
+  window.addEventListener('gamepadbuttondown', moveArrows);
+  $document.on('keyup', replaceArrows);
+  window.addEventListener('gamepadbuttonup', replaceArrows);
+
+
+// .up img {
+//     // position: absolute;
+//     transition: transform 0.2s;
+//     width: 100%;
+//     // left: calc((100vw / 10));
+//   }
+//   .right img {
+//     width: 100%;
+//     transform: translateY(90px) rotate(90deg);
+//     transition: transform 0.2s;
+//     // transform: rotate(90deg);
+//     // position: absolute;
+//     // left: calc(100vw / 10);
+//   }
+//   .down img {
+//     width: 100%;
+//     transform: translateY(90px) rotate(180deg);
+//     transition: transform 0.2s;
+//     // position: absolute;
+//   }
+//   .left img {
+//     width: 100%;
+//     transform: translateY(90px) rotate(-90deg);
+//     transition: transform 0.2s;
+//     // position: absolute;
+
+//   }
+
+  var arrows = {
+    left: {
+      el: $('.arrow-keys .left img')[0],
+      dir: "left",
+      start: "0",
+      end: "-20px"
+    },
+    right: {
+      el: $('.arrow-keys .right img')[0],
+      dir: "left",
+      start: "0",
+      end: "20px"
+    },
+    down: {
+      el: $('.arrow-keys .down img')[0],
+      dir: "top",
+      start: "0",
+      end: "20px"
+    },
+    up: {
+      el: $('.arrow-keys .up img')[0],
+      dir: "top",
+      start: "0",
+      end: "-20px"
+    },
+  };
+
+  function moveArrows (e) {
+    var button = keyConfigFactory.getButton(e);
+    if (!button) return;
+
+    var a = arrows[button.name];
+
+    a.el.style[a.dir] = a.end;
+    a.el.style['-webkit-filter'] = "grayscale(1) brightness(200%)";
+  }
+  function replaceArrows (e) {
+    var button = keyConfigFactory.getButton(e);
+    if (!button) return;
+
+    var a = arrows[button.name];
+
+    a.el.style[a.dir] = a.start;
+    a.el.style['-webkit-filter'] = "";
+  }
 
   function onArrowKey(event) {
     var button = keyConfigFactory.getButton(event);
@@ -50,6 +129,8 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
 
   	var active = $('.activeHome') || $('#option1');
    	var activeNumber = parseInt(active[0].id.slice(-1));
+
+
 
   	if (button.name === 'right') {
   		//right arrow
