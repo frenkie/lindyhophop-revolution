@@ -128,6 +128,29 @@ router.post('/upload', multipartMiddleware, function(req, res, next) {
         });
     });
 
+    fs.readFile(req.files.bg.path, function(err, data) {
+        if (err) {
+            console.error('error in readFile ', err);
+            next(err);
+        }
+        var newPath = process.cwd() + "/browser/img/background/" + req.files.bg.originalFilename;
+        fs.writeFile(newPath, data, function(error) {
+            if (error) {
+            console.error('error in writeFile ', error);
+            next(error);
+            }
+            console.log('file should be written');
+
+            //delete temp file
+            fs.unlink('req.files.bg.path', function () {
+                console.log('temp bg file has been deleted');
+                fs.unlink('req.files.bg.path', function() {
+                  console.log('temp bg deleted');
+                });
+            });
+        });
+    });
+
 
 });
 
