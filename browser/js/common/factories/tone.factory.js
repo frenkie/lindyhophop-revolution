@@ -29,7 +29,7 @@ app.factory('ToneFactory', function ($q) {
 
     ToneFactory.prototype.stop = function () {
         this.player.stop();
-        this.player.dispose();
+        if (this.player) this.player.dispose();
     }
 
     ToneFactory.play = function (fx) {
