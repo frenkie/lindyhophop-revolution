@@ -109,19 +109,22 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         CarouselFactory.chooseLevel(e);
         var button = keyConfigFactory.getButton(e);
         if (!button) return;
+
+
+        console.log('button.player', button.player);
         if (button.name === 'down' || button.name === 'up') {
             ToneFactory.play('blop');
             viewSongInfo();
         }
         else if (button.name === 'left') {
-            if ($scope.P1arrowSpeed > 1) {
-                $scope.P1arrowSpeed -= 0.5;
+            if ($scope[`P${button.player+1}arrowSpeed`] > 1) {
+                $scope[`P${button.player+1}arrowSpeed`] -= 0.5;
                 $scope.$digest();
             }            
         }
         else if (button.name === 'right') {
-            if ($scope.P1arrowSpeed < 4) {              
-                $scope.P1arrowSpeed += 0.5;
+            if ($scope[`P${button.player+1}arrowSpeed`] < 4) {              
+                $scope[`P${button.player+1}arrowSpeed`] += 0.5;
                 $scope.$digest();
             }
         }
@@ -232,8 +235,9 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         ToneFactory.play('start');
         window.removeEventListener("keydown", chooseLevel, false);
         window.removeEventListener("gamepadbuttondown", chooseLevel, false);
-        if($stateParams.players===2) $state.go('versus', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2});
-        else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, mod1: $scope.P1arrowSpeed, mod2: $scope.P2arrowSpeed});
+        console.log({songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2, mod1: $scope.P1arrowSpeed, mod2: $scope.P2arrowSpeed})
+        if($stateParams.players===2) $state.go('versus', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2, mod1: $scope.P1arrowSpeed, mod2: $scope.P2arrowSpeed});
+        else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, mod1: $scope.P1arrowSpeed});
 
     };
 
