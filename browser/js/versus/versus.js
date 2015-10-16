@@ -13,8 +13,8 @@ app.config(function($stateProvider) {
             mod1: 1,
             mod2: 1
         },
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
-            
+        controller: function($scope, $q, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+
 
 
             $scope.ready = false;
@@ -28,8 +28,6 @@ app.config(function($stateProvider) {
             var P1chartId = currentSong.Charts[P1difficulty].stepChart;
             var P2chartId = currentSong.Charts[P2difficulty].stepChart;
             var mainBPM = currentSong.bpms[0].bpm;
-            //idea for cleanup of config/currentsong ES6 syntax thingie
-            // var {Charts, bpms} = currentSong;
 
 
             var config1 = {
@@ -54,42 +52,40 @@ app.config(function($stateProvider) {
 
             //This is only so the user can read the loading screen and have heightened anticipation!
             setTimeout(function () {
-                SongFactory.getChartById(P1chartId)
-                .then(function(P1chart) {
-                    SongFactory.getChartById(P2chartId)
-                    .then(function(P2chart) {
-                        console.log('have chartIds, running prepsong with charts');
-                        prepSong(P1chart, P2chart);
-                    });
-                });
+                $q.all([SongFactory.getChartById(P1chartId), SongFactory.getChartById(P2chartId)])
+                .then(function (charts) {
+                    prepSong(charts[0], charts[1]);
+                })
             }, 2000);
 
 
             function prepSong(P1stepChart, P2stepChart) {
+                // we need to know which player has a slower modifier--we will start the slower player's arrows first
+                // we also need to use the slower player's config in the Tone Factory
                 var playerOffset = config1.ARROW_TIME - config2.ARROW_TIME;
-                console.log('playerOffset', playerOffset);
                 var configForTone = playerOffset >= 0 ? config1 : config2;
-                console.log('configForTone:');
-                console.log(configForTone);
+
                 tone = new ToneFactory("/audio/"+currentSong.music, mainBPM, currentSong.offset, configForTone);
                 //to set the stepChart on the player object
                 ScoreFactory.setStepChart(P1stepChart, 1);
                 ScoreFactory.setStepChart(P2stepChart, 2);
 
-                var player1Offset = playerOffset >= 0 ? 0 : playerOffset*-1;
-                var player2Offset = playerOffset >= 0 ? playerOffset : 0;
+                // if player 1 is slower, her offset is 0, and player 2's
+                var player1Offset, player2Offset;
+                if (playerOffset >= 0) { // player 1's arrows start first
+                    player1Offset = 0;
+                    player2Offset = playerOffset;
+                } else { // player 2's arrows start first
+                    player1Offset = -playerOffset;
+                    player2Offset = 0;
+                }
+                // this allows us to pass the offset on to the arrow factory in the config object
                 config1.animationOffset = player1Offset;
                 config2.animationOffset = player2Offset;
-                //when prepping song, score factory will get the total number of arrows in the stepchart
-                //for score calculation purposes
                 ScoreFactory.setTotalArrows(1);
                 ScoreFactory.setTotalArrows(2);
 
 
-                // functions defined in arrow
-
-
-                // sets up arrow for animating
                 var arrows1 = ArrowFactory.makeArrows(P1stepChart.chart, mainBPM, config1, currentSong, 1);
                 var arrows2 = ArrowFactory.makeArrows(P2stepChart.chart, mainBPM, config2, currentSong, 2);
 
@@ -98,11 +94,8 @@ app.config(function($stateProvider) {
                 arrowWorker1 = new WorkerFactory('/js/animation/animationWorker.js', 1);
                 arrowWorker2 = new WorkerFactory('/js/animation/animationWorker.js', 2);
 
+                // important to use the same config as the one that started the music to calculate timeStamps on the worker
                 arrowWorker1.prepStepChart(currentSong, configForTone, mainBPM, P1stepChart.chart);
-                // arrowWorker2.prepStepChart(currentSong, {
-                //     ARROW_TIME: config2.ARROW_TIME - (4/mainBPM)*((ArrowFactory.SPEED_1X/config2.SPEED_MOD) - (ArrowFactory.SPEED_1X/config1.SPEED_MOD)),
-                //     TIMING_WINDOW: config2.TIMING_WINDOW
-                // }, 
                 arrowWorker2.prepStepChart(currentSong, configForTone, mainBPM, P2stepChart.chart);
 
 
@@ -142,7 +135,7 @@ app.config(function($stateProvider) {
                     $scope.videoSrc = '/video/Darude - Sandstorm.mp4';
                 }
                 else {
-                    $scope.imageSrc = `/img/background/${song.background}`;               
+                    $scope.imageSrc = `/img/background/${song.background}`;
                 }
                 setTimeout(function() {
                     var video = document.getElementById('bg-video');

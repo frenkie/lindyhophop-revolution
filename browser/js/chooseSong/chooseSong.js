@@ -1,4 +1,4 @@
-/* global Tone */
+/* global RadarChart */
 
 app.config(function ($stateProvider) {
 
@@ -21,8 +21,6 @@ app.config(function ($stateProvider) {
 
 app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, songs, $timeout, ToneFactory, ScoreFactory, $stateParams, keyConfigFactory) {
 
-    console.log(`players:`);
-    console.log($stateParams);
     $scope.players = $stateParams.players;
 
     $scope.songs = songs;
@@ -44,28 +42,16 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     //add a new player
     if ($stateParams.players === 2) ScoreFactory.addPlayer();
 
-    // $scope.speedMod = ArrowFactory.speedModifier;
-    // ArrowFactory.setSpeed($scope.speedMod);
-    console.log(`All songs: (Count: ${songs.length})`);
-    console.log(songs.map(s => s.title).sort().join(', '));
-
     function viewSongInfo() {
         var $selected1 = $('.selected1');
         var $selected2 = $('.selected2');
         if (!$selected2.length) $selected2 = null;
 
-        console.log('$selected1');
-        console.log($selected1);
-
         if ($selected1) $scope.selectedDifficulty1 = $selected1[0].innerText.match(levelrgx)[1];
         if ($selected2) $scope.selectedDifficulty2 = $selected2[0].innerText.match(levelrgx)[1];
 
 
-        console.log('selected song:', $scope.choice.song);
         var {title, artist, displayBpm, music, offset, sampleStart, sampleLength, Charts} = $scope.choice.song;
-
-        console.log('sampleStart:', sampleStart);
-        console.log('sampleLength:', sampleLength);
 
         _.range($stateParams.players).map(p=>p+1).forEach(num => {
             $scope['selectedChart'+num] = Charts[$scope['selectedDifficulty'+num]];
@@ -80,18 +66,6 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         // var {level2, grooveRadar2} = $scope.selectedChart2;
 
 
-        // console.log(`Selected chart:`);
-        // console.log($scope.selectedChart1);
-        console.log(`${title} - ${artist}`);
-        console.log(`BPM: ${displayBpm}`);
-        console.log(`Preview audio: ${music}`);
-        console.log(`Difficulty P1: ${$scope.selectedDifficulty1}; Feet: ${$scope.level1}`);
-        // console.log(`Difficulty P2: ${$scope.selectedDifficulty2}; Feet: ${$scope.level2}`);
-
-        // console.log(Object.keys(grooveRadar).reduce((output, category) => {
-        //     return output.concat(`${category}: ${grooveRadar[category]}`);
-        // }, []).join(' | '));
-
         if (!$scope.songPreview) {
             $scope.songPreview = new ToneFactory("/audio/"+music, null, offset, null, sampleStart, sampleLength);
             $scope.songPreview.previewStart();
@@ -103,15 +77,10 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     function chooseLevel(e) {
         if ($scope.choice.levels < 2) return;
 
-        console.log('$scope.choice')
-        console.log($scope.choice);
-
         CarouselFactory.chooseLevel(e);
         var button = keyConfigFactory.getButton(e);
         if (!button) return;
 
-
-        console.log('button.player', button.player);
         if (button.name === 'down' || button.name === 'up') {
             ToneFactory.play('blop');
             viewSongInfo();
@@ -120,10 +89,10 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
             if ($scope[`P${button.player+1}arrowSpeed`] > 1) {
                 $scope[`P${button.player+1}arrowSpeed`] -= 0.5;
                 $scope.$digest();
-            }            
+            }
         }
         else if (button.name === 'right') {
-            if ($scope[`P${button.player+1}arrowSpeed`] < 4) {              
+            if ($scope[`P${button.player+1}arrowSpeed`] < 4) {
                 $scope[`P${button.player+1}arrowSpeed`] += 0.5;
                 $scope.$digest();
             }
@@ -175,14 +144,11 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         // var currentSong = JSON.parse($scope.choice.song);
         var charts = song.Charts;
         $scope.charts = Object.keys(charts);
-        //console.log('charts:', song.Charts);
         Object.keys(charts).forEach(function(key) {
             $scope.choice.levels.push(key);
         });
-        console.log('levels:', $scope.choice.levels);
         $scope.choice.levels.reverse();
 
-        console.log('$scope.choice:', $scope.choice);
 
         window.removeEventListener("keydown", CarouselFactory.carouselMove, false);
         window.removeEventListener("gamepadbuttondown", CarouselFactory.carouselMove, false);
@@ -191,7 +157,6 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
     };
 
     function displayGrooveRadar (p1Chart, p2Chart) {
-        console.log('groovey ', p1Chart, p2Chart);
         var data = [{
             axes: [
                 {axis: "Stream", value: p1Chart.grooveRadar['stream']},
@@ -207,7 +172,7 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
                 {axis: "Air", value: 1},
                 {axis: "Freeze", value: 1},
                 {axis: "Chaos", value: 1}
-            ]} 
+            ]}
         ];
         if(p2Chart) {
             data.push({
@@ -235,7 +200,6 @@ app.controller('ChooseSongCtrl', function ($scope, CarouselFactory, $state, song
         ToneFactory.play('start');
         window.removeEventListener("keydown", chooseLevel, false);
         window.removeEventListener("gamepadbuttondown", chooseLevel, false);
-        console.log({songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2, mod1: $scope.P1arrowSpeed, mod2: $scope.P2arrowSpeed})
         if($stateParams.players===2) $state.go('versus', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, chosenLevelP2: $scope.selectedDifficulty2, mod1: $scope.P1arrowSpeed, mod2: $scope.P2arrowSpeed});
         else $state.go('animation', {songId: $scope.choice.song._id, chosenLevel: $scope.selectedDifficulty1, mod1: $scope.P1arrowSpeed});
 
