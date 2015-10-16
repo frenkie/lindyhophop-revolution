@@ -41,7 +41,7 @@ var schema = new mongoose.Schema({
     type: String
   },
   highScores: {
-    type: [Number],
+    type: [],
     default: []
   },
   Charts: {

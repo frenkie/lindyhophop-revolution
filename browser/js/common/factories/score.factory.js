@@ -216,6 +216,32 @@ app.factory('ScoreFactory', function($http) {
         });
     }
 
+    function isHighScore(score, highScores, songId) {
+        var scoreObj = {name: 'Karen', score: score};
+        if(highScores.length < 3) {
+            console.log('new high score!');
+            highScores.push(scoreObj);
+            setHighScore(highScores, songId);
+        }
+        else {
+            var minScore = highScores.reduce((a, b) => (a.score < b.score) ? a : b);
+            if (score > minScore.score) {
+                console.log('new high score! Kicking out an old score!');
+                var ind = highScores.indexOf(minScore);
+                highScores.splice(ind, 1, scoreObj);
+                setHighScore(highScore, songId);
+            }
+        }
+    }
+
+    function setHighScore(highScores, songId) {
+        $http.put('/api/songs/'+songId+'/highScores', {highScores: highScores})
+        .then(function(res) {
+            console.log('successfully set high score');
+            return res.data;
+        });
+    }
+
     return {
         addScore: addScore,
         addCombo: addCombo,
@@ -231,6 +257,7 @@ app.factory('ScoreFactory', function($http) {
         setStepChart: setStepChart,
         getAccuracyColors: getAccuracyColors,
         allPlayerGuys: allPlayerGuys,
-        getHighScores: getHighScores
+        getHighScores: getHighScores,
+        isHighScore: isHighScore
     };
 });
