@@ -216,12 +216,13 @@ app.factory('ScoreFactory', function($http) {
         });
     }
 
-    function isHighScore(score, highScores, songId) {
-        var scoreObj = {name: 'Karen', score: score};
+    function isHighScore(score, name, highScores, songId) {
+        var score = score || 0;
+        var scoreObj = {name: name, score: score};
         if(highScores.length < 3) {
             console.log('new high score!');
             highScores.push(scoreObj);
-            setHighScore(highScores, songId);
+            setHighScore(sortHighScores(highScores), songId);
         }
         else {
             var minScore = highScores.reduce((a, b) => (a.score < b.score) ? a : b);
@@ -229,9 +230,13 @@ app.factory('ScoreFactory', function($http) {
                 console.log('new high score! Kicking out an old score!');
                 var ind = highScores.indexOf(minScore);
                 highScores.splice(ind, 1, scoreObj);
-                setHighScore(highScore, songId);
+                setHighScore(sortHighScores(highScores), songId);
             }
         }
+    }
+
+    function sortHighScores(highScores) {
+        return highScores.sort((a, b) => b.score-a.score);
     }
 
     function setHighScore(highScores, songId) {

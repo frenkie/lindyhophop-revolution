@@ -25,7 +25,7 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFactory, $state, ToneFactory, keyConfigFactory, highScores, $stateParams, $modal) {
+app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFactory, $state, ToneFactory, keyConfigFactory, highScores, $stateParams) {
     
     $scope.player1 = player;
     $scope.percent = percent;
@@ -33,7 +33,7 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
 
     
 
-    ScoreFactory.isHighScore($scope.score, highScores, $stateParams.songId);
+    ScoreFactory.isHighScore($scope.score, "Karley", highScores, $stateParams.songId);
 
     
     
@@ -57,7 +57,7 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
             window.removeEventListener('keydown', leaveResults);
             window.removeEventListener('gamepadbuttondown', leaveResults);
             ScoreFactory.resetPlayers();
-            $state.go('chooseSong');
+            $state.go('songHighScores', {songId: $stateParams.songId});
         }
     }
 
