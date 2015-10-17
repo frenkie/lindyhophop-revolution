@@ -54,15 +54,15 @@ app.factory('ArrowFactory', function (SexyBackFactory) {
         Arrow.speedModifier = num;
     }
 
-    Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes) {
+    Arrow.prototype.animate = function (bpm, chIndex, mIndex, mNotes, config) {
         if (!tl) throw Error('Make a timeline first');
-        var animationLength = (Arrow.speed * 4)/bpm;
+        var animationLength = ((Arrow.SPEED_1X/config.SPEED_MOD) * 4)/bpm;
+
         var measureTime = 240 / bpm;
         var timePerBeat = measureTime / mNotes;
-        var startTime = chIndex * measureTime + mIndex * timePerBeat;
+        // including an animation offset for a possible speed modifier differential
+        var startTime = chIndex * measureTime + mIndex * timePerBeat + config.animationOffset;
         this.startTime = startTime;
-        //console.log('animationLength is', animationLength);
-        //console.log('measureTime is ',measureTime)
         tl.to(this.el, animationLength * 10, {top: '-900vh', ease:Linear.easeNone}, startTime);
     }
 
@@ -101,6 +101,7 @@ app.factory('ArrowFactory', function (SexyBackFactory) {
 
     Arrow.makeArrows = function (stepChart, bpm, config, currentSong, player) {
 
+        Arrow.speed /= config.SPEED_MOD;
         Arrow.makeTimeline();
 
         var obj = {
@@ -129,7 +130,7 @@ app.factory('ArrowFactory', function (SexyBackFactory) {
                 line.forEach(function (maybeArrow, index) {
                     var dir = indexToDir[index];
                     var thisBeat = measureIndex * 4 + (lineIndex / notes) * 4;
-                    if (maybeArrow === "1" || maybeArrow === "2") { //FIX to account for freezes : D
+                    if (maybeArrow === "1" || maybeArrow === "2") {
                         var color;
                         var note = lineIndex / notes;
 
@@ -145,7 +146,7 @@ app.factory('ArrowFactory', function (SexyBackFactory) {
                             arrow = new FreezeArrow(dir, player, color);
                             freezes[dir].arrow = arrow;
                         }
-                        arrow.animate(bpm, measureIndex, lineIndex, notes);
+                        arrow.animate(bpm, measureIndex, lineIndex, notes, config);
                         obj[indexToDir[index]].push(arrow);
                     } else if (maybeArrow === "3") {
                         var length = config.BEAT_VH * (thisBeat - freezes[dir].firstBeat);

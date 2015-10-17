@@ -30,17 +30,11 @@ app.config(function($stateProvider) {
 
 app.controller('ResultsVersusCtrl', function($scope, player1, player2, percent1, percent2, score1, score2, ScoreFactory, $state, ToneFactory, keyConfigFactory) {
     $scope.player1 = player1;
-    console.log("$scope.player1; ", $scope.player1)
     $scope.percent1 = percent1;
-    console.log("$scope.percent1; ", $scope.percent1)
     $scope.score1 = parseInt(score1);
-    console.log("$scope.score1; ", $scope.score1)
     $scope.player2 = player2;
-    console.log("$scope.player2; ", $scope.player2)
     $scope.percent2 = percent2;
-    console.log("$scope.percent2; ", $scope.percent2)
     $scope.score2 = parseInt(score2);
-    console.log("$scope.score2; ", $scope.score2)
 
     function play(fx) {
       ToneFactory.play(fx);
