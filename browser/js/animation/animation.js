@@ -12,9 +12,12 @@ app.config(function($stateProvider) {
         params: {
             mod1: 1
         },
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory, SexyBackFactory) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory, FreqOpacAnimFactory) {
 
-            $scope.numBars = 50;
+            $scope.numBars = []; // window.outerWidth / 100;
+            for(var i = 0; i < 35; i++) {
+              $scope.numBars.push(i);
+            }
 
             $scope.ready = false;
             var currentSong = song;
@@ -62,13 +65,15 @@ app.config(function($stateProvider) {
 
                 // sets up arrow for animating
                 var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 1);
-                SexyBackFactory.init('#gameplayAnimationContainer');
 
                 // gives arrowWorker first chart
                 arrowWorker = new WorkerFactory('/js/animation/animationWorker.js', 1);
                 arrowWorker.prepStepChart(currentSong, config, mainBPM, stepChart.chart);
 
                 arrowWorker.handleMessages($scope, arrows, tone, 1);
+
+                var $gameplayContainer = $('#gameplayAnimationContainer');
+                FreqOpacAnimFactory.init($scope.numBars, $gameplayContainer);
 
                 Tone.Buffer.onload = runInit;
 

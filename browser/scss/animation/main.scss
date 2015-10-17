@@ -1,10 +1,28 @@
+@font-face {
+    font-family: 'neon';
+    src: url('/img/font/neon.ttf');
+}
+
+@font-face {
+    font-family: 'petit';
+    src: url('/img/font/petit.otf');
+}
+
 #animationJSContainer {
-  
+
     #gameplayAnimationContainer {
       z-index: 1;
       position: absolute;
       width: 100%;
       height: 100%;
+    }
+
+    .frequencyOpacityAnimation {
+      height: 100%;
+      width: 40px;
+      display: inline-block;
+      background-color: black;
+      opacity: 0.6;
     }
 
     .arrow {
@@ -158,16 +176,6 @@
       top: -80px;
       width: 100%;
       height: 60%;
-    }
-
-    @font-face {
-        font-family: 'neon';
-        src: url('/img/font/neon.ttf');
-    }
-
-    @font-face {
-        font-family: 'petit';
-        src: url('/img/font/petit.otf');
     }
 
     .accuracy {

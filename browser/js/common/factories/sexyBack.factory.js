@@ -1,12 +1,15 @@
 app.factory('SexyBackFactory', function () {
 
+    // this is the variable to cancel the animation rendering when set to false
+    var onLandingPage = true;
+
     var scene;
 
     function SexyBack() {
       if(!scene) throw Error("make a scene first");
     }
 
-    SexyBack.init = function(page) {
+    SexyBack.init = function() {
 
         // attempt to create a material for the ocean effect
         // var material = new THREE.ShaderMaterial( {
@@ -22,7 +25,6 @@ app.factory('SexyBackFactory', function () {
         //     fragmentShader: document.getElementById( 'fragmentShader' ).textContent
         //
         // } );
-
         window.audio = new Audio();
         audio.src = '/audio/Sandstorm.mp3';
         audio.autoplay = true;
@@ -45,7 +47,7 @@ app.factory('SexyBackFactory', function () {
         var renderer = new THREE.WebGLRenderer();
 
         // get the DOM element to attach to - assume we've got jQuery to hand
-        var $container = $(page);
+        var $container = $('#landingPageAnimationContainer');
         $container.append(renderer.domElement);
 
         // var camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -136,41 +138,41 @@ app.factory('SexyBackFactory', function () {
         camera.lookAt(groupCubes.position);
 
         function RenderScene() {
+          if(onLandingPage) {
+            console.log("RENDERING")
+              var OFFSET = 100;
+              var freqByteData = new Uint8Array(analyser.frequencyBinCount);
+              analyser.getByteFrequencyData(freqByteData);
+              for (var i = 0; i < numBars; ++i) {
+                var magnitude = freqByteData[i * 2 + OFFSET];
+                cubes[i].scale.y = magnitude;
+                cubes[i].position.y = magnitude / 2;
+              };
+              window.requestAnimationFrame(RenderScene)
 
-          var OFFSET = 100;
-          var freqByteData = new Uint8Array(analyser.frequencyBinCount);
-          analyser.getByteFrequencyData(freqByteData);
-          for (var i = 0; i < numBars; ++i) {
-            var magnitude = freqByteData[i * 2 + OFFSET];
-            cubes[i].scale.y = magnitude;
-            cubes[i].position.y = magnitude / 2;
-          };
+              // steady rotation
+              groupCubes.rotation.y -= 0.001;
 
-          // groupCubes.rotation.x += 0.01;
-          groupCubes.rotation.y -= 0.001;
-          // groupCubes.rotation.z -= 0.01;
-
-          // camera.rotation.x -= 0.015;
-          // camera.updateProjectionMatrix();
-
-          // draw!
-          renderer.render(scene, camera);
-          window.requestAnimationFrame(RenderScene);
+              // draw!
+              renderer.render(scene, camera);
+          } else {
+            return;
+          }
         };
 
         (function onLoad(e) {
             var source = context.createMediaElementSource(audio);
             source.connect(analyser);
             analyser.connect(context.destination);
-            RenderScene();
+            window.requestAnimationFrame(RenderScene);
         })();
-
         // code for debugging => in the console type 'group' to see groupCubes
         window.group = groupCubes;
     };
 
     SexyBack.pause = function() {
       audio.pause();
+      onLandingPage = false;
     };
 
     return SexyBack;

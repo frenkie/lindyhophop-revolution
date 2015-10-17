@@ -32,7 +32,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
 
   (function landingPageAnimation() {
-    SexyBackFactory.init('#landingPageAnimationContainer');
+    SexyBackFactory.init();
   })();
 
   function play(fx) {
