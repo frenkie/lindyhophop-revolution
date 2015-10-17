@@ -18,6 +18,10 @@ app.controller('MainMenuCtrl', function ($scope, $state, ToneFactory, keyConfigF
         e.stopImmediatePropagation();
     });
 
+    (function landingPageAnimation() {
+      SexyBackFactory.init();
+    })();
+
     function play(fx) {
       ToneFactory.play(fx);
     };

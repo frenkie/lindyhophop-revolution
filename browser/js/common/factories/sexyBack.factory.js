@@ -7,6 +7,27 @@ app.factory('SexyBackFactory', function () {
     }
 
     SexyBack.init = function() {
+
+        // attempt to create a material for the ocean effect
+        // var material = new THREE.ShaderMaterial( {
+        //
+        //     uniforms: {
+        //       time: { type: "f", value: 1.0 },
+        //       resolution: { type: "v2", value: new THREE.Vector2() }
+        //     },
+        //     attributes: {
+        //       vertexOpacity: { type: 'f', value: [] }
+        //     },
+        //     vertexShader: document.getElementById( 'vertexShader' ).textContent,
+        //     fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+        //
+        // } );
+
+        window.audio = new Audio();
+        audio.src = '/audio/Sandstorm.mp3';
+        audio.autoplay = true;
+        audio.loop = true;
+
         // set the scene size
         var WIDTH = window.outerWidth,
           HEIGHT = window.outerHeight;
@@ -20,85 +41,66 @@ app.factory('SexyBackFactory', function () {
           NEAR = 0.1,
           FAR = 10000;
 
-        // get the DOM element to attach to
-        // - assume we've got jQuery to hand
-        var $container = $('#outerContainer');
-
-        // create a WebGL renderer, camera
-        // and a scene
+        // create a WebGL renderer
         var renderer = new THREE.WebGLRenderer();
+
+        // get the DOM element to attach to - assume we've got jQuery to hand
+        var $container = $('#landingPageAnimationContainer');
+        $container.append(renderer.domElement);
+
         // var camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
         var camera = new THREE.OrthographicCamera( WIDTH / -2, WIDTH / 2, HEIGHT / 2, HEIGHT / -2, -2000, 4000);
 
         scene = new THREE.Scene();
-
-        // add the camera to the scene
         scene.add(camera);
 
-        // the camera starts at 0,0,0
-        // so pull it back
         camera.position.z = 500;
         camera.position.x = 0;
-        camera.position.y = 200;
+        camera.position.y = 300;
 
-        // start the renderer
         renderer.setSize(WIDTH, HEIGHT);
-        // setClearColor below is used to set the background of the threeJS canvas to be white
         renderer.setClearColor( 0x2c3338, 1);
 
-        // attach the render-supplied DOM element
-        $container.append(renderer.domElement);
-
-        // // create a point light
-        // var pointLight = new THREE.PointLight(0xFFFFFF);
-        //
-        // // set its position
-        // pointLight.position.x = 10;
-        // pointLight.position.y = 50;
-        // pointLight.position.z = 130;
-        //
-        // // add to the scene
-        // scene.add(pointLight);
-
-        var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
-        directionalLight.position.set( 0, 1, 0 );
-        scene.add( directionalLight );
-
-        window.audio = new Audio();
-        audio.src = '/audio/Sandstorm.mp3';
-        // audio.controls = true;
-        // audio.defaultMuted = true;
-        audio.autoplay = true;
-        audio.loop = true;
         var cubes = [];
-        var groupCubes;
+        var groupCubes = new THREE.Object3D();
         var context = new AudioContext();
         var analyser = context.createAnalyser();
         var radius = 400;
         var angle = (2 * Math.PI)/numBars;
-        makeCubes(numBars);
-        camera.lookAt(groupCubes.position);
+        var formations = [circleFormation, lineFormation];
 
-        function makeCubes(numBars) {
-            groupCubes = new THREE.Object3D();
+        function circleFormation() {
+            cubes.forEach(function(cube, i) {
+                cube.position.x = radius * Math.sin(angle * i);
+                cube.position.z = radius * Math.cos(angle * i);
+            });
+        }
+
+        function lineFormation() {
+            var numCubes = cubes.length;
+            var cubeOffset = 20;
+            cubes.forEach(function(cube, i) {
+                var j = i - numCubes/2
+                cube.position.x += j * cubeOffset;
+            });
+        };
+
+        var makeCubes = function(numBars) {
             for(var i = 0; i < numBars; i++) {
               var geometry = new THREE.BoxGeometry( 5, 1, 5 );
               var material = new THREE.MeshBasicMaterial( {color: 0xea4c88} );
               var cube = new THREE.Mesh( geometry, material );
-              console.log(cube)
               groupCubes.add(cube)
-              cube.castShadow = true;
-              cube.position.x = radius * Math.sin(angle * i)
-              cube.position.z = radius * Math.cos(angle * i)
-              console.log(angle);
-              // cube.position.x += i * 20;
               cubes.push(cube);
             }
+            formations[Math.floor(Math.random() * formations.length)]();
             scene.add( groupCubes );
         }
 
-        window.group = groupCubes;
-
+        // make the cubes in the selected formations
+        // then reposition the camera to look at the cubes
+        makeCubes(numBars);
+        camera.lookAt(groupCubes.position);
 
         function RenderScene() {
 
@@ -107,8 +109,7 @@ app.factory('SexyBackFactory', function () {
           analyser.getByteFrequencyData(freqByteData);
           for (var i = 0; i < numBars; ++i) {
             var magnitude = freqByteData[i * 2 + OFFSET];
-
-            cubes[i].scale.y = magnitude * 1;
+            cubes[i].scale.y = magnitude;
             cubes[i].position.y = magnitude / 2;
           };
 
@@ -131,7 +132,24 @@ app.factory('SexyBackFactory', function () {
             RenderScene();
         })();
 
+        // code for debugging => in the console type 'group' to see groupCubes
+        window.group = groupCubes;
     };
 
     return SexyBack;
 });
+
+// create a point light
+// var pointLight = new THREE.PointLight(0xFFFFFF);
+//
+// // set its position
+// pointLight.position.x = 10;
+// pointLight.position.y = 50;
+// pointLight.position.z = 130;
+//
+// // add to the scene
+// scene.add(pointLight);
+
+// var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
+// directionalLight.position.set( 0, 1, 0 );
+// scene.add( directionalLight );
