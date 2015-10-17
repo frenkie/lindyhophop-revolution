@@ -29,12 +29,9 @@ app.config(function($stateProvider) {
 
             var difficulty = $stateParams.chosenLevel;
             var chartId = currentSong.Charts[difficulty].stepChart;
-            console.log("Sandstorm: ", chartId)
             var mainBPM = currentSong.bpms[0].bpm;
             //idea for cleanup of config/currentsong ES6 syntax thingie
             // var {Charts, bpms} = currentSong;
-
-
             var config = {
                 TIMING_WINDOW: TIMING_WINDOW,
                 ARROW_TIME: ArrowFactory.speed * 4 / mainBPM, //Factor for timing how fast arrow takes (this number / bpm for seconds)
@@ -63,12 +60,9 @@ app.config(function($stateProvider) {
                 //for score calculation purposes
                 ScoreFactory.setTotalArrows(1);
 
-                // functions defined in arrow
-
                 // sets up arrow for animating
                 var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 1);
-                SexyBackFactory.init();
-                SexyBackFactory.makeShapes(stepChart.chart, mainBPM, config, currentSong);
+                SexyBackFactory.init('#gameplayAnimationContainer');
 
                 // gives arrowWorker first chart
                 arrowWorker = new WorkerFactory('/js/animation/animationWorker.js', 1);
@@ -76,15 +70,12 @@ app.config(function($stateProvider) {
 
                 arrowWorker.handleMessages($scope, arrows, tone, 1);
 
-
-
                 Tone.Buffer.onload = runInit;
 
             };
 
             function runInit () {
                 ArrowFactory.resumeTimeline();
-                SexyBackFactory.resumeTimeline();
                 tone.start();
                 var startTime = Date.now() - currentSong.offset*1000;
                 arrowWorker.worker.postMessage({

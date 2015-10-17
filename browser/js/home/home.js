@@ -32,7 +32,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
 
   (function landingPageAnimation() {
-    SexyBackFactory.init();
+    SexyBackFactory.init('#landingPageAnimationContainer');
   })();
 
   function play(fx) {
@@ -107,15 +107,16 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     if (!button) return;
 
     if (button.name === 'enter') {
+      // ToneFactory.sandstormAudio.pause();
+      SexyBackFactory.pause();
       play('start');
-      $state.go('mainMenu');
       $document.off('keydown', onArrowKey);
       window.removeEventListener('gamepadbuttondown', onArrowKey);
       $document.off('keydown', moveArrows);
       window.removeEventListener('gamepadbuttondown', moveArrows);
       $document.off('keydown', replaceArrows);
       window.removeEventListener('gamepadbuttondown', replaceArrows);
-      // ToneFactory.sandstormAudio.pause();
+      $state.go('mainMenu');
   	};
   };
 

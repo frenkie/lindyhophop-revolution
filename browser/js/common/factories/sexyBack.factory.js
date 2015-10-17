@@ -6,7 +6,7 @@ app.factory('SexyBackFactory', function () {
       if(!scene) throw Error("make a scene first");
     }
 
-    SexyBack.init = function() {
+    SexyBack.init = function(page) {
 
         // attempt to create a material for the ocean effect
         // var material = new THREE.ShaderMaterial( {
@@ -33,7 +33,7 @@ app.factory('SexyBackFactory', function () {
           HEIGHT = window.outerHeight;
 
         //set the number of bars that can fit on the screen
-        var numBars = 50;
+        var numBars = 200;
 
         // set some camera attributes
         var VIEW_ANGLE = 80,
@@ -45,7 +45,7 @@ app.factory('SexyBackFactory', function () {
         var renderer = new THREE.WebGLRenderer();
 
         // get the DOM element to attach to - assume we've got jQuery to hand
-        var $container = $('#landingPageAnimationContainer');
+        var $container = $(page);
         $container.append(renderer.domElement);
 
         // var camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -65,9 +65,9 @@ app.factory('SexyBackFactory', function () {
         var groupCubes = new THREE.Object3D();
         var context = new AudioContext();
         var analyser = context.createAnalyser();
-        var radius = 400;
+        var radius = 500;
         var angle = (2 * Math.PI)/numBars;
-        var formations = [circleFormation, lineFormation];
+        var formations = [circleFormation, lineFormation, quarterFormation];
 
         function circleFormation() {
             cubes.forEach(function(cube, i) {
@@ -85,6 +85,37 @@ app.factory('SexyBackFactory', function () {
             });
         };
 
+        function quarterFormation() {
+            var quarters = Math.floor(cubes.length / 4)
+            var angleQuarter = 2 * Math.PI / quarters;
+            var radiusQuarter = 200;
+            var theCorner = {
+                width: WIDTH / 4,
+                height: WIDTH/ 4
+            };
+            var cubesFirstQuarter = cubes.slice(0, quarters);
+            var cubesSecondQuarter = cubes.slice(quarters, quarters * 2);
+            var cubesThirdQuarter = cubes.slice(quarters * 2, quarters * 3);
+            var cubesFourthQuarter = cubes.slice(quarters * 3);
+            cubesFirstQuarter.forEach(function(cube, i) {
+                cube.position.x = theCorner.width + radiusQuarter * Math.sin(angleQuarter * i);
+                cube.position.z = theCorner.height + radiusQuarter * Math.cos(angleQuarter * i);
+            });
+            cubesSecondQuarter.forEach(function(cube, i) {
+                cube.position.x = -1 * theCorner.width + radiusQuarter * Math.sin(angleQuarter * i);
+                cube.position.z = theCorner.height + radiusQuarter * Math.cos(angleQuarter * i);
+            });
+            cubesThirdQuarter.forEach(function(cube, i) {
+                cube.position.x = theCorner.width + radiusQuarter * Math.sin(angleQuarter * i);
+                cube.position.z = -1 * theCorner.height + radiusQuarter * Math.cos(angleQuarter * i);
+            });
+            cubesFourthQuarter.forEach(function(cube, i) {
+                cube.position.x = -1 * theCorner.width + radiusQuarter * Math.sin(angleQuarter * i);
+                cube.position.z = -1 * theCorner.height + radiusQuarter * Math.cos(angleQuarter * i);
+            });
+
+        }
+
         var makeCubes = function(numBars) {
             for(var i = 0; i < numBars; i++) {
               var geometry = new THREE.BoxGeometry( 5, 1, 5 );
@@ -93,7 +124,9 @@ app.factory('SexyBackFactory', function () {
               groupCubes.add(cube)
               cubes.push(cube);
             }
-            formations[Math.floor(Math.random() * formations.length)]();
+            // quarterFormation();
+            circleFormation();
+            // formations[Math.floor(Math.random() * formations.length)]();
             scene.add( groupCubes );
         }
 
@@ -134,6 +167,10 @@ app.factory('SexyBackFactory', function () {
 
         // code for debugging => in the console type 'group' to see groupCubes
         window.group = groupCubes;
+    };
+
+    SexyBack.pause = function() {
+      audio.pause();
     };
 
     return SexyBack;
