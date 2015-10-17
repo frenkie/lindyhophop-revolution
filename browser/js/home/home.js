@@ -51,17 +51,16 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
       ARROW_TIME: 400 / mainBPM, //Factor for timing how fast arrow takes (this number / bpm for seconds)
       BEAT_TIME: 1/(mainBPM/60/4)/4 //Number of seconds per measure
   };
+
   (function prepAnimation(stepChart) {
-    SexyBackFactory.init();
-    SexyBackFactory.makeShapes(stepChart.chart, mainBPM, config, song);
+    SexyBackFactory.init(); 
   })(sandStormChart);
 
-  if(!ToneFactory.sandstormAudio) {
-    ToneFactory.sandstorm();
-  } else {
-    ToneFactory.sandstormAudio.play();
-  }
-  SexyBackFactory.resumeTimeline();
+  // if(!ToneFactory.sandstormAudio) {
+  //   ToneFactory.sandstorm();
+  // } else {
+  //   ToneFactory.sandstormAudio.play();
+  // }
 
   function play(fx) {
     ToneFactory.play(fx);
