@@ -10,24 +10,26 @@ app.config(function($stateProvider) {
 
 app.controller('uploadCtrl', function ($scope, Upload, $state, keyConfigFactory) {
 
-    var blink = true;
+    var blink = false;
     setInterval(function() {
       if(blink){
         $('.smUpload').addClass('blink-upload');
         $('.songUpload').removeClass('blink-upload');
+        $('.bgUpload').removeClass('blink-upload');
         blink = false;
       } else {
         $('.songUpload').addClass('blink-upload');
         $('.smUpload').removeClass('blink-upload');
+        $('.bgUpload').addClass('blink-upload');
         blink = true;
       };
     },300);
 
     // upload later on form submit or something similar
     $scope.submit = function() {
-      if ($scope.song && !$scope.song.$error && $scope.sm && !$scope.sm.$error) {
+      if ($scope.song && !$scope.song.$error && $scope.sm && !$scope.sm.$error && $scope.bg && !$scope.bg.$error) {
         console.log("now calling scope.upload")
-        $scope.upload($scope.song, $scope.sm);
+        $scope.upload($scope.song, $scope.sm, $scope.bg);
       } else {
         console.log("both files need to be in the page");
       }
@@ -35,13 +37,14 @@ app.controller('uploadCtrl', function ($scope, Upload, $state, keyConfigFactory)
 
 
     // upload on file select or drop
-    $scope.upload = function (song, sm) {
+    $scope.upload = function (song, sm, bg) {
       console.log('song', song);
       console.log('sm file', sm);
+      console.log('bg file', bg);
         Upload.upload({
             url: '/api/songs/upload/',
             method: 'POST',
-            data: {song: song, sm: sm}
+            data: {song: song, sm: sm, bg: bg}
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.song.name + 'uploaded. Response: ' + resp.data);
         }, function (resp) {
