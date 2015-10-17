@@ -25,15 +25,40 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFactory, $state, ToneFactory, keyConfigFactory, highScores, $stateParams) {
+app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFactory, $state, ToneFactory, keyConfigFactory, highScores, $stateParams, $modal) {
     
     $scope.player1 = player;
     $scope.percent = percent;
     $scope.score = parseInt(score);
 
     
+    //need is high score separate from putting it in
+    var isHighScore = ScoreFactory.isHighScore($scope.score, highScores);
 
-    ScoreFactory.isHighScore($scope.score, "Karley", highScores, $stateParams.songId);
+
+    var openModal = function (size) {
+
+          var modalInstance = $modal.open({
+          animation: true,
+          templateUrl: 'js/results/myModal.html',
+          controller: 'ModalInstanceCtrl'
+        });
+
+
+        modalInstance.result.then(function (name) {
+            $scope.name = name;
+            console.log('name is', name);
+            window.addEventListener('keydown', leaveResults);
+            window.addEventListener('gamepadbuttondown', leaveResults);
+            ScoreFactory.setHighScore(highScores, $stateParams.songId, name, $scope.score);
+        });
+    };
+
+    if(isHighScore) openModal();
+    else {
+        window.addEventListener('keydown', leaveResults);
+        window.addEventListener('gamepadbuttondown', leaveResults);
+    }
 
     
     
@@ -61,7 +86,20 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
         }
     }
 
-    window.addEventListener('keydown', leaveResults);
-    window.addEventListener('gamepadbuttondown', leaveResults);
+    
+
+});
+
+app.controller('ModalInstanceCtrl', function($scope, $modalInstance) {
+
+  $scope.ok = function () {
+    console.log('you are in ok');
+    $modalInstance.close($scope.name);
+  };
+
+  // $scope.cancel = function () {
+  //   $modalInstance.dismiss('cancel');
+  // };
+
 
 });

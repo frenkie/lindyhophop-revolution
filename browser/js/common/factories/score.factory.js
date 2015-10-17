@@ -216,31 +216,21 @@ app.factory('ScoreFactory', function($http) {
         });
     }
 
-    function isHighScore(score, name, highScores, songId) {
-        var score = score || 0;
-        var scoreObj = {name: name, score: score};
-        if(highScores.length < 3) {
-            console.log('new high score!');
-            highScores.push(scoreObj);
-            setHighScore(sortHighScores(highScores), songId);
-        }
-        else {
-            var minScore = highScores.reduce((a, b) => (a.score < b.score) ? a : b);
-            if (score > minScore.score) {
-                console.log('new high score! Kicking out an old score!');
-                var ind = highScores.indexOf(minScore);
-                highScores.splice(ind, 1, scoreObj);
-                setHighScore(sortHighScores(highScores), songId);
-            }
-        }
+    function isHighScore(score, highScores) {
+        return (highScores.length < 5 || score > highScores[length-1].score) 
     }
 
     function sortHighScores(highScores) {
         return highScores.sort((a, b) => b.score-a.score);
     }
 
-    function setHighScore(highScores, songId) {
-        $http.put('/api/songs/'+songId+'/highScores', {highScores: highScores})
+    function setHighScore(highScores, songId, name, score) {
+        var score = score || 0;
+        var scoreObj = {name: name, score: score};
+        if(highScores.length < 5) highScores.push(scoreObj);
+        else highScores.splice(-1, 1, scoreObj);
+
+        $http.put('/api/songs/'+songId+'/highScores', {highScores: sortHighScores(highScores)})
         .then(function(res) {
             console.log('successfully set high score');
             return res.data;
@@ -263,6 +253,7 @@ app.factory('ScoreFactory', function($http) {
         getAccuracyColors: getAccuracyColors,
         allPlayerGuys: allPlayerGuys,
         getHighScores: getHighScores,
-        isHighScore: isHighScore
+        isHighScore: isHighScore,
+        setHighScore: setHighScore
     };
 });
