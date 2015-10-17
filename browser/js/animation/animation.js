@@ -2,20 +2,19 @@
 
 app.config(function($stateProvider) {
     $stateProvider.state('animation', {
-        url: '/animation/:songId/:chosenLevel',
+        url: '/animation/:songId/:chosenLevel/',
         templateUrl: 'js/animation/animation.html',
         resolve: {
             song: function(SongFactory, $stateParams) {
                 return SongFactory.getSongById($stateParams.songId);
-            },
-            resolve: function(song) {
-                return song.background;
             }
         },
-
+        params: {
+            mod1: 1
+        },
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
 
-            $scope.imageSrc = `/img/background/${song.background}`;
+
 
             $scope.ready = false;
             var currentSong = song;
@@ -35,10 +34,12 @@ app.config(function($stateProvider) {
 
             var config = {
                 TIMING_WINDOW: TIMING_WINDOW,
-                ARROW_TIME: ArrowFactory.speed * 4 / mainBPM, //Factor for timing how fast arrow takes (this number / bpm for seconds)
-                BEAT_TIME: 1/(mainBPM/60/4)/4 //Number of seconds per measure
+                ARROW_TIME: ((ArrowFactory.SPEED_1X/$stateParams.mod1) * 4 / mainBPM), //Factor for timing how fast arrow takes (this number / bpm for seconds)
+                BEAT_TIME: 1/(mainBPM/60/4)/4, //Number of seconds per measure
+                SPEED_MOD: $stateParams.mod1,
+                animationOffset: 0
             };
-            config.BEAT_VH = 100/((ArrowFactory.speed * 4)/mainBPM) * config.BEAT_TIME;
+            config.BEAT_VH = 100/(((ArrowFactory.SPEED_1X/$stateParams.mod1) * 4)/mainBPM) * config.BEAT_TIME;
 
             var arrowWorker, tone;
 
@@ -100,6 +101,7 @@ app.config(function($stateProvider) {
                 }
                 else {
 
+                    $scope.imageSrc = `/img/background/${song.background}`;
                 }
                 setTimeout(function() {
                     var video = document.getElementById('bg-video');

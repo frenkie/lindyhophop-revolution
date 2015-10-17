@@ -84,17 +84,17 @@ app.factory('ScoreFactory', function($http) {
 
 
     function addCombo(diff, playerNum) {
-        console.log('adding score to player:', playerNum);
+        // console.log('adding score to player:', playerNum);
 
         var player = allPlayerGuys[playerNum-1] || player1Guy;
 
-        console.log(player);
+        // console.log(player);
 
         if (diff <= TIMINGWINDOWS.Great) {
             player.combo++;
             if (player.combo > player.maxCombo) player.maxCombo = player.combo;
         }
-        console.log('what is player combo:', player.combo);
+        // console.log('what is player combo:', player.combo);
 
         return player.combo;
         // if (playerNum === 2) {
@@ -112,7 +112,7 @@ app.factory('ScoreFactory', function($http) {
         // }
     }
 
-    function resetPlayers() {     
+    function resetPlayers() {
         allPlayerGuys.forEach(function (guy) {
             for( var key in guy) {
                 guy[key] = RESETVALUES[key];

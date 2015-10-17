@@ -187,6 +187,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
         var button = keyConfigFactory.getButton(event);
         if (!button) return;
         if (button.name === "up") { //key up
+            if (!$(`.selected${button.player + 1}`).prev()[0]) return;
             if ($(`.selected${button.player + 1}`).prev().length) {
                 $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
                 $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).prev().addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
@@ -197,6 +198,7 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             }
 
         } else if (button.name === "down") { //key down
+            if (!$(`.selected${button.player + 1}`).next()[0].id) return;
             if ($(`.selected${button.player + 1}`).next().length) {
                 $(`.selected${button.player + 1}>.player${button.player + 1}Arrow`).removeClass(`selectedArrow${button.player + 1}`);
                 $(`.selected${button.player + 1}`).removeClass(`selected${button.player + 1}`).next().addClass(`selected${button.player + 1}`).children(`.player${button.player + 1}Arrow`).addClass(`selectedArrow${button.player + 1}`);
@@ -207,13 +209,11 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             }
 
         } else if (button.name === "enter") { //enter
-            // should probably only be for number one : D
             $(`.selected1`).trigger('click');
 
         } else if (button.name === "escape") { //escape
             $('.choose-level').css("visibility", "hidden").children().children().removeClass("selectedArrow1").removeClass("selectedArrow2");
             $('.radar-chart').css("visibility", "hidden");
-            // $('.selectedArrow1').css("visibility", "hidden")
             TweenMax.set($(`#item${target}`), {
                 clearProps: "all"
             });
