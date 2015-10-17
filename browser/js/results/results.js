@@ -47,7 +47,6 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
 
         modalInstance.result.then(function (name) {
             $scope.name = name;
-            console.log('name is', name);
             window.addEventListener('keydown', leaveResults);
             window.addEventListener('gamepadbuttondown', leaveResults);
             ScoreFactory.setHighScore(highScores, $stateParams.songId, name, $scope.score);
@@ -93,7 +92,6 @@ app.controller('ResultsCtrl', function($scope, player, percent, score, ScoreFact
 app.controller('ModalInstanceCtrl', function($scope, $modalInstance) {
 
   $scope.ok = function () {
-    console.log('you are in ok');
     $modalInstance.close($scope.name);
   };
 

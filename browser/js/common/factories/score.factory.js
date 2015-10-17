@@ -232,7 +232,6 @@ app.factory('ScoreFactory', function($http) {
 
         $http.put('/api/songs/'+songId+'/highScores', {highScores: sortHighScores(highScores)})
         .then(function(res) {
-            console.log('successfully set high score');
             return res.data;
         });
     }
