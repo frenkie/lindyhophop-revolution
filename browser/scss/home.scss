@@ -1,12 +1,17 @@
 #home {
   position: relative;
+  margin-top: -3%;
 
   .storeKey {
     padding: 0;
   }
 
+  video {
+    min-height: 140%;
+  }
+
   h1 {
-    margin-top: 1%;
+    margin-top: 3%;
     color: #49D5EA;
     position: relative;
   }
