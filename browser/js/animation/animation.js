@@ -16,6 +16,8 @@ app.config(function($stateProvider) {
 
         controller: function($scope, ArrowFactory, ToneFactory, SexyBackFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
 
+            $scope.numBars = 50;
+
             $scope.imageSrc = `/img/background/${song.background}`;
 
             $scope.ready = false;

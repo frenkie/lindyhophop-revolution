@@ -1,181 +1,184 @@
-#gameplayAnimationContainer {
-  z-index: 1;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
+#animationJSContainer {
+  
+    #gameplayAnimationContainer {
+      z-index: 1;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
 
-.arrow {
-  padding-top: 10%;
-  position: absolute;
-  top: 100vh;
-  transition: opacity 0.2s;
-  width: 100%;
-  z-index: 6;
+    .arrow {
+      padding-top: 10%;
+      position: absolute;
+      top: 100vh;
+      transition: opacity 0.2s;
+      width: 100%;
+      z-index: 6;
 
-  text-align: center;
-  img {
-    position: relative;
-    z-index: 5;
-    height: 15vh;
-  }
-}
-
-
-.arrowPlace {
-  padding-top: 10%;
-  position: absolute;
-  transition: opacity 0.2s;
-  width: 100%;
-  z-index: 100;
-
-  text-align: center;
-  img {
-    position: relative;
-    z-index: 100;
-    height: 15vh;
-    opacity: 0.6;
-  }
-}
-
-.arrowPlacePressed img {
-  opacity: 1;
-}
+      text-align: center;
+      img {
+        position: relative;
+        z-index: 5;
+        height: 15vh;
+      }
+    }
 
 
+    .arrowPlace {
+      padding-top: 10%;
+      position: absolute;
+      transition: opacity 0.2s;
+      width: 100%;
+      z-index: 100;
 
-.freeze {
-  margin:auto;
-  z-index: 3;
-  width: 10vh;
-  transform: translateY(-7.5vh);
-  background-image: url('/img/arrows/freeze.png');
-  background-repeat: repeat-y;
-  background-size: 100%;
-}
+      text-align: center;
+      img {
+        position: relative;
+        z-index: 100;
+        height: 15vh;
+        opacity: 0.6;
+      }
+    }
 
-.arrow-col {
-  height: inherit;
-  position: relative;
-  padding: 0;
-}
-
-
-.animContainer {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 0;
-}
-
-.row {
-  height: inherit;
-}
-
-.player-1 {
-  height: inherit;
-}
-
-.pusher {
-  height: 5%;
-}
-
-.fader {
-  position: absolute;
-  top: -5%;
-  height: 14%;
-  width: 100%;
-  background: linear-gradient(0deg, rgba(30, 30, 30, 0), rgba(30, 30, 30, 1));
-  z-index: 10;
-}
-
-.freeze-eater {
-  background-color: rgba(30, 30, 30, 1);
-}
-
-.chute {
-  position: absolute;
-  top: -5%;
-  height: 12.5%;
-  width: 100%;
-  background: rgba(30, 30, 30, 1);
-  z-index: 4;
-}
+    .arrowPlacePressed img {
+      opacity: 1;
+    }
 
 
-.under-chute {
-  position: absolute;
-  top: 7.5%;
-  height: 15.5%;
-  width: 100%;
-  background: linear-gradient(0deg, rgba(30, 30, 30, 0), rgba(30, 30, 30, 1));
-  z-index: 4;
-}
 
-.chute-right {
-  width: 147%;
-}
+    .freeze {
+      margin:auto;
+      z-index: 3;
+      width: 10vh;
+      transform: translateY(-7.5vh);
+      background-image: url('/img/arrows/freeze.png');
+      background-repeat: repeat-y;
+      background-size: 100%;
+    }
 
-.chute-left {
-  width: 147%;
-  left: -47%;
-}
+    .arrow-col {
+      height: inherit;
+      position: relative;
+      padding: 0;
+    }
 
-#player-1-arrowLane {
-  position: relative;
-  height: 100vh;
-  background-color: rgba(30, 30, 30, 0.7);
-  z-index: 1;
-  &:first-child {
-    padding-left: 75px;
-  }
-  &:last-child {
-    padding-right: 75px;
-  }
-}
 
-#player-2-arrowLane {
-  position: relative;
-  height: 100vh;
-  background-color: rgba(30, 30, 30, 0.7);
-  z-index: 1;
-  &:first-child {
-    padding-left: 75px;
-  }
-  &:last-child {
-    padding-right: 75px;
-  }
-}
+    .animContainer {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 0;
+    }
 
-.container {
-  z-index: 1;
-  height: 100%;
-}
+    .row {
+      height: inherit;
+    }
 
-iframe {
-  top: -80px;
-  width: 100%;
-  height: 60%;
-}
+    .player-1 {
+      height: inherit;
+    }
 
-@font-face {
-    font-family: 'neon';
-    src: url('/img/font/neon.ttf');
-}
+    .pusher {
+      height: 5%;
+    }
 
-@font-face {
-    font-family: 'petit';
-    src: url('/img/font/petit.otf');
-}
+    .fader {
+      position: absolute;
+      top: -5%;
+      height: 14%;
+      width: 100%;
+      background: linear-gradient(0deg, rgba(30, 30, 30, 0), rgba(30, 30, 30, 1));
+      z-index: 10;
+    }
 
-.accuracy {
-  font-family: 'neon';
-  font-size: 8vh;
-  position: absolute;
-  top: 50%;
-  left: 40%;
-  width: 100%;
-  color: white;
-  z-index: 10;
-  visibility: visible;
+    .freeze-eater {
+      background-color: rgba(30, 30, 30, 1);
+    }
+
+    .chute {
+      position: absolute;
+      top: -5%;
+      height: 12.5%;
+      width: 100%;
+      background: rgba(30, 30, 30, 1);
+      z-index: 4;
+    }
+
+
+    .under-chute {
+      position: absolute;
+      top: 7.5%;
+      height: 15.5%;
+      width: 100%;
+      background: linear-gradient(0deg, rgba(30, 30, 30, 0), rgba(30, 30, 30, 1));
+      z-index: 4;
+    }
+
+    .chute-right {
+      width: 147%;
+    }
+
+    .chute-left {
+      width: 147%;
+      left: -47%;
+    }
+
+    #player-1-arrowLane {
+      position: relative;
+      height: 100vh;
+      background-color: rgba(30, 30, 30, 0.7);
+      z-index: 1;
+      &:first-child {
+        padding-left: 75px;
+      }
+      &:last-child {
+        padding-right: 75px;
+      }
+    }
+
+    #player-2-arrowLane {
+      position: relative;
+      height: 100vh;
+      background-color: rgba(30, 30, 30, 0.7);
+      z-index: 1;
+      &:first-child {
+        padding-left: 75px;
+      }
+      &:last-child {
+        padding-right: 75px;
+      }
+    }
+
+    .container {
+      z-index: 1;
+      height: 100%;
+    }
+
+    iframe {
+      top: -80px;
+      width: 100%;
+      height: 60%;
+    }
+
+    @font-face {
+        font-family: 'neon';
+        src: url('/img/font/neon.ttf');
+    }
+
+    @font-face {
+        font-family: 'petit';
+        src: url('/img/font/petit.otf');
+    }
+
+    .accuracy {
+      font-family: 'neon';
+      font-size: 8vh;
+      position: absolute;
+      top: 50%;
+      left: 40%;
+      width: 100%;
+      color: white;
+      z-index: 10;
+      visibility: visible;
+    }
 }
