@@ -107,7 +107,6 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     if (!button) return;
 
     if (button.name === 'enter') {
-      // ToneFactory.sandstormAudio.pause();
       SexyBackFactory.pause();
       play('start');
       $document.off('keydown', onArrowKey);
