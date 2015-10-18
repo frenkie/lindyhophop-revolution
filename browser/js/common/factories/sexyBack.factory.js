@@ -35,7 +35,7 @@ app.factory('SexyBackFactory', function () {
           HEIGHT = window.outerHeight;
 
         //set the number of bars that can fit on the screen
-        var numBars = 200;
+        var numBars = 350;
 
         // set some camera attributes
         var VIEW_ANGLE = 80,
@@ -67,8 +67,8 @@ app.factory('SexyBackFactory', function () {
         var groupCubes = new THREE.Object3D();
         var context = new AudioContext();
         var analyser = context.createAnalyser();
-        var radius = 500;
-        var angle = (2 * Math.PI)/numBars;
+        var radius = 600;
+        var angle = (2 * Math.PI) / numBars;
         var formations = [circleFormation, lineFormation, quarterFormation];
 
         function circleFormation() {
@@ -76,6 +76,21 @@ app.factory('SexyBackFactory', function () {
                 cube.position.x = radius * Math.sin(angle * i);
                 cube.position.z = radius * Math.cos(angle * i);
             });
+        }
+
+        function doubleCircleFormation() {
+          var firstHalfCubes = cubes.slice(0, cubes.length / 2);
+          var secondHalfCubes = cubes.slice(cubes.length / 2);
+          var doubleCircleAngle = (2 * Math.PI) / cubes.length * 2;
+          var doubleCircleRadius = 500;
+          firstHalfCubes.forEach(function(cube, i) {
+              cube.position.x = doubleCircleRadius * Math.sin(doubleCircleAngle * i);
+              cube.position.z = doubleCircleRadius * Math.cos(doubleCircleAngle * i);
+          });
+          secondHalfCubes.forEach(function(cube, j) {
+              cube.position.x = doubleCircleRadius / 2 * Math.sin(doubleCircleAngle * j);
+              cube.position.z = doubleCircleRadius / 2 * Math.cos(doubleCircleAngle * j);
+          });
         }
 
         function lineFormation() {
@@ -126,8 +141,9 @@ app.factory('SexyBackFactory', function () {
               groupCubes.add(cube)
               cubes.push(cube);
             }
-            quarterFormation();
+            // quarterFormation();
             // circleFormation();
+            doubleCircleFormation();
             // formations[Math.floor(Math.random() * formations.length)]();
             scene.add( groupCubes );
         }
@@ -144,7 +160,7 @@ app.factory('SexyBackFactory', function () {
               analyser.getByteFrequencyData(freqByteData);
 
               for (var i = 0; i < numBars; ++i) {
-                var magnitude = freqByteData[i * 2 + OFFSET];
+                var magnitude = freqByteData[i + OFFSET];
                 cubes[i].scale.y = magnitude;
                 cubes[i].position.y = magnitude / 2;
               };
