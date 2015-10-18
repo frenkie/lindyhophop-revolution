@@ -145,14 +145,14 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             var heightGuy = window.outerHeight*0.02;
 
             TweenMax.to($(`#item${target}`), 1, {
-                transform: 'scale(6) translateY(-'+(heightGuy + 0.5*(songs-13))+'vh)'
+                transform: 'scale(5) translateY(-'+(heightGuy + 0.5*(songs-13))+'vh)'
             });
             $(`#item${target} > .carouselItemInner`).addClass('activeSong');
             TweenMax.to($('.carouselContainer'), 1, {
                 transform: 'translateY(40px)'
             });
             TweenMax.to($(`.choose-level`), 1, {
-                transform: 'translateY(-'+Math.pow(heightGuy,3)/3300+'vh)'
+                transform: 'translateY(-' + Math.pow(heightGuy,3)/3300+'vh)'
             });
             TweenMax.to($(`#groovey`), 1, {
                 transform: 'translateY(-'+Math.pow(heightGuy,3)/4000+'vh)'
