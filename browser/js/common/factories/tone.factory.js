@@ -8,7 +8,6 @@ app.factory('ToneFactory', function ($q) {
         this.bpm = bpm;
         this.syncOffset = config ? config.ARROW_TIME + parseFloat(offset) : offset;
         this.player = new Tone.Player(this.path).toMaster();
-        window.player = this.player;
         this.transport = Tone.Transport;
         this.transport.bpm.value = this.bpm;
         this.buffer = Tone.Buffer;
