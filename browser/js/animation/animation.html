@@ -3,13 +3,14 @@
       <loading></loading>
     </div>
 
-    <div id='gameplayAnimationContainer'>
-      <div class='frequencyOpacityAnimation' ng-repeat='bar in numBars'>{{$index}}</div>
+    <div id='barContainer'>
+      <div id='gameplayAnimationContainer'>
+        <div class='frequencyOpacityAnimation' ng-repeat='bar in numBars'>.</div>
+      </div>
     </div>
 
 
     <div class='animContainer' ng-show='ready'>
-      <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/2HQaBWziYvY" frameborder="0" allowfullscreen></iframe> -->
 
       <img id='bg-image' ng-src="{{imageSrc}}" />
 

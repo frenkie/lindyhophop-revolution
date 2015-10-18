@@ -126,8 +126,8 @@ app.factory('SexyBackFactory', function () {
               groupCubes.add(cube)
               cubes.push(cube);
             }
-            // quarterFormation();
-            circleFormation();
+            quarterFormation();
+            // circleFormation();
             // formations[Math.floor(Math.random() * formations.length)]();
             scene.add( groupCubes );
         }

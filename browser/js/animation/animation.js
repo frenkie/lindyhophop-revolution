@@ -14,8 +14,9 @@ app.config(function($stateProvider) {
         },
         controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory, FreqOpacAnimFactory) {
 
-            $scope.numBars = []; // window.outerWidth / 100;
-            for(var i = 0; i < 35; i++) {
+            $scope.numBars = [];
+            var bars = window.innerWidth / 20;
+            for(var i = 0; i < bars; i++) {
               $scope.numBars.push(i);
             }
 
@@ -72,10 +73,7 @@ app.config(function($stateProvider) {
 
                 arrowWorker.handleMessages($scope, arrows, tone, 1);
 
-
-                Tone.Buffer.onload = function () {
-                  runInit();
-                }
+                Tone.Buffer.onload = runInit;
 
             };
 

@@ -10,19 +10,29 @@
 
 #animationJSContainer {
 
-    #gameplayAnimationContainer {
-      z-index: 1;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
+    #barContainer {
 
-    .frequencyOpacityAnimation {
-      height: 100%;
-      width: 40px;
-      display: inline-block;
-      background-color: black;
-      opacity: 0.6;
+        margin:auto;
+        width: inherit;
+        height: inherit;
+
+        #gameplayAnimationContainer {
+          z-index: 1;
+          position: absolute;
+          // the width is 110% so that the music bars extend the length of page
+          width: 110%;
+          height: 100%;
+        }
+
+        .frequencyOpacityAnimation {
+          height: 100%;
+          width: 20px;
+          display: inline-block;
+          background-color: black;
+          opacity: 0.6;
+          color: black;
+        }
+
     }
 
     .arrow {
