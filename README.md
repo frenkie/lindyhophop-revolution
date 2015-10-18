@@ -1,12 +1,12 @@
 # Dance Dance Evolution
 
 <!-- [![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](http://www.dancedanceevolution.com) -->
-[![Live Demo](https://photos-3.dropbox.com/t/2/AADZYgjiqe9QbeVBABOwXyyEOtcfaNV31lpb5wb9vWHWlQ/12/34003749/png/32x32/1/_/1/2/demo-online-green.svg/ELXz5RkYuhwgBygH/14Kkgs8Iabw2LqO3UNXQvIdk2o4qN_roI2Gl2deIOQg?size=1024x768&size_mode=2)](http://www.dancedanceevolution.com)
-[![Uses JS](https://photos-1.dropbox.com/t/2/AAA5dOkHyfU_di3gNAYayeIoQIy7gaq85vUAnTem7kD9Sg/12/34003749/png/32x32/1/_/1/2/usesjs.svg/ELXz5RkYuhwgBygH/9En6D4ybYIRDQKEYupOsY3BL1wyDbTyy-e4fHQkL4g4?size=1024x768&size_mode=2)](http://www.dancedanceevolution.com)
-[![Built with Love](https://photos-2.dropbox.com/t/2/AAChpmS9rEMbJcRsTZgd8zdODX42RwqLrEmqXm4-P7dqUg/12/34003749/png/32x32/1/_/1/2/builtwith.svg/ELXz5RkYuhwgBygH/VZL07hPga8RAet1I1ZWg_drcxfAIp6x6HQDJQEsIP_4?size=1024x768&size_mode=2)](http://www.dancedanceevolution.com)
+[![Live Demo](https://camo.githubusercontent.com/d57a88a378dd7ed232931397d903da874daa7809/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f64656d6f2d6f6e6c696e652d677265656e2e737667)](http://www.dancedanceevolution.com)
+[![Uses JS](http://i.imgur.com/iCHwult.png)](http://www.dancedanceevolution.com)
+[![Built with Love](http://i.imgur.com/cB5v58b.png)](http://www.dancedanceevolution.com)
 
 ## Description
-Dance Dance Evolution is a version of StepMania that lives entirely in the browser. DDE looks to pay our respects to one of our childhood favorite games while also looking to turn the page on a new era of dance.
+Dance Dance Evolution is a version of StepMania that lives entirely in the browser. DDE looks to pay our respects to one of our childhood favorite games while also looking to turn the page onto a new era of music-themed games.
 
 ## Features
 - Upload music and SM files
