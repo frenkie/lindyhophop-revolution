@@ -79,8 +79,8 @@ app.factory('SexyBackFactory', function () {
         }
 
         function doubleCircleFormation() {
-          var firstHalfCubes = cubes.slice(0, cubes.length / 2);
-          var secondHalfCubes = cubes.slice(cubes.length / 2);
+          var firstHalfCubes = cubes.slice(0, cubes.length * 2 / 3);
+          var secondHalfCubes = cubes.slice(cubes.length * 2 / 3);
           var doubleCircleAngle = (2 * Math.PI) / cubes.length * 2;
           var doubleCircleRadius = 500;
           firstHalfCubes.forEach(function(cube, i) {
@@ -88,8 +88,8 @@ app.factory('SexyBackFactory', function () {
               cube.position.z = doubleCircleRadius * Math.cos(doubleCircleAngle * i);
           });
           secondHalfCubes.forEach(function(cube, j) {
-              cube.position.x = doubleCircleRadius / 2 * Math.sin(doubleCircleAngle * j);
-              cube.position.z = doubleCircleRadius / 2 * Math.cos(doubleCircleAngle * j);
+              cube.position.x = doubleCircleRadius / 2 * Math.sin(doubleCircleAngle * j * (3/2));
+              cube.position.z = doubleCircleRadius / 2 * Math.cos(doubleCircleAngle * j * (3/2));
           });
         }
 
@@ -130,8 +130,11 @@ app.factory('SexyBackFactory', function () {
                 cube.position.x = -1 * theCorner.width + radiusQuarter * Math.sin(angleQuarter * i);
                 cube.position.z = -1 * theCorner.height + radiusQuarter * Math.cos(angleQuarter * i);
             });
-
         }
+
+        // function armyFormation() {
+        //
+        // }
 
         var makeCubes = function(numBars) {
             for(var i = 0; i < numBars; i++) {
@@ -141,9 +144,9 @@ app.factory('SexyBackFactory', function () {
               groupCubes.add(cube)
               cubes.push(cube);
             }
-            // quarterFormation();
+            quarterFormation();
             // circleFormation();
-            doubleCircleFormation();
+            // doubleCircleFormation();
             // formations[Math.floor(Math.random() * formations.length)]();
             scene.add( groupCubes );
         }
