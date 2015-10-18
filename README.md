@@ -1,7 +1,7 @@
 # Dance Dance Evolution
 
 <!-- [![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](http://www.dancedanceevolution.com) -->
-[![Live Demo](https://camo.githubusercontent.com/d57a88a378dd7ed232931397d903da874daa7809/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f64656d6f2d6f6e6c696e652d677265656e2e737667)](http://www.dancedanceevolution.com)
+[![Live Demo](http://imgur.com/K655Ilu.png)](http://www.dancedanceevolution.com)
 [![Uses JS](http://i.imgur.com/iCHwult.png)](http://www.dancedanceevolution.com)
 [![Built with Love](http://i.imgur.com/cB5v58b.png)](http://www.dancedanceevolution.com)
 
