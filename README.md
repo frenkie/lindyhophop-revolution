@@ -1,7 +1,7 @@
 # Dance Dance Evolution
 
 <!-- [![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](http://www.dancedanceevolution.com) -->
-[![Live Demo](http://imgur.com/K655Ilu.png)](http://www.dancedanceevolution.com)
+[![Live Demo](http://i.imgur.com/84jKsei.png)](http://www.dancedanceevolution.com)
 [![Uses JS](http://i.imgur.com/iCHwult.png)](http://www.dancedanceevolution.com)
 [![Built with Love](http://i.imgur.com/cB5v58b.png)](http://www.dancedanceevolution.com)
 
