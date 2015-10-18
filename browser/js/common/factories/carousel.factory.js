@@ -142,17 +142,17 @@ app.factory('CarouselFactory', function ($state, ToneFactory, ScoreFactory, keyC
             var $ny = -2000 + getRandomInt(4000);
             var $nz = -4000 + getRandomInt(4000);
 
-            var heightGuy = window.outerHeight*0.03;
+            var heightGuy = window.outerHeight*0.02;
 
             TweenMax.to($(`#item${target}`), 1, {
-                transform: 'scale(4) translateY(-'+(heightGuy + 1.3*(songs-13))+'vh)'
+                transform: 'scale(5) translateY(-'+(heightGuy + 0.5*(songs-13))+'vh)'
             });
             $(`#item${target} > .carouselItemInner`).addClass('activeSong');
             TweenMax.to($('.carouselContainer'), 1, {
                 transform: 'translateY(40px)'
             });
             TweenMax.to($(`.choose-level`), 1, {
-                transform: 'translateY(-'+Math.pow(heightGuy,3)/3300+'vh)'
+                transform: 'translateY(-' + Math.pow(heightGuy,3)/3300+'vh)'
             });
             TweenMax.to($(`#groovey`), 1, {
                 transform: 'translateY(-'+Math.pow(heightGuy,3)/4000+'vh)'
