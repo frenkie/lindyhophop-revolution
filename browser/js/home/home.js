@@ -113,41 +113,6 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     var button = keyConfigFactory.getButton(event);
     if (!button) return;
 
-  	// var active = $('.activeHome') || $('#option1');
-   // 	var activeNumber = parseInt(active[0].id.slice(-1));
-
-
-
-  	// if (button.name === 'right') {
-  	// 	//right arrow
-  	// 	play('blop');
-  	// 	activeNumber = activeNumber === menu[menu.length - 1]? 1 : menu[menu.indexOf(activeNumber) + 1];
-  	// 	active.removeClass("activeHome");
-  	// 	$('#option' + activeNumber).addClass("activeHome");
-  	// } else if (button.name === 'left') {
-  	// 	//left arrow
-  	// 	play('blop');
-  	// 	activeNumber = activeNumber === 1? menu[menu.length - 1] : menu[menu.indexOf(activeNumber) - 1];
-  	// 	active.removeClass("activeHome");
-  	// 	$('#option' + activeNumber).addClass("activeHome");
-  	// } else if (button.name === 'enter') {
-   //    play('start');
-  	// 	var uiState = active[0].outerHTML.split('"');
-   //    $document.off('keydown', onArrowKey);
-   //    window.removeEventListener('gamepadbuttondown', onArrowKey);
-   //    $document.off('keydown', moveArrows);
-   //    window.removeEventListener('gamepadbuttondown', moveArrows);
-   //    $document.off('keydown', replaceArrows);
-   //    window.removeEventListener('gamepadbuttondown', replaceArrows);
-   //    if(uiState[5] === "user") {
-   //      logout();
-   //      $state.reload();
-   //    } else {
-   //      ToneFactory.sandstormAudio.pause();
-   //      $state.go(uiState[5]);
-   //    }
-  	// };
-
     if (button.name === 'enter') {
       play('start');
       $document.off('keydown', onArrowKey);
