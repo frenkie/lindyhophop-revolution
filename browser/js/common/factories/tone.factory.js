@@ -8,6 +8,7 @@ app.factory('ToneFactory', function ($q) {
         this.bpm = bpm;
         this.syncOffset = config ? config.ARROW_TIME + parseFloat(offset) : offset;
         this.player = new Tone.Player(this.path).toMaster();
+        window.player = this.player;
         this.transport = Tone.Transport;
         this.transport.bpm.value = this.bpm;
         this.buffer = Tone.Buffer;
@@ -45,9 +46,6 @@ app.factory('ToneFactory', function ($q) {
     ToneFactory.prototype.previewStart = function() {
         var self = this;
         Tone.Buffer.onload = function() {
-            console.log('in previewstart starting NRNRNRKNKNE')
-            console.log($('.radar-chart'));
-
             self.preview.start();
         }
     }
@@ -59,10 +57,8 @@ app.factory('ToneFactory', function ($q) {
     ToneFactory.prototype.tonePromise = function () {
         return $q(function(resolve, reject) {
             var bufferLoaded = false;
-            console.log('in promise');
             Tone.Buffer.onload = function () {
                 bufferLoaded = true;
-                console.log('tone resolved and buffer loaded');
                 resolve();
             };
         });

@@ -139,10 +139,10 @@ app.factory('SexyBackFactory', function () {
 
         function RenderScene() {
           if(onLandingPage) {
-            console.log("RENDERING")
               var OFFSET = 100;
               var freqByteData = new Uint8Array(analyser.frequencyBinCount);
               analyser.getByteFrequencyData(freqByteData);
+
               for (var i = 0; i < numBars; ++i) {
                 var magnitude = freqByteData[i * 2 + OFFSET];
                 cubes[i].scale.y = magnitude;

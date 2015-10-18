@@ -72,16 +72,18 @@ app.config(function($stateProvider) {
 
                 arrowWorker.handleMessages($scope, arrows, tone, 1);
 
-                var $gameplayContainer = $('#gameplayAnimationContainer');
-                FreqOpacAnimFactory.init($scope.numBars, $gameplayContainer);
 
-                Tone.Buffer.onload = runInit;
+                Tone.Buffer.onload = function () {
+                  runInit();
+                }
 
             };
 
             function runInit () {
                 ArrowFactory.resumeTimeline();
                 tone.start();
+                var $gameplayContainer = $('#gameplayAnimationContainer');
+                FreqOpacAnimFactory.init($scope.numBars, $gameplayContainer, tone);
                 var startTime = Date.now() - currentSong.offset*1000;
                 arrowWorker.worker.postMessage({
                   type: 'startTime',
