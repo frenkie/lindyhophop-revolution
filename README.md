@@ -27,11 +27,11 @@ Dance Dance Evolution is a version of StepMania that lives entirely in the brows
 [![Sean Johnston](https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAbRAAAAJGIwOTc3ZTcwLTA2ZDAtNGYwNy04NTdjLTk3ZTYwYzEzYzAwYQ.jpg)](https://www.linkedin.com/in/sbjohnston)
 [![Jay Lee](https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAVuAAAAJGFiNGM5NTZiLWZlYjQtNDJjYi04ODQyLTQyZTlkYWM5NDhlOA.jpg)](https://www.linkedin.com/in/jl975)
 [![Kim-Hung Leung](https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAUdAAAAJDAzMjM5YmRkLTNmNDItNDJlMi05MTZiLTRhN2RhNDQ2OTRkNA.jpg)](https://www.linkedin.com/in/kimhungleung)
-[![Karen MacPherson](https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAbOAAAAJDBjZDg5Y2I1LTgzYTQtNDRiNS05OThmLTA4MjE2ZGJhNTAzOA.jpg)](https://www.linkedin.com/pub/karen-macpherson/48/641/307)
-[![Jimin Sung](https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/000/1b2/161/3e9efe5.jpg)](https://www.linkedin.com/in/jiminsung)
+[![Karen MacPherson](http://i.imgur.com/GP3nJue.jpg)](https://www.linkedin.com/pub/karen-macpherson/48/641/307)
+[![Jimin Sung](http://i.imgur.com/CLfld70.jpg)](https://www.linkedin.com/in/jiminsung)
 
 ## Screenshots
-![Start Splash Page](http://imgur.com/gVtd3pS)
-![Main Menu](http://imgur.com/5dhHCcU)
-![Choose Song Difficulty](http://imgur.com/N6tPsFU)
+![Start Splash Page](http://imgur.com/gVtd3pS.png)
+![Main Menu](http://imgur.com/5dhHCcU.png)
+![Choose Song Difficulty](http://imgur.com/N6tPsFU.png)
 ![2 Player Mode Play](http://i.imgur.com/wz3zao3.png)
