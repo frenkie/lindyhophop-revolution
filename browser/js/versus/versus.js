@@ -13,9 +13,13 @@ app.config(function($stateProvider) {
             mod1: 1,
             mod2: 1
         },
-        controller: function($scope, $q, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+        controller: function($scope, $q, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory, FreqOpacAnimFactory) {
 
-
+            $scope.numBars = [];
+            var bars = window.innerWidth / 20;
+            for(var i = 0; i < bars; i++) {
+              $scope.numBars.push(i);
+            }
 
             $scope.ready = false;
             var currentSong = song;
@@ -110,6 +114,8 @@ app.config(function($stateProvider) {
             function runInit () {
                 ArrowFactory.resumeTimeline();
                 tone.start();
+                var $gameplayContainer = $('#gameplayAnimationContainer');
+                FreqOpacAnimFactory.init($scope.numBars, $gameplayContainer, tone);
                 var startTime = Date.now() - currentSong.offset*1000;
                 arrowWorker1.worker.postMessage({
                   type: 'startTime',

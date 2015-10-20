@@ -8,7 +8,7 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('MainMenuCtrl', function ($scope, $state, ToneFactory, keyConfigFactory) {
+app.controller('MainMenuCtrl', function ($scope, $state, ToneFactory, keyConfigFactory, SexyBackFactory) {
     $('.activeChoice').removeClass("activeChoice");
     $('#option1').addClass("activeChoice");
 

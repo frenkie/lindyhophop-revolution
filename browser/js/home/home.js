@@ -6,9 +6,9 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('HomeController', function ($rootScope, $scope, $state, AuthService, AUTH_EVENTS, ToneFactory, keyConfigFactory) {
+app.controller('HomeController', function ($rootScope, $scope, $state, AuthService, AUTH_EVENTS, ToneFactory, keyConfigFactory, SexyBackFactory) {
+
   $scope.user = null;
-  // var menu = [1, 2, 3, 4, 5];
 
   $('.homeMenu').click( function (e) {
     e.stopPropagation();
@@ -19,11 +19,6 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   var setUser = function () {
       AuthService.getLoggedInUser().then(function (user) {
           $scope.user = user;
-          if(user) {
-            menu = [1, 2, 5];
-          } else {
-            menu = [1, 2, 3, 4];
-          }
       });
   };
 
@@ -36,11 +31,9 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
   $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
   $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
 
-  if(!ToneFactory.sandstormAudio) {
-    ToneFactory.sandstorm();
-  } else {
-    ToneFactory.sandstormAudio.play();
-  }
+  (function landingPageAnimation() {
+    SexyBackFactory.init();
+  })();
 
   function play(fx) {
     ToneFactory.play(fx);
@@ -114,6 +107,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     if (!button) return;
 
     if (button.name === 'enter') {
+      SexyBackFactory.pause();
       play('start');
       $document.off('keydown', onArrowKey);
       window.removeEventListener('gamepadbuttondown', onArrowKey);
@@ -121,9 +115,8 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
       window.removeEventListener('gamepadbuttondown', moveArrows);
       $document.off('keydown', replaceArrows);
       window.removeEventListener('gamepadbuttondown', replaceArrows);
-        ToneFactory.sandstormAudio.pause();
-        $state.go('mainMenu'); 
-    };
+      $state.go('mainMenu');
+  	};
   };
 
   function logout() {

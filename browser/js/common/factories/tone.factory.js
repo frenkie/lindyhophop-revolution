@@ -45,9 +45,6 @@ app.factory('ToneFactory', function ($q) {
     ToneFactory.prototype.previewStart = function() {
         var self = this;
         Tone.Buffer.onload = function() {
-            console.log('in previewstart starting NRNRNRKNKNE')
-            console.log($('.radar-chart'));
-
             self.preview.start();
         }
     }
@@ -59,10 +56,8 @@ app.factory('ToneFactory', function ($q) {
     ToneFactory.prototype.tonePromise = function () {
         return $q(function(resolve, reject) {
             var bufferLoaded = false;
-            console.log('in promise');
             Tone.Buffer.onload = function () {
                 bufferLoaded = true;
-                console.log('tone resolved and buffer loaded');
                 resolve();
             };
         });

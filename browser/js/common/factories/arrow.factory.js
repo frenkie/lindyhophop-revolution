@@ -1,7 +1,7 @@
 /* global $ TweenMax */
 
 
-app.factory('ArrowFactory', function () {
+app.factory('ArrowFactory', function (SexyBackFactory) {
     var Arrow = function (direction, player, color) {
         this.direction = direction;
         // this.el = $(`<div class="arrow"></div>`);
@@ -63,7 +63,6 @@ app.factory('ArrowFactory', function () {
         // including an animation offset for a possible speed modifier differential
         var startTime = chIndex * measureTime + mIndex * timePerBeat + config.animationOffset;
         this.startTime = startTime;
-
         tl.to(this.el, animationLength * 10, {top: '-900vh', ease:Linear.easeNone}, startTime);
     }
 

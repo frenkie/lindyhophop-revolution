@@ -67,12 +67,20 @@ body {
 
 $arrow-height: 120px;
 
+// #testingDiv {
+//   z-index: 2;
+//   position: absolute;
+//   width: 25%;
+//   height: 25%;
+//   background-color: red;
+// }
+
 .wrap {
   margin: 0 auto;
   max-width: 75%;
   text-align: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .btn.round {

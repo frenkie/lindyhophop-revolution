@@ -12,9 +12,13 @@ app.config(function($stateProvider) {
         params: {
             mod1: 1
         },
-        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory) {
+        controller: function($scope, ArrowFactory, ToneFactory, song, SongFactory, $stateParams, ScoreFactory, $state, $timeout, WorkerFactory, FreqOpacAnimFactory) {
 
-
+            $scope.numBars = [];
+            var bars = window.innerWidth / 20;
+            for(var i = 0; i < bars; i++) {
+              $scope.numBars.push(i);
+            }
 
             $scope.ready = false;
             var currentSong = song;
@@ -30,8 +34,6 @@ app.config(function($stateProvider) {
             var mainBPM = currentSong.bpms[0].bpm;
             //idea for cleanup of config/currentsong ES6 syntax thingie
             // var {Charts, bpms} = currentSong;
-
-
             var config = {
                 TIMING_WINDOW: TIMING_WINDOW,
                 ARROW_TIME: ((ArrowFactory.SPEED_1X/$stateParams.mod1) * 4 / mainBPM), //Factor for timing how fast arrow takes (this number / bpm for seconds)
@@ -62,8 +64,6 @@ app.config(function($stateProvider) {
                 //for score calculation purposes
                 ScoreFactory.setTotalArrows(1);
 
-                // functions defined in arrow
-
                 // sets up arrow for animating
                 var arrows = ArrowFactory.makeArrows(stepChart.chart, mainBPM, config, currentSong, 1);
 
@@ -73,8 +73,6 @@ app.config(function($stateProvider) {
 
                 arrowWorker.handleMessages($scope, arrows, tone, 1, $stateParams.songId);
 
-
-
                 Tone.Buffer.onload = runInit;
 
             };
@@ -82,6 +80,8 @@ app.config(function($stateProvider) {
             function runInit () {
                 ArrowFactory.resumeTimeline();
                 tone.start();
+                var $gameplayContainer = $('#gameplayAnimationContainer');
+                FreqOpacAnimFactory.init($scope.numBars, $gameplayContainer, tone);
                 var startTime = Date.now() - currentSong.offset*1000;
                 arrowWorker.worker.postMessage({
                   type: 'startTime',
