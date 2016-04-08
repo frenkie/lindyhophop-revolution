@@ -26,7 +26,7 @@ app.factory('SexyBackFactory', function () {
         //
         // } );
         window.audio = new Audio();
-        audio.src = '/audio/Sandstorm.mp3';
+        audio.src = '/audio/finebrownframe.mp3';
         audio.autoplay = true;
         audio.loop = true;
 
@@ -61,7 +61,7 @@ app.factory('SexyBackFactory', function () {
         camera.position.y = 300;
 
         renderer.setSize(WIDTH, HEIGHT);
-        renderer.setClearColor( 0x2c3338, 1);
+        renderer.setClearColor( 0x17191b, 1);
 
         var cubes = [];
         var groupCubes = new THREE.Object3D();
@@ -139,7 +139,7 @@ app.factory('SexyBackFactory', function () {
         var makeCubes = function(numBars) {
             for(var i = 0; i < numBars; i++) {
               var geometry = new THREE.BoxGeometry( 5, 1, 5 );
-              var material = new THREE.MeshBasicMaterial( {color: 0xea4c88} );
+              var material = new THREE.MeshBasicMaterial( {color: 0xcf955d} );
               var cube = new THREE.Mesh( geometry, material );
               groupCubes.add(cube)
               cubes.push(cube);

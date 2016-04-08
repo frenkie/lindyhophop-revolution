@@ -35,6 +35,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         time.timer = $timeout(function() {
             time.timing = false;
             $scope['accuracy'+self.player] = null;
+            $scope['accuracyLabel'+self.player] = null;
         }, 1000);
 }
 
@@ -61,6 +62,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
         //as long as there is a measure of accuracy to show, make it so
         $scope['accuracy'+self.player] = ScoreFactory.getAccuracy(e.data.diff);
         $scope['accuracyCol'+self.player] = ScoreFactory.getAccuracyColors($scope['accuracy'+self.player]);
+        $scope['accuracyLabel'+self.player] = ScoreFactory.getAccuracyLabel($scope['accuracy'+self.player]);
         //only show accuracy feedback for 1 sec
 
         this.handleRemoval($scope, time);
@@ -90,6 +92,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                 $scope['showCombo'+self.player] = false;
                 $scope['accuracy'+self.player] = "Bad";
                 $scope['accuracyCol'+self.player] = '#FF0000';
+                $scope['accuracyLabel'+self.player] = 'Jammer';
                 //only show accuracy feedback for 1 sec
 
                 self.handleRemoval($scope, time);
@@ -118,6 +121,7 @@ app.factory('WorkerFactory', function (ScoreFactory, $timeout, ToneFactory, Arro
                 $scope['showCombo'+self.player] = false;
                 $scope['accuracy'+self.player] = "Boo";
                 $scope['accuracyCol'+self.player] = '#ED3DED';
+                $scope['accuracyLabel'+self.player] = 'Mis';
                 //only show accuracy feedback for 800 msec
 
                 self.handleRemoval($scope, time);

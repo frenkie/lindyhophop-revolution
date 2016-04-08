@@ -10,16 +10,16 @@ div.loadingScreen {
 //note for later - change the widths and heights of the parent elements to be %
 .loadingSphere {
   img {
-    width: 30%; 
-    height: 30%; 
+    width: 30%;
+    height: 30%;
     margin: 4%;
   }
   margin-left: auto;
   margin-top: 4%;
-  font-family: EchoDeco;
+  font-family: 'Market Deco';
   font-weight: 10;
   font-size: 4.5vh;
-  color: #ea4c88;
+  color: $base__font-active-color;
   padding-top: 2%;
   text-align: center;
   div {

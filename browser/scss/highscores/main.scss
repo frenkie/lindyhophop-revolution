@@ -9,16 +9,16 @@
   }
 
   h3 {
-    color: #ea4c88;
-    font-family: 'EchoDeco';
+    color: $base__font-active-color;
+    font-family: 'Frieda';
     text-align: center;
     font-size: 35px;
   }
 
   h2 {
     font-size: 50px;
-    color: #ea4c88;
-    font-family: 'EchoDeco';
+    color: $base__font-active-color;
+    font-family: 'Frieda';
     text-align: center;
     margin-top: 0;
   }
@@ -28,13 +28,13 @@
   }
 
   .score-item {
-    font-family: petit;
+    font-family: 'StonyIslandNF';
     text-align: center;
-    color: lightgray;
+    color: $base__color;
     h4 {
       font-size: 35px;
     }
-    
+
   }
 
 

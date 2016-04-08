@@ -30,6 +30,7 @@ function readSM(title) {
             value = lineParse[2];
         metadata[key] = value;
     })
+
     metadata.BPMS = metadata.BPMS ? metadata.BPMS.split(',').map(function(bpm) {
         var things = bpm.split('=');
         return {
@@ -48,7 +49,7 @@ function readSM(title) {
         };
     }) : [];
 
-    //console.log('metadata:',metadata);
+     console.log('metadata:',metadata);
     // var stepCharts = {};
 
     var charts = {};

@@ -12,7 +12,7 @@
 
     <div class='animContainer' ng-show='ready'>
 
-      <img id='bg-image' ng-src="{{imageSrc}}" />
+      <div id='bg-image' ng-show="imageSrc" style="background-image:url('{{imageSrc}}')"></div>
 
       <video id='bg-video' ng-src="{{videoSrc}}" muted loop>
         <!-- <source ng-src="{{videoSrc}}" type='video/mp4'></source> -->
@@ -26,7 +26,7 @@
       <div class="row">
         <div class="col-sm-offset-2 col-sm-8 player-1">
           <div id="player-1-arrowLane" class="row">
-            <div class="accuracy" style="color: {{accuracyCol1}}">{{accuracy1}}</div>
+            <div class="accuracy" style="color: {{accuracyCol1}}">{{accuracyLabel1}}</div>
             <div class="view-score" ng-show='ready && showCombo1'>{{combo1 || 0}} combo</div>
             <div class="pusher"></div>
             <div class="col-sm-3 left-arrow-col arrow-col-0 arrow-col">

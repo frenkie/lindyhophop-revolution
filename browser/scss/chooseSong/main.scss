@@ -18,9 +18,8 @@
 
 	h1 {
 		margin-top: 3.5%;
-  		font-family: 'EchoDeco';
-  		src: url('/img/font/EchoDeco.ttf');
-  		color: #ea4c88;
+  		font-family: 'Park Lane NF';
+  		color: $base__font-active-contrast2-color;
   		font-size: 11vh;
   		text-align: center;
 	}
@@ -59,8 +58,7 @@
 		visibility:hidden;
 
 		p {
-			margin-top: -15px;
-			font-family: petit;
+			font-family: 'Frieda';
 		}
 	}
 
@@ -69,9 +67,9 @@
 		width:320px;	//384px
 		height:130px;	//120px
 		position:absolute;
-		background-color:rgba(234, 76, 136, .75);
+		background-color:rgba($base__bgmenu-contrast-color, .75);
 		//border:10px solid rgba(212, 65, 121, .5);
-		color:#eee;
+		color:$base__font-color;
 		font-size:30px;
 		left:50%;
 		top:50%;
@@ -84,7 +82,7 @@
 
 	.carouselItemInner:hover
 	{
-		background-color:rgba(212, 65, 121, .75);
+		background-color:rgba($base__bgmenu-contrast-color, .7);
 	}
 
 	.loadingScreen {
@@ -112,43 +110,36 @@
 	// 		max-height: 9vh;
 	// 	}
 	// }
-	@font-face {
-    	font-family: 'petit';
-    	src: url('/img/font/petit.otf');
-	}
-	
 	.choose-level {
-		font-family: petit;
+		font-family: 'Frieda';
 		font-size: 30px;
-		color: #b2b2b2;
+		color: $base__color;
 		position: absolute;
-		left: 77%;
-		width: 25%;
+		left: 75%;
+		width: 30%;
 		div {
 			max-height: 6vh;
 		}
 		.player1Arrow {
 			height: 3vh;
-			visibility: hidden;
-			display: inline-block;
+			display: none;
 		}
 		.player2Arrow {
 			height: 3vh;
-			visibility: hidden;
-			display: inline-block;
+			display: none;
 		}
 		.selectedArrow1 {
-			visibility: visible;
+			display: inline-block;
 		}
 		.selectedArrow2 {
-			visibility: visible;
+			display: inline-block;
 		}
 	}
 
 
 	#chart-info {
 		font-size: 10vh;
-		color: #b2b2b2;
+		color: $base__color;
 		position: absolute;
 		top: 14%;
 		left: 15%;
@@ -162,18 +153,17 @@
 		font-size: 32px;
 		font-weight: bold;
 		// color: #E9A92E;
-		color: #3E98DF;
+		color: $base__font-active-color;
 	}
 
 	.selected2 {
 		font-size: 32px;
 		font-weight: bold;
-		color: #22BD6B;
-		// color: #3E98DF;
+		color: $base__font-active-contrast-color;
 	}
 
 	.activeSong {
-		background-color: #E9A92E;
+		background-color: $base__bgmenu-contrast-color;
 		// background-color: #9A54CF;
 		//border:10px solid #E9A92E;
 	}
@@ -189,7 +179,7 @@
 
 	#groovey {
 		visibility: hidden;
-		display: block;
+		display: none;
 		color: white;
 		position: absolute;
 		left: -6%;
@@ -204,7 +194,7 @@
 		.area.grooveGuy {
 			fill-opacity: 0.05;
 		}
-		
+
 	}
 
 	svg {

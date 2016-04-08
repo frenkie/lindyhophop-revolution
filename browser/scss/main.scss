@@ -38,13 +38,18 @@ div#main.ng-leave-active {
 
 * {
   box-sizing: border-box;
-  cursor: none;
 }
 
-$base__bgcolor: #2c3338;
-$base__color: #606468;
+$base__bgcolor: #17191b;
+$base__bgmenu-color: #21b1ed;
+$base__bgmenu-contrast-color: #cf955d;
+$base__color: #ffffff;
+$base__font-color: #ffffff;
+$base__font-active-color: #21b1ed;
+$base__font-active-contrast-color: #43aa54;
+$base__font-active-contrast2-color: #cf955d;
 $base__font-family-fallback: sans-serif;
-$base__font-family: 'Open Sans';
+$base__font-family: 'StonyIslandNF';
 $base__font-size: 1.3rem;
 $base__font-weight: 400;
 $base__line-height: 1.5;
@@ -93,9 +98,9 @@ $arrow-height: 120px;
 }
 
 .btn-primary.outline {
-  border: 2px solid#2DDEFF;
+  border: 2px solid $base__font-active-color;
   // outline: 1px solid #FFFFFF;
-  color: #2DDEFF;
+  color: $base__font-active-color;
 }
 
 .btn-primary.outline.active {
@@ -121,9 +126,10 @@ $arrow-height: 120px;
   position: absolute;
   top: 0;
   left: 0;
-  background-size: contain;
-  min-width: 100%;
-  overflow: hidden;
+  background-size: cover;
+  right:0;
+  bottom:0;
+    min-width: 100%;
   opacity: 0.7;
 }
 

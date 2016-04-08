@@ -23,7 +23,7 @@
 
   h1 {
     margin-top: 3%;
-    color: #2DDEFF;
+    color: $base__font-active-color;
     position: relative;
   }
 
@@ -74,13 +74,13 @@
   }
 
   .instruction {
-    color: #2DDEFF;
+    color: $base__font-active-color;
     font-size: 15pt;
     margin-top: 38%;
   }
 
   span {
-    color: #2DDEFF;
+    color: $base__font-active-color;
     font-size: 15pt;
     padding-left: 15px;
 

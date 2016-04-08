@@ -69,7 +69,9 @@ function createStepCharts(parsedSM) {
               };
             }
 
-            highScores = [{name: 'Complete n00b', score: 500000}, {name: 'An Okay Player', score: 700000}, {name: 'Pretty Awesome', score: 900000}, {name: 'The One To Beat', score: 950000}];
+            //highScores = [{name: 'Complete n00b', score: 500000}, {name: 'An Okay Player', score: 700000}, {name: 'Pretty Awesome', score: 900000}, {name: 'The One To Beat', score: 950000}];
+
+            highScores = [];
 
             return Song.create({
                 title: parsedSM.metadata.TITLE,
@@ -120,11 +122,13 @@ connectToDb.then(function() {
     seedSongs()
     .then( function () {
         console.log(chalk.green('Seeding songs was super-effective!'));
-        return seedUsers();
-    }).then( function () {
-        console.log(chalk.green('Seeding users was super-effective!'));
         process.kill(0);
     });
+
+    //.then( function () {
+    //    console.log(chalk.green('Seeding users was super-effective!'));
+    //    process.kill(0);
+    //});
 
 
 

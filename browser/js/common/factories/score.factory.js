@@ -22,9 +22,9 @@ app.factory('ScoreFactory', function($http) {
     var allPlayerGuys = [player1Guy];
 
     const TIMINGWINDOWS = {
-        Flawless: 0.03,
-        Marvelous: 0.07,
-        Great: 0.10
+        Flawless: 0.05,
+        Marvelous: 0.1,
+        Great: 0.2
     };
 
     const POINTS = {
@@ -49,11 +49,19 @@ app.factory('ScoreFactory', function($http) {
     };
 
     var ACCURACYCOLORS = {
-        Flawless: '#40C7DF',
+        Flawless: '#21b1ed',
         Marvelous: '#E8E374',
         Great: '#8EED44',
         Bad: '#FFD700'
     };
+
+    var ACCURACYLABELS = {
+        Flawless: 'Perfect',
+        Marvelous: 'Top',
+        Great: 'Goed',
+        Bad: 'Jammer'
+    };
+
 
     function getPlayer(playerNum) {
         return playerNum === 2 ? player2Guy : player1Guy;
@@ -209,6 +217,10 @@ app.factory('ScoreFactory', function($http) {
         return ACCURACYCOLORS[acc];
     }
 
+    function getAccuracyLabel (acc) {
+        return ACCURACYLABELS[acc];
+    }
+
     function getHighScores(songId) {
         return $http.get('/api/songs/'+songId+'/highScores')
         .then(function(res) {
@@ -217,7 +229,7 @@ app.factory('ScoreFactory', function($http) {
     }
 
     function isHighScore(score, highScores) {
-        return (highScores.length < 5 || score > highScores[highScores.length-1].score) 
+        return (highScores.length < 5 || score > highScores[highScores.length-1].score)
     }
 
     function sortHighScores(highScores) {
@@ -250,6 +262,7 @@ app.factory('ScoreFactory', function($http) {
         getAccuracy: getAccuracy,
         setStepChart: setStepChart,
         getAccuracyColors: getAccuracyColors,
+        getAccuracyLabel: getAccuracyLabel,
         allPlayerGuys: allPlayerGuys,
         getHighScores: getHighScores,
         isHighScore: isHighScore,
