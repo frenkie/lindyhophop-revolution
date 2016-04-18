@@ -49,26 +49,50 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
 
 
   var arrows = {
-    left: {
-      el: $('.arrow-keys .left img')[0],
+      'left-0': {
+        el: $('.arrow-keys .left-0 img')[0],
+        dir: "left",
+        start: "0",
+        end: "-20px"
+      },
+      'right-0': {
+        el: $('.arrow-keys .right-0 img')[0],
+        dir: "left",
+        start: "0",
+        end: "20px"
+      },
+      'down-0': {
+        el: $('.arrow-keys .down-0 img')[0],
+        dir: "top",
+        start: "0",
+        end: "20px"
+      },
+      'up-0': {
+        el: $('.arrow-keys .up-0 img')[0],
+        dir: "top",
+        start: "0",
+        end: "-20px"
+      },
+    'left-1': {
+      el: $('.arrow-keys .left-1 img')[0],
       dir: "left",
       start: "0",
       end: "-20px"
     },
-    right: {
-      el: $('.arrow-keys .right img')[0],
+    'right-1': {
+      el: $('.arrow-keys .right-1 img')[0],
       dir: "left",
       start: "0",
       end: "20px"
     },
-    down: {
-      el: $('.arrow-keys .down img')[0],
+    'down-1': {
+      el: $('.arrow-keys .down-1 img')[0],
       dir: "top",
       start: "0",
       end: "20px"
     },
-    up: {
-      el: $('.arrow-keys .up img')[0],
+    'up-1': {
+      el: $('.arrow-keys .up-1 img')[0],
       dir: "top",
       start: "0",
       end: "-20px"
@@ -85,7 +109,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     var button = keyConfigFactory.getButton(e);
     if (!button) return;
 
-    var a = arrows[button.name];
+    var a = arrows[button.name+'-'+button.player];
     if (!a) return;
 
     a.el.style[a.dir] = a.end;
@@ -95,7 +119,7 @@ app.controller('HomeController', function ($rootScope, $scope, $state, AuthServi
     var button = keyConfigFactory.getButton(e);
     if (!button) return;
 
-    var a = arrows[button.name];
+    var a = arrows[button.name+'-'+button.player];
     if (!a) return;
 
     a.el.style[a.dir] = a.start;
